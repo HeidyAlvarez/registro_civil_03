@@ -1,0 +1,2442 @@
+[
+{
+  "model": "autenticacion.usuarioregistrocivil",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$TZ68mbYrW3kMazWjS6FLCL$pokkGWibfceva9Z4PdQ0WuQ9fkB8utrhcfADKkQAnMs=",
+    "last_login": "2026-07-09T03:36:13.355Z",
+    "is_superuser": true,
+    "username": "admin_01",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-05-28T16:18:35Z",
+    "rol": "ADMIN",
+    "groups": [],
+    "user_permissions": [
+      28
+    ]
+  }
+},
+{
+  "model": "autenticacion.usuarioregistrocivil",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$dHILF7Ci63qjQZ0PZxHcl4$y7L+MPXhFUW+nl6ceCDZaH4FWXBb65973kYiT8UaCfI=",
+    "last_login": "2026-07-09T02:57:33.960Z",
+    "is_superuser": false,
+    "username": "cap_01",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-15T16:03:00Z",
+    "rol": "CAPTURISTA",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "autenticacion.usuarioregistrocivil",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$ixleYcZsXT1yCEpiyof2ui$K3b7X4lwHwqEW2z7HbT+IIlyPS1iUaDol3adDKP/k8E=",
+    "last_login": "2026-07-09T02:58:16.608Z",
+    "is_superuser": false,
+    "username": "Oficial_03",
+    "first_name": "Martin",
+    "last_name": "López Sandoval",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-15T16:36:58Z",
+    "rol": "OFICIAL",
+    "groups": [
+      2
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 5,
+  "fields": {
+    "nombre": "Matrimonios"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 6,
+  "fields": {
+    "nombre": "Aclaración de actas del estado civil"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 7,
+  "fields": {
+    "nombre": "Inscripción del acta de diorcio administrativo"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 8,
+  "fields": {
+    "nombre": "Inscripción del acta de divorcio judicial"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 9,
+  "fields": {
+    "nombre": "Expedición del Certificado de Inscripción o No Inscripción en el Registro de Deudores Alimentarios Morosos"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 10,
+  "fields": {
+    "nombre": "Registro de reconocimiento de hijos"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 11,
+  "fields": {
+    "nombre": "Expedición de copia certificada de actas de nacimiento"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 12,
+  "fields": {
+    "nombre": "Expedición de copia certificada de actas de matrimonio"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 13,
+  "fields": {
+    "nombre": "Expedición de copia certificada de actas de defunción"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 14,
+  "fields": {
+    "nombre": "Expedición de copia certificada de acta de reconocimiento"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 15,
+  "fields": {
+    "nombre": "Expedición de copia certificada de acta de inscripción de sentencia"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 16,
+  "fields": {
+    "nombre": "Expedición de copia certificada de acta de divorcio"
+  }
+},
+{
+  "model": "citas.secciontramite",
+  "pk": 17,
+  "fields": {
+    "nombre": "Registro de nacimiento"
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 2,
+  "fields": {
+    "seccion": 5,
+    "nombre": "Matrimonio en oficialía (lunes a viernes)",
+    "duracion_minutos": 35,
+    "costo": "435.00",
+    "documentos_requeridos": "Acta certificada de ambos \r\nCURP de ambos \r\nCertificado prenupcial (acudir a la oficialía una semana antes para extender el formato)",
+    "activo": true
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 3,
+  "fields": {
+    "seccion": 5,
+    "nombre": "Matrimonio en oficialía (sabado)",
+    "duracion_minutos": 35,
+    "costo": "2037.00",
+    "documentos_requeridos": "Acta certificada de ambos \r\nCURP de ambos \r\nCertificado prenupcial (acudir a la oficialía una semana antes para extender el formato)",
+    "activo": true
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 4,
+  "fields": {
+    "seccion": 5,
+    "nombre": "Matrimonio a domicilio",
+    "duracion_minutos": 180,
+    "costo": "3058.00",
+    "documentos_requeridos": "Acta certificada de ambos \r\nCURP de ambos \r\nCertificado prenupcial (acudir a la oficialía una semana antes para extender el formato)",
+    "activo": true
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 5,
+  "fields": {
+    "seccion": 6,
+    "nombre": "Aclaración de actas del estado civil",
+    "duracion_minutos": 25,
+    "costo": "172.00",
+    "documentos_requeridos": "",
+    "activo": true
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 6,
+  "fields": {
+    "seccion": 7,
+    "nombre": "Asentamiento",
+    "duracion_minutos": 20,
+    "costo": "435.00",
+    "documentos_requeridos": "",
+    "activo": true
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 7,
+  "fields": {
+    "seccion": 7,
+    "nombre": "Tramitación",
+    "duracion_minutos": 30,
+    "costo": "2454.00",
+    "documentos_requeridos": "",
+    "activo": true
+  }
+},
+{
+  "model": "citas.tramite",
+  "pk": 8,
+  "fields": {
+    "seccion": 7,
+    "nombre": "Anotación marginal",
+    "duracion_minutos": 30,
+    "costo": "153.00",
+    "documentos_requeridos": "",
+    "activo": true
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 13,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Heidy",
+    "codigo_postal": "50900",
+    "direccion": "ejido la gavia",
+    "tramite": 2,
+    "fecha": "2026-07-02",
+    "hora": "12:30:00",
+    "estado": "FINALIZADO",
+    "qr_codigo": "ababe8e9-8a7b-45af-a834-e54cc38a8189",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-23T18:47:23.523Z",
+    "codigo_qr": "qrs/qr_13.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 14,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Heidy",
+    "codigo_postal": "50900",
+    "direccion": "casco la gavia",
+    "tramite": 7,
+    "fecha": "2026-06-26",
+    "hora": "10:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "1e731e19-63e3-48e3-8f26-73f629c57bf4",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-24T03:35:40.010Z",
+    "codigo_qr": "qrs/qr_14.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 15,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Heidy",
+    "codigo_postal": "50950",
+    "direccion": "jjjjjjjjjjj",
+    "tramite": 5,
+    "fecha": "2026-06-26",
+    "hora": "08:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "d2ee22c6-3752-414c-82fc-9d71deacf474",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-24T04:03:58.246Z",
+    "codigo_qr": "qrs/qr_15.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 16,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Heidy",
+    "codigo_postal": "50950",
+    "direccion": "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+    "tramite": 8,
+    "fecha": "2026-06-26",
+    "hora": "11:00:00",
+    "estado": "FINALIZADO",
+    "qr_codigo": "7fb8c2da-02a4-4a2e-bfb6-d197caf8d3af",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-24T04:35:11.201Z",
+    "codigo_qr": "qrs/qr_16.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 17,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Heidy",
+    "codigo_postal": "50950",
+    "direccion": "jjjjjjjjjjjjjjjjjjj",
+    "tramite": 7,
+    "fecha": "2026-06-25",
+    "hora": "13:00:00",
+    "estado": "FINALIZADO",
+    "qr_codigo": "01b1eb3a-7f98-479a-bd72-b377e35414ab",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-24T17:01:30.798Z",
+    "codigo_qr": "qrs/qr_17.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 18,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "50950",
+    "direccion": "la gavia domicilio conocido",
+    "tramite": 4,
+    "fecha": "2026-07-11",
+    "hora": "14:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "b789049c-da9a-4d0c-b0be-e7b5c92b8774",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-25T02:18:58.061Z",
+    "codigo_qr": "qrs/qr_18.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 19,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "50950",
+    "direccion": "LA GAVIA",
+    "tramite": 7,
+    "fecha": "2026-07-09",
+    "hora": "11:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "f3d295b0-6272-451f-b4d2-75102ca59a21",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-26T05:39:57.486Z",
+    "codigo_qr": "qrs/qr_19.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 20,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "JJJJJJJJJJJJJJJJJJJJ",
+    "tramite": 6,
+    "fecha": "2026-07-09",
+    "hora": "10:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "f8ca5f93-9b46-41a5-95db-e858ca165b6a",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-26T05:44:56.009Z",
+    "codigo_qr": "qrs/qr_20.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 21,
+  "fields": {
+    "curp_ciudadano": "AARB291085HMCLPN07",
+    "nombre_ciudadano": "Benjamin Alvarez Ruperto",
+    "codigo_postal": "50930",
+    "direccion": "San José la gavia",
+    "tramite": 7,
+    "fecha": "2026-07-01",
+    "hora": "10:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "36e18411-748c-43ec-a1a0-79ef737155fb",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-28T04:59:57.990Z",
+    "codigo_qr": "qrs/qr_21.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 22,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "la gavia",
+    "tramite": 4,
+    "fecha": "2026-07-11",
+    "hora": "13:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "70396e25-49fc-4862-ac7b-56361953669c",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-29T20:46:55.683Z",
+    "codigo_qr": "qrs/qr_22.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 23,
+  "fields": {
+    "curp_ciudadano": "MMMMMMMMMMMMMMMMMM",
+    "nombre_ciudadano": "Martina Hernández Morales",
+    "codigo_postal": "00000",
+    "direccion": "San José la gaviota",
+    "tramite": 5,
+    "fecha": "2026-07-31",
+    "hora": "10:00:00",
+    "estado": "FINALIZADO",
+    "qr_codigo": "834f6356-4b83-4cbe-b5ec-30ebd057677f",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-30T03:31:22.341Z",
+    "codigo_qr": "qrs/qr_23.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 24,
+  "fields": {
+    "curp_ciudadano": "AARB291085HMCLPN07",
+    "nombre_ciudadano": "Benjamin Alvarez Ruperto",
+    "codigo_postal": "50930",
+    "direccion": "San Luis la Manzana",
+    "tramite": 2,
+    "fecha": "2026-07-02",
+    "hora": "14:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "24acecad-ee3b-4dd4-954b-09784e4ba2d0",
+    "usuario_atendio": null,
+    "creado_el": "2026-06-30T03:51:03.075Z",
+    "codigo_qr": "qrs/qr_24.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 25,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "la gavia",
+    "tramite": 8,
+    "fecha": "2026-07-16",
+    "hora": "14:15:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "2a7d8e35-cb3e-4f97-9883-32ab9d32c337",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-02T16:56:25.070Z",
+    "codigo_qr": "qrs/qr_25.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 26,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "kkkkkkkkkkkkkkk",
+    "tramite": 3,
+    "fecha": "2026-07-24",
+    "hora": "14:15:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "f01921ac-8181-4456-9f5d-ce695a35d2c3",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-02T17:49:01.024Z",
+    "codigo_qr": "qrs/qr_26.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 27,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "llllllllllllll",
+    "tramite": 7,
+    "fecha": "2026-07-17",
+    "hora": "10:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "0d0b4274-3d7e-40d8-b649-9e9d17bc399c",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-02T18:26:11.767Z",
+    "codigo_qr": "qrs/qr_27.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 28,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "kkkkkkkkk",
+    "tramite": 8,
+    "fecha": "2026-07-10",
+    "hora": "12:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "a0d7f357-2895-4bb0-96a8-ea1e6a2968c0",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-02T18:58:55.223Z",
+    "codigo_qr": "qrs/qr_28.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 29,
+  "fields": {
+    "curp_ciudadano": "AAHH060806MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "KKKKKKKKKKKKKKKKK",
+    "tramite": 7,
+    "fecha": "2026-07-20",
+    "hora": "09:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "0bbeebe5-8270-4ec7-bbc7-8d49db69b044",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-02T19:29:59.300Z",
+    "codigo_qr": "qrs/qr_29.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 30,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "heidy alvarez",
+    "codigo_postal": "55555",
+    "direccion": "LA GAVIA",
+    "tramite": 6,
+    "fecha": "2026-07-04",
+    "hora": "09:40:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "21a934f5-a397-4fca-b7e8-59f577570ce1",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-02T19:37:24.439Z",
+    "codigo_qr": "qrs/qr_30.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 31,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Heidy Paola Alvarez Hernnadez",
+    "codigo_postal": "50930",
+    "direccion": "Domicilio conocido, La gavia",
+    "tramite": 6,
+    "fecha": "2026-07-15",
+    "hora": "12:20:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "0e6a5725-e7b6-4f4f-b1f1-380b3b80e2c0",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-03T02:12:40.479Z",
+    "codigo_qr": "qrs/qr_31.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 32,
+  "fields": {
+    "curp_ciudadano": "AAAA222222HLLLLLL4",
+    "nombre_ciudadano": "Heidy Paola Alvarez Hernnadez",
+    "codigo_postal": "50930",
+    "direccion": "lllllllllllllllllllllllllllllll",
+    "tramite": 5,
+    "fecha": "2026-07-17",
+    "hora": "14:50:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "cc955a4b-363e-4c9e-b25c-7f30fec739a1",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-03T23:46:00.145Z",
+    "codigo_qr": "qrs/qr_32.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 33,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Álvarez Hernandez MERARI LIZETH",
+    "codigo_postal": "50930",
+    "direccion": "DOMICILIO CONOCIDO No. S/N, Int. S/N, Col. SAN JOSE LA GAVIA, ALMOLOYA DE JUAREZ, ESTADO DE MEXICO, C.P. 50930",
+    "tramite": 6,
+    "fecha": "2026-07-24",
+    "hora": "15:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "84fde5f2-bc4b-4b78-8536-b1d5d2033419",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-04T00:11:24.357Z",
+    "codigo_qr": "qrs/qr_33.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 34,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Álvarez Hernandez MERARI LIZETH",
+    "codigo_postal": "50930",
+    "direccion": "DOMICILIO CONOCIDO No. S/N, Int. S/N, Col. SAN JOSE LA GAVIA, ALMOLOYA DE JUAREZ, Estado de México, C.P. 50930",
+    "tramite": 8,
+    "fecha": "2026-07-10",
+    "hora": "15:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "1fd888c4-05ef-4d29-9dd1-825937fabedb",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-04T00:15:07.074Z",
+    "codigo_qr": "qrs/qr_34.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 35,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Álvarez Hernandez MERARI LIZETH",
+    "codigo_postal": "50930",
+    "direccion": "DOMICILIO CONOCIDO No. S/N, Int. S/N, Col. SAN JOSE LA GAVIA, ALMOLOYA DE JUAREZ, Estado de México, C.P. 50930",
+    "tramite": 2,
+    "fecha": "2026-07-10",
+    "hora": "09:35:00",
+    "estado": "CANCELADA",
+    "qr_codigo": "74a88de5-24f9-49c5-a36d-bb1c2cc730a7",
+    "usuario_atendio": 1,
+    "creado_el": "2026-07-04T00:19:32.771Z",
+    "codigo_qr": "qrs/qr_35.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 36,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Álvarez Hernandez MERARI LIZETH",
+    "codigo_postal": "50930",
+    "direccion": "DOMICILIO CONOCIDO No. S/N, Int. S/N, Col. SAN JOSE LA GAVIA, ALMOLOYA DE JUAREZ, Estado de México, C.P. 50930",
+    "tramite": 8,
+    "fecha": "2026-07-09",
+    "hora": "12:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "a6f371fa-d10a-4875-b974-6abc95138673",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-06T20:25:36.070Z",
+    "codigo_qr": "qrs/qr_36.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 37,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Álvarez Hernandez MERARI LIZETH",
+    "codigo_postal": "50930",
+    "direccion": "DOMICILIO CONOCIDO No. S/N, Int. S/N, Col. SAN JOSE LA GAVIA, ALMOLOYA DE JUAREZ, Estado de México, C.P. 50930",
+    "tramite": 5,
+    "fecha": "2026-07-23",
+    "hora": "13:10:00",
+    "estado": "FINALIZADA",
+    "qr_codigo": "610444a2-2d0f-478a-9932-57d1576c8241",
+    "usuario_atendio": 5,
+    "creado_el": "2026-07-07T04:25:03.186Z",
+    "codigo_qr": "qrs/qr_37.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 38,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Álvarez Hernandez MERARI LIZETH",
+    "codigo_postal": "50930",
+    "direccion": "DOMICILIO CONOCIDO No. S/N, Int. S/N, Col. SAN JOSE LA GAVIA, ALMOLOYA DE JUAREZ, Estado de México, C.P. 50930",
+    "tramite": 2,
+    "fecha": "2026-07-16",
+    "hora": "12:30:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "e5b68741-95e0-4d48-9215-6f6569371f18",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-07T20:46:47.263Z",
+    "codigo_qr": "qrs/qr_38.png"
+  }
+},
+{
+  "model": "citas.cita",
+  "pk": 39,
+  "fields": {
+    "curp_ciudadano": "AAHH060815MMCLRDA4",
+    "nombre_ciudadano": "Alvarez Hernandez Heidy Paola",
+    "codigo_postal": "50930",
+    "direccion": "Domicilio conocido No. S/N, Col. San Jose La Gavia, Almoloya de Juatrez, Estado de México, C.P. 50930",
+    "tramite": 7,
+    "fecha": "2026-07-16",
+    "hora": "12:00:00",
+    "estado": "PENDIENTE",
+    "qr_codigo": "1fca8fdd-c9c8-4e41-88e5-1fa7d44bbf56",
+    "usuario_atendio": null,
+    "creado_el": "2026-07-08T19:21:29.318Z",
+    "codigo_qr": "qrs/qr_39.png"
+  }
+},
+{
+  "model": "citas.pagocaja",
+  "pk": 4,
+  "fields": {
+    "cita": 13,
+    "monto_cobrado": "435.00",
+    "fecha_pago": "2026-06-24T04:19:47.068Z",
+    "cajero": 1,
+    "corte_cierre_listo": false
+  }
+},
+{
+  "model": "citas.pagocaja",
+  "pk": 5,
+  "fields": {
+    "cita": 16,
+    "monto_cobrado": "153.00",
+    "fecha_pago": "2026-06-24T16:59:45.990Z",
+    "cajero": 1,
+    "corte_cierre_listo": false
+  }
+},
+{
+  "model": "citas.pagocaja",
+  "pk": 6,
+  "fields": {
+    "cita": 17,
+    "monto_cobrado": "2454.00",
+    "fecha_pago": "2026-06-24T17:07:23.645Z",
+    "cajero": 1,
+    "corte_cierre_listo": false
+  }
+},
+{
+  "model": "citas.pagocaja",
+  "pk": 7,
+  "fields": {
+    "cita": 23,
+    "monto_cobrado": "172.00",
+    "fecha_pago": "2026-06-30T03:35:08.362Z",
+    "cajero": 6,
+    "corte_cierre_listo": false
+  }
+},
+{
+  "model": "citas.pagocaja",
+  "pk": 8,
+  "fields": {
+    "cita": 35,
+    "monto_cobrado": "435.00",
+    "fecha_pago": "2026-07-05T04:02:42.869Z",
+    "cajero": 1,
+    "corte_cierre_listo": false
+  }
+},
+{
+  "model": "citas.pagocaja",
+  "pk": 9,
+  "fields": {
+    "cita": 37,
+    "monto_cobrado": "172.00",
+    "fecha_pago": "2026-07-07T04:34:00.778Z",
+    "cajero": 6,
+    "corte_cierre_listo": false
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 10,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_COSTO",
+    "descripcion": "El trámite 'Matrimonio en oficialía (sabado)' cambió su costo oficial de $1016.00 a $2037.00.",
+    "fecha_hora": "2026-06-23T18:40:54.955Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 11,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #13) para el ciudadano Heidy.",
+    "fecha_hora": "2026-06-23T18:47:23.546Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 12,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #14) para el ciudadano Heidy.",
+    "fecha_hora": "2026-06-24T03:35:40.021Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 13,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #15) para el ciudadano Heidy.",
+    "fecha_hora": "2026-06-24T04:03:58.259Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 14,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #16) para el ciudadano Heidy.",
+    "fecha_hora": "2026-06-24T04:35:11.203Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 15,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #17) para el ciudadano Heidy.",
+    "fecha_hora": "2026-06-24T17:01:30.812Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 16,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #18) para el ciudadano heidy alvarez.",
+    "fecha_hora": "2026-06-25T02:18:58.077Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 17,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #19) para el ciudadano heidy alvarez.",
+    "fecha_hora": "2026-06-26T05:39:57.491Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 18,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #20) para el ciudadano heidy alvarez.",
+    "fecha_hora": "2026-06-26T05:44:56.012Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 19,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #21) para el ciudadano Benjamin Alvarez Ruperto.",
+    "fecha_hora": "2026-06-28T04:59:58.003Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 20,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #22) para el ciudadano heidy alvarez.",
+    "fecha_hora": "2026-06-29T20:46:55.693Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 21,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #23) para el ciudadano Martina Hernández Morales.",
+    "fecha_hora": "2026-06-30T03:31:22.349Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 22,
+  "fields": {
+    "usuario": null,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Se agendó una nueva cita (Folio #24) para el ciudadano Benjamin Alvarez Ruperto.",
+    "fecha_hora": "2026-06-30T03:51:03.077Z",
+    "ip_direccion": null
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 23,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T16:53:14.094Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 24,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-02T16:54:06.839Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 25,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-02T17:46:27.685Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 26,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T17:51:37.404Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 27,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T18:06:56.445Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 28,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T18:20:06.698Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 29,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T18:24:44.496Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 30,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-02T18:34:45.769Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 31,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T23:24:45.648Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 32,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-02T23:25:49.863Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 33,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-03T23:20:14.429Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 34,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-03T23:39:43.895Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 35,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-04T00:33:36.802Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 36,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-04T00:41:09.631Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 37,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-04T00:41:32.079Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 38,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-04T21:37:28.187Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 39,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-04T21:44:45.213Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 40,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-05T03:38:12.080Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 41,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-05T03:39:47.756Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 42,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-05T03:56:01.117Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 43,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-05T03:57:06.181Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 44,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-05T03:57:10.074Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 45,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-05T03:57:31.702Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 46,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-05T03:59:10.699Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 47,
+  "fields": {
+    "usuario": 1,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Cita #35 (Álvarez Hernandez MERARI LIZETH) marcada como ASISTIDA por validación QR.",
+    "fecha_hora": "2026-07-05T04:02:25.819Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 48,
+  "fields": {
+    "usuario": 1,
+    "accion": "TRANSACCION",
+    "descripcion": "Cobro de $435.00 registrado para cita #35 (Álvarez Hernandez MERARI LIZETH).",
+    "fecha_hora": "2026-07-05T04:02:42.881Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 49,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-05T05:00:10.191Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 50,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-05T05:00:12.161Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 51,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-06T02:53:35.168Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 52,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-06T02:56:03.311Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 53,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-06T02:59:38.937Z",
+    "ip_direccion": "192.168.8.51"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 54,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-06T18:33:05.591Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 55,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-06T18:33:36.308Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 56,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-06T18:36:49.517Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 57,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-06T20:27:00.896Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 58,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-06T20:27:02.417Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 59,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-06T20:28:36.678Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 60,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-06T20:29:15.397Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 61,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-06T20:30:09.445Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 62,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-06T20:30:21.224Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 63,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-06T20:41:54.671Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 64,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-06T20:52:46.410Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 65,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-06T20:52:56.605Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 66,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — POST /admin/citas/cita/36/change/",
+    "fecha_hora": "2026-07-06T20:54:01.405Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 67,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — POST /admin/citas/cita/36/change/",
+    "fecha_hora": "2026-07-06T20:57:22.337Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 68,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-06T21:06:44.040Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 69,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-06T21:06:53.125Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 70,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-07T04:16:59.835Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 71,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:19:40.710Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 72,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:20:10.450Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 73,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:20:28.554Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 74,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-07T04:20:37.615Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 75,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:22:31.356Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 76,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-07T04:22:54.261Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 77,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:23:04.070Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 78,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:23:11.920Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 79,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:23:43.075Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 80,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:23:54.266Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 81,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — POST /citas/agendar/",
+    "fecha_hora": "2026-07-07T04:25:03.251Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 82,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:26:21.420Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 83,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:26:26.512Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 84,
+  "fields": {
+    "usuario": 5,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Cita #37 (Álvarez Hernandez MERARI LIZETH) marcada como ASISTIDA por validación QR.",
+    "fecha_hora": "2026-07-07T04:26:32.584Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 85,
+  "fields": {
+    "usuario": 5,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Intento QR rechazado: cita #37 ya en estado ASISTIDA.",
+    "fecha_hora": "2026-07-07T04:26:54.262Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 86,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:32:41.545Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 87,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-07T04:33:13.721Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 88,
+  "fields": {
+    "usuario": 6,
+    "accion": "TRANSACCION",
+    "descripcion": "Cobro de $172.00 registrado para cita #37 (Álvarez Hernandez MERARI LIZETH).",
+    "fecha_hora": "2026-07-07T04:34:00.798Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 89,
+  "fields": {
+    "usuario": 6,
+    "accion": "MODIFICACION_CITA",
+    "descripcion": "Cita #37 (Álvarez Hernandez MERARI LIZETH) marcada como FINALIZADA.",
+    "fecha_hora": "2026-07-07T04:34:32.437Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 90,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:36:40.497Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 91,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:36:48.172Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 92,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:37:21.152Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 93,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:38:51.138Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 94,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T04:39:09.965Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 95,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T04:49:32.193Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 96,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-07T18:50:01.269Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 97,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T19:03:04.711Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 98,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-07T19:03:18.056Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 99,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T19:18:48.347Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 100,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-07T20:12:56.476Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 101,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T20:24:24.651Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 102,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-07T20:24:31.288Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 103,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — POST /citas/agendar/",
+    "fecha_hora": "2026-07-07T20:46:47.329Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 104,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T20:52:07.417Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 105,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-07T20:52:17.303Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 106,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-07T21:01:03.077Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 107,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-08T18:33:59.800Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 108,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T18:35:13.179Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 109,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-08T18:35:19.377Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 110,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — POST /admin/citas/tramite/",
+    "fecha_hora": "2026-07-08T18:36:03.348Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 111,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T18:36:22.311Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 112,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-08T20:22:57.296Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 113,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T20:25:51.608Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 114,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-08T20:25:59.857Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 115,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T20:26:12.545Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 116,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-08T20:26:20.293Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 117,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T20:38:29.692Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 118,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-08T20:38:35.952Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 119,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T20:38:43.415Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 120,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-08T20:38:56.850Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 121,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T20:51:53.502Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 122,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-08T20:51:58.787Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 123,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-08T20:52:00.590Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 124,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-08T20:53:26.043Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 125,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-09T02:55:09.934Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 126,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-09T02:57:25.404Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 127,
+  "fields": {
+    "usuario": 5,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (cap_01).",
+    "fecha_hora": "2026-07-09T02:57:33.962Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 128,
+  "fields": {
+    "usuario": 5,
+    "accion": "INFO",
+    "descripcion": "[Capturista] cap_01 — cierre de sesión.",
+    "fecha_hora": "2026-07-09T02:58:08.140Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 129,
+  "fields": {
+    "usuario": 6,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (Oficial_03).",
+    "fecha_hora": "2026-07-09T02:58:16.610Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 130,
+  "fields": {
+    "usuario": 6,
+    "accion": "INFO",
+    "descripcion": "[oficial] Oficial_03 — cierre de sesión.",
+    "fecha_hora": "2026-07-09T02:58:35.117Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 131,
+  "fields": {
+    "usuario": 1,
+    "accion": "LOGIN",
+    "descripcion": "Inicio de sesión exitoso (admin_01).",
+    "fecha_hora": "2026-07-09T03:36:13.360Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 132,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — POST /admin/citas/tramite/8/change/",
+    "fecha_hora": "2026-07-09T03:41:12.237Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.bitacoraauditoria",
+  "pk": 133,
+  "fields": {
+    "usuario": 1,
+    "accion": "INFO",
+    "descripcion": "[Administrador] admin_01 — POST /admin/citas/tramite/8/change/",
+    "fecha_hora": "2026-07-09T03:41:42.725Z",
+    "ip_direccion": "127.0.0.1"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 1,
+  "fields": {
+    "fecha": "2026-07-02",
+    "hora": "14:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T00:48:25.383Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 2,
+  "fields": {
+    "fecha": "2026-07-10",
+    "hora": "12:00:00",
+    "motivo": "tramite interno",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:01:05.358Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 4,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "10:30:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.967Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 5,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "11:00:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.978Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 6,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "11:30:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.980Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 7,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "12:00:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.982Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 8,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "12:30:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.985Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 9,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "13:00:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.987Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 10,
+  "fields": {
+    "fecha": "2026-06-17",
+    "hora": "13:30:00",
+    "motivo": "Reunion",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:10:36.989Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 11,
+  "fields": {
+    "fecha": "2026-06-27",
+    "hora": "09:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:12:53.967Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 12,
+  "fields": {
+    "fecha": "2026-06-27",
+    "hora": "09:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:12:53.970Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 13,
+  "fields": {
+    "fecha": "2026-06-27",
+    "hora": "10:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:12:53.973Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 14,
+  "fields": {
+    "fecha": "2026-06-27",
+    "hora": "10:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:12:53.977Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 15,
+  "fields": {
+    "fecha": "2026-06-27",
+    "hora": "11:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:12:53.979Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 16,
+  "fields": {
+    "fecha": "2026-07-11",
+    "hora": "09:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:13:26.068Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 17,
+  "fields": {
+    "fecha": "2026-07-11",
+    "hora": "09:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:13:26.073Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 18,
+  "fields": {
+    "fecha": "2026-07-11",
+    "hora": "10:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:13:26.076Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 19,
+  "fields": {
+    "fecha": "2026-07-11",
+    "hora": "10:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:13:26.079Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 20,
+  "fields": {
+    "fecha": "2026-07-11",
+    "hora": "11:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T01:13:26.083Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 21,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "09:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.829Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 22,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "09:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.849Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 23,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "10:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.852Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 24,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "10:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.854Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 25,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "11:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.856Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 26,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "11:30:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.858Z"
+  }
+},
+{
+  "model": "citas.horariobloqueado",
+  "pk": 27,
+  "fields": {
+    "fecha": "2026-07-30",
+    "hora": "12:00:00",
+    "motivo": "",
+    "creado_por": 6,
+    "creado_el": "2026-07-01T18:33:55.860Z"
+  }
+}
+]

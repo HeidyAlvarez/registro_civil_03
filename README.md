@@ -32,6 +32,13 @@ python manage.py runserver
 - `mockups/` — maquetación estática de interfaces
 - `core_rc/` — configuración del proyecto
 
-## Historias de usuario
+## Despliegue en Render
 
-El documento `HU_con_criterios.docx` define las 8 historias de usuario y sus criterios de aceptación.
+El archivo `render.yaml` crea automáticamente:
+
+- Base de datos PostgreSQL (`registro-civil-db`)
+- Servicio web Django (`registro-civil-03`)
+
+En [dashboard.render.com](https://dashboard.render.com) → **New** → **Blueprint** → conecta el repositorio de GitHub y aplica el blueprint.
+
+El build ejecuta migraciones y carga `fixtures/initial_data.json` (usuarios, trámites y citas de desarrollo).

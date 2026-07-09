@@ -1,0 +1,26 @@
+databases:
+  - name: registro-civil-db
+    plan: free
+    databaseName: registro_civil
+    user: registro_civil
+
+services:
+  - type: web
+    name: registro-civil-03
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn core_rc.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: registro-civil-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: WEB_CONCURRENCY
+        value: 2
