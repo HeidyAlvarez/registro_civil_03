@@ -1,9 +1,12 @@
+from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from autenticacion.admin import sincronizar_rol_y_grupos
 from autenticacion.models import UsuarioRegistroCivil
 from citas.models import Tramite
+
+GRUPOS_INICIALES = ('Capturista', 'oficial', 'Administrador')
 
 
 class Command(BaseCommand):
@@ -13,6 +16,9 @@ class Command(BaseCommand):
         if Tramite.objects.exists():
             self.stdout.write(self.style.WARNING('La base ya tiene datos; no se volvió a cargar.'))
             return
+
+        for nombre in GRUPOS_INICIALES:
+            Group.objects.get_or_create(name=nombre)
 
         call_command('loaddata', 'fixtures/initial_data.json')
         for usuario in UsuarioRegistroCivil.objects.all():

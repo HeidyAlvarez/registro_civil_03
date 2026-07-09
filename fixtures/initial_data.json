@@ -15,9 +15,7 @@
     "date_joined": "2026-05-28T16:18:35Z",
     "rol": "ADMIN",
     "groups": [],
-    "user_permissions": [
-      28
-    ]
+    "user_permissions": []
   }
 },
 {
@@ -35,9 +33,7 @@
     "is_active": true,
     "date_joined": "2026-06-15T16:03:00Z",
     "rol": "CAPTURISTA",
-    "groups": [
-      1
-    ],
+    "groups": [],
     "user_permissions": []
   }
 },
@@ -56,9 +52,7 @@
     "is_active": true,
     "date_joined": "2026-06-15T16:36:58Z",
     "rol": "OFICIAL",
-    "groups": [
-      2
-    ],
+    "groups": [],
     "user_permissions": []
   }
 },
