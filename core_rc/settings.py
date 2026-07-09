@@ -105,7 +105,7 @@ if os.environ.get('DATABASE_URL'):
         'default': dj_database_url.config(
             default=os.environ['DATABASE_URL'],
             conn_max_age=600,
-            ssl_require=not DEBUG,
+            conn_health_checks=True,
         )
     }
 else:
@@ -169,7 +169,7 @@ STORAGES = {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 # Apuntar al modelo heredado de AbstractUser en la app autenticacion

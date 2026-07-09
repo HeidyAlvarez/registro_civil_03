@@ -9,8 +9,8 @@ services:
     name: registro-civil-03
     runtime: python
     plan: free
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn core_rc.wsgi:application"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate --no-input && python manage.py seed_initial_data"
+    startCommand: "gunicorn core_rc.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -21,6 +21,6 @@ services:
       - key: DEBUG
         value: "False"
       - key: PYTHON_VERSION
-        value: 3.12.8
+        value: 3.12.11
       - key: WEB_CONCURRENCY
         value: 2
