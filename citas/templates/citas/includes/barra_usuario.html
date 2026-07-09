@@ -1,0 +1,17 @@
+{% if request.user.is_authenticated %}
+<div class="gobmx-barra-usuario{% if barra_extra_class %} {{ barra_extra_class }}{% endif %}">
+  <span class="gobmx-usuario">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+    {{ request.user.get_full_name|default:request.user.username }}
+  </span>
+  <span class="gobmx-barra-spacer" aria-hidden="true"></span>
+  {% if not en_panel_inicio and mostrar_inicio != False %}
+  <a href="{{ panel_inicio_url }}" class="btn-panel-inicio">Inicio</a>
+  {% endif %}
+  {% if show_logout != False %}
+  <form action="{% url 'admin:logout' %}" method="post" class="barra-logout-form">{% csrf_token %}
+    <button type="submit" class="gobmx-link-btn">Cerrar sesión</button>
+  </form>
+  {% endif %}
+</div>
+{% endif %}

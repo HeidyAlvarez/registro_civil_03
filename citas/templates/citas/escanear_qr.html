@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Validación por QR — Registro Civil</title>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <link rel="stylesheet" href="{% static 'citas/css/qr-scanner.css' %}?v=2">
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script src="{% static 'citas/js/qr-scanner.js' %}?v=2"></script>
+  <script src="{% static 'citas/js/qr-validar.js' %}?v=1"></script>
+</head>
+<body class="qr-standalone">
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Validación QR</span>
+    </span>
+  </a>
+</header>
+
+{% include 'citas/includes/barra_usuario.html' with show_logout=False %}
+
+<main class="page">
+  <div class="qr-page">
+    <div class="qr-card">
+      <div class="qr-card-header">
+        <svg class="qr-header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/>
+          <rect x="7" y="7" width="10" height="10" rx="1"/>
+        </svg>
+        <span class="qr-header-title">Validación de Cita por QR</span>
+      </div>
+
+      <div class="qr-card-body">
+        <p class="qr-instruction">Acerca el código QR de la cita a la cámara.</p>
+
+        <div class="qr-scanner-wrap" id="qr-scanner"></div>
+
+        <div id="qr-resultado" class="qr-resultado" role="status" aria-live="polite">
+          <div class="qr-resultado-icon" id="res-icon">✓</div>
+          <div class="qr-resultado-titulo" id="res-titulo">¡Asistencia Registrada!</div>
+          <div class="qr-resultado-detalle" id="res-ciudadano"></div>
+          <div class="qr-resultado-detalle" id="res-tramite"></div>
+        </div>
+
+        <div class="qr-actions" id="qr-actions">
+          <button type="button" class="btn-qr-sec" id="btn-reintentar">Escanear otro</button>
+          <a href="{% url 'vista_agenda' %}" class="btn-qr-sec">Volver a la agenda</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const E = id => document.getElementById(id);
+  let scannerActivo = false;
+
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k, v] = c.trim().split('=');
+      if (k === n) return decodeURIComponent(v);
+    }
+    return null;
+  }
+
+  function mostrarResultado(tipo, titulo, ciudadano, tramite) {
+    const box = E('qr-resultado');
+    box.className = 'qr-resultado visible' + (tipo === 'error' ? ' error' : '');
+    E('res-icon').textContent = tipo === 'error' ? '✕' : '✓';
+    E('res-titulo').textContent = titulo;
+    E('res-ciudadano').textContent = ciudadano ? 'Ciudadano: ' + ciudadano : '';
+    E('res-tramite').textContent = tramite ? 'Trámite: ' + tramite : '';
+    if (tipo === 'error' || titulo === 'Procesando…') {
+      E('qr-actions').classList.remove('visible');
+    } else {
+      E('qr-actions').classList.add('visible');
+    }
+  }
+
+  function iniciarScanner() {
+    RegistroQR.start(E('qr-scanner'), onScanExitoso);
+    scannerActivo = true;
+  }
+
+  function detenerScanner() {
+    RegistroQR.stop();
+    scannerActivo = false;
+  }
+
+  function onScanExitoso(decodedText) {
+    detenerScanner();
+    const parsed = parseQrCita(decodedText);
+    if (!parsed || !parsed.token) {
+      mostrarResultado('error', 'QR inválido', '', '');
+      E('qr-actions').classList.add('visible');
+      return;
+    }
+    mostrarResultado('ok', 'Procesando…', '', '');
+
+    enviarValidacionQr(parsed.citaId, parsed.token, getCookie('csrftoken'))
+    .then(data => {
+      if (data.status === 'success') {
+        mostrarResultado('ok', '¡Asistencia Registrada!', data.ciudadano, data.tramite);
+      } else {
+        mostrarResultado('error', data.message || 'No se pudo validar', '', '');
+        E('qr-actions').classList.add('visible');
+      }
+    })
+    .catch(() => {
+      mostrarResultado('error', 'Error de conexión', '', '');
+      E('qr-actions').classList.add('visible');
+    });
+  }
+
+  E('btn-reintentar').onclick = () => {
+    E('qr-resultado').className = 'qr-resultado';
+    E('qr-actions').classList.remove('visible');
+    E('qr-scanner').innerHTML = '';
+    scannerActivo = false;
+    iniciarScanner();
+  };
+
+  iniciarScanner();
+</script>
+</body>
+</html>

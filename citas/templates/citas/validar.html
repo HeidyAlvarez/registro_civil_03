@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Estado de la Cita — Registro Civil</title>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Estado de la cita</span>
+    </span>
+  </a>
+</header>
+
+{% include 'citas/includes/barra_usuario.html' with show_logout=False %}
+
+<main class="page">
+  <div class="validar-page">
+    <div class="validar-card">
+
+      <h1 class="validar-titulo">Estado de la Cita</h1>
+
+      {% if cita.estado == 'PENDIENTE' %}
+        <div class="validar-icon warn">!</div>
+        <h2 class="validar-estado warn">Cita pendiente de validación</h2>
+      {% elif cita.estado == 'CANCELADA' %}
+        <div class="validar-icon bad">✕</div>
+        <h2 class="validar-estado bad">Cita cancelada</h2>
+      {% else %}
+        <div class="validar-icon ok">✓</div>
+        <h2 class="validar-estado ok">Cita Validada Correctamente</h2>
+      {% endif %}
+
+      <p class="validar-dato"><strong>Ciudadano:</strong> {{ cita.nombre_ciudadano }}</p>
+      <p class="validar-dato"><strong>Trámite:</strong> {{ cita.tramite.nombre }}</p>
+
+      <a href="{% url 'vista_agenda' %}" class="validar-volver">Volver a la agenda</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

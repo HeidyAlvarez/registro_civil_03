@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup — Comprobante de cita</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/maqueta.css">
+</head>
+<body>
+  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
+  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
+  <nav class="navbar">
+    <a class="navbar-brand" href="portal-inicio.html"><span class="crest">RC</span><span><span class="brand-name">Registro Civil 03</span><span class="brand-sub">Comprobante de cita</span></span></a>
+  </nav>
+
+  <div class="wizard-steps">
+    <span class="wstep done">① Trámite</span>
+    <span class="wstep done">② Datos</span>
+    <span class="wstep done">③ Horario</span>
+    <span class="wstep done">④ Confirmar</span>
+    <span class="wstep active">⑤ Comprobante</span>
+  </div>
+
+  <div class="comprobante-wrap">
+    <div class="comprobante-card">
+      <div class="comprobante-head">
+        <span class="crest" style="width:36px;height:36px;font-size:12px">RC</span>
+        <div>
+          <strong style="font-family:Montserrat,sans-serif;font-size:15px">Registro Civil — Oficialía 03</strong>
+          <div style="font-size:11px;color:var(--tinta-muted);margin-top:2px">Comprobante de cita agendada</div>
+        </div>
+      </div>
+
+      <div class="comprobante-ok">✓ Cita registrada correctamente</div>
+
+      <div class="comprobante-folio">Folio <strong>#436</strong></div>
+
+      <div class="comprobante-grid">
+        <div><span class="lbl">Ciudadano</span><span class="val">Álvarez Hernandez MERARI LIZETH</span></div>
+        <div><span class="lbl">CURP</span><span class="val">AAHH060815MMCLRDA4</span></div>
+        <div><span class="lbl">Trámite</span><span class="val">Aclaración de actas del estado civil</span></div>
+        <div><span class="lbl">Fecha y hora</span><span class="val">09/07/2026 · 13:10 hrs</span></div>
+        <div><span class="lbl">Costo referencia</span><span class="val">$485.00 MXN</span></div>
+        <div><span class="lbl">Lugar</span><span class="val">Oficialía 03 · Registro Civil</span></div>
+      </div>
+
+      <div class="comprobante-qr">
+        <div class="qr-box">[ Código QR ]</div>
+        <p>Presenta este código el día de tu cita para validar tu asistencia.</p>
+      </div>
+
+      <ul class="comprobante-notas">
+        <li>Llega 10 minutos antes con identificación oficial.</li>
+        <li>Trae los documentos requeridos para tu trámite.</li>
+        <li>Este comprobante no sustituye el pago en ventanilla.</li>
+      </ul>
+
+      <div class="comprobante-actions">
+        <button class="btn btn-sm" type="button" disabled>Descargar comprobante PDF</button>
+        <button class="btn btn-sm btn-outline" type="button" disabled>Descargar solo QR</button>
+        <a class="btn btn-sm btn-ghost" href="portal-inicio.html">Agendar otra cita</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

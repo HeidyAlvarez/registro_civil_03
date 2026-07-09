@@ -1,0 +1,547 @@
+/* Registro Civil — tema institucional para Django Admin */
+
+html[data-theme="light"],
+:root {
+  --rc-verde:        #0F5C3C;
+  --rc-verde-dark:   #0A3F29;
+  --rc-verde-mid:    #157A52;
+  --rc-verde-claro:  #E4F1EA;
+  --rc-oro:          #9C7A22;
+  --rc-gris-piedra:  #E9E8E4;
+  --rc-rojo:         #A3281E;
+
+  --primary:         var(--rc-verde-mid);
+  --secondary:       var(--rc-verde);
+  --accent:          #ffffff;
+  --primary-fg:      #ffffff;
+
+  --body-fg:         #1B211E;
+  --body-bg:         var(--rc-gris-piedra);
+  --body-quiet-color: #5B655E;
+  --body-medium-color: #3A423D;
+  --body-loud-color: #1B211E;
+
+  --header-color:    rgba(255, 255, 255, 0.88);
+  --header-branding-color: #ffffff;
+  --header-bg:       var(--rc-verde-dark);
+  --header-link-color: #ffffff;
+
+  --breadcrumbs-fg:  rgba(255, 255, 255, 0.78);
+  --breadcrumbs-link-fg: #ffffff;
+  --breadcrumbs-bg:  var(--rc-verde);
+
+  --link-fg:         var(--rc-verde);
+  --link-hover-color: var(--rc-verde-dark);
+  --link-selected-fg: var(--rc-verde-mid);
+
+  --hairline-color:  #D8D8D2;
+  --border-color:    #D0D0CA;
+
+  --error-fg:        var(--rc-rojo);
+
+  --message-success-bg: var(--rc-verde-claro);
+  --message-info-bg: #d9ebe3;
+  --message-warning-bg: #faf3dc;
+  --message-error-bg: #f6e4e2;
+
+  --darkened-bg:     #f4f6f4;
+  --selected-bg:     var(--rc-verde-claro);
+  --selected-row:    #d6ebe0;
+
+  --button-fg:       #ffffff;
+  --button-bg:       var(--rc-verde);
+  --button-hover-bg: var(--rc-verde-dark);
+  --default-button-bg: var(--rc-verde-mid);
+  --default-button-hover-bg: var(--rc-verde);
+  --delete-button-bg: var(--rc-rojo);
+  --delete-button-hover-bg: #8a2219;
+
+  --object-tools-fg: #ffffff;
+  --object-tools-bg: #5B655E;
+  --object-tools-hover-bg: #3A423D;
+
+  --font-family-primary:
+    'Roboto',
+    "Segoe UI",
+    system-ui,
+    Arial,
+    sans-serif;
+}
+
+html[data-theme="dark"] {
+  --primary:         #1a6b48;
+  --secondary:       #0F5C3C;
+  --accent:          #ffffff;
+
+  --body-fg:         #e8ece9;
+  --body-bg:         #141916;
+  --body-quiet-color: #a8b0ab;
+
+  --header-bg:       #0A3F29;
+  --header-branding-color: #ffffff;
+  --header-link-color: #ffffff;
+
+  --breadcrumbs-bg:  #0F5C3C;
+  --breadcrumbs-link-fg: #ffffff;
+
+  --link-fg:         #7ec9a3;
+  --link-hover-color: #a8dfc0;
+  --link-selected-fg: #7ec9a3;
+
+  --hairline-color:  #2a332e;
+  --border-color:    #343d38;
+
+  --darkened-bg:     #1c231f;
+  --selected-bg:     #1f3d2e;
+  --selected-row:    #1a3328;
+
+  --button-bg:       #157A52;
+  --button-hover-bg: #0F5C3C;
+  --default-button-bg: #1a6b48;
+  --default-button-hover-bg: #157A52;
+}
+
+/* Franja superior gobierno */
+.rc-gov-strip {
+  background: var(--rc-verde-dark, #0A3F29);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  padding: 6px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rc-gov-strip b {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Marca en header */
+#rc-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rc-crest {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+#site-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-inline-end: 20px;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+#site-name a:link,
+#site-name a:visited {
+  color: #ffffff !important;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+}
+
+#site-name a:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-decoration: none;
+}
+
+.rc-subtitle {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.2px;
+}
+
+#header {
+  padding: 12px 40px;
+  box-shadow: 0 2px 12px rgba(10, 63, 41, 0.18);
+}
+
+#user-tools {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+#user-tools a,
+#logout-form button {
+  font-weight: 500;
+}
+
+/* Contenido principal */
+.main {
+  background: var(--body-bg);
+}
+
+#content {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(10, 63, 41, 0.06);
+  margin: 16px 24px 24px;
+  padding: 20px 24px;
+}
+
+html[data-theme="dark"] #content {
+  background: var(--darkened-bg);
+}
+
+#content h1 {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  color: var(--rc-verde, #0F5C3C);
+  font-size: 1.35rem;
+}
+
+html[data-theme="dark"] #content h1 {
+  color: #7ec9a3;
+}
+
+.breadcrumbs {
+  border-radius: 0;
+  font-size: 0.8125rem;
+}
+
+/* Módulos y tablas */
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: var(--rc-verde, #0F5C3C);
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+#nav-sidebar .module th {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+}
+
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited {
+  color: var(--rc-verde, #0F5C3C);
+  font-weight: 700;
+}
+
+#nav-sidebar .current-model {
+  background: var(--rc-verde-claro, #E4F1EA);
+}
+
+html[data-theme="dark"] #nav-sidebar .current-model {
+  background: var(--selected-bg);
+}
+
+/* Botones */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+  border-radius: 20px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 8px 18px;
+}
+
+.default,
+input[type="submit"].default,
+.submit-row input.default {
+  background: var(--rc-verde, #0F5C3C);
+}
+
+.default:hover,
+input[type="submit"].default:hover {
+  background: var(--rc-verde-dark, #0A3F29);
+}
+
+/* Dashboard — panel principal a ancho completo */
+.dashboard .main {
+  background: #ffffff;
+}
+
+.dashboard #content {
+  width: auto;
+  max-width: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 24px 32px 32px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.dashboard #content.colMS {
+  margin-right: 0;
+}
+
+.dashboard #content-main {
+  float: none;
+  flex: 1 1 720px;
+  min-width: min(100%, 720px);
+  width: auto;
+}
+
+.dashboard #content-related {
+  float: none;
+  flex: 0 0 300px;
+  width: 300px;
+  max-width: 100%;
+  margin: 0;
+  position: static;
+}
+
+.dashboard .module table th {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+}
+
+.dashboard .module table td {
+  font-size: 0.875rem;
+}
+
+#content-related .module h2 {
+  background: var(--rc-verde-dark, #0A3F29);
+  color: #ffffff;
+  border-bottom: none;
+}
+
+/* Formularios */
+fieldset.module.aligned {
+  border-radius: 8px;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  border-color: var(--rc-verde-mid, #157A52);
+  outline-color: var(--rc-verde-mid, #157A52);
+}
+
+/* Mensajes — fondo sólido, sin iconos repetidos */
+ul.messagelist li {
+  background-image: none;
+  background-repeat: no-repeat;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 4px solid transparent;
+}
+
+ul.messagelist li.success {
+  background-color: var(--rc-verde-claro, #E4F1EA);
+  color: var(--rc-verde-dark, #0A3F29);
+  border-left-color: var(--rc-verde, #0F5C3C);
+}
+
+ul.messagelist li.info {
+  background-color: #d9ebe3;
+  border-left-color: var(--rc-verde-mid, #157A52);
+}
+
+ul.messagelist li.warning {
+  background-color: #faf3dc;
+  border-left-color: var(--rc-oro, #9C7A22);
+}
+
+ul.messagelist li.error {
+  background-color: #f6e4e2;
+  border-left-color: var(--rc-rojo, #A3281E);
+}
+
+html[data-theme="dark"] ul.messagelist li.success {
+  background-color: #1a3328;
+  color: #a8dfc0;
+  border-left-color: #157A52;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .rc-gov-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 6px 16px;
+  }
+
+  #header {
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #content {
+    margin: 12px;
+    padding: 16px;
+  }
+
+  .dashboard #content {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .dashboard #content-main {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .dashboard #content-related {
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .rc-subtitle {
+    display: none;
+  }
+}
+
+/* ── Tablas estilo bitácora (solo tablas del panel admin) ── */
+#changelist .results {
+  border: 1px solid var(--hairline-color, #D8D8D2);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+  margin-top: 4px;
+}
+
+.dashboard #content-main .module table,
+.dashboard #content-related .module table,
+.change-list #content-main .module table:not(#result_list) {
+  border: 1px solid var(--hairline-color, #D8D8D2);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+#changelist table#result_list,
+#content-main .module table,
+#content-related .module table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+#changelist table#result_list thead th,
+#content-main .module table thead th,
+#content-main .module table caption + tbody th,
+#content-related .module table thead th,
+#content-related .module table caption + tbody th {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: #f5f5f4 !important;
+  color: var(--body-quiet-color, #5B655E) !important;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--hairline-color, #D8D8D2);
+  vertical-align: middle;
+}
+
+#changelist table#result_list thead th .text a,
+#changelist table#result_list thead th .text span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--body-quiet-color, #5B655E);
+}
+
+#changelist table#result_list thead th .text a:hover {
+  color: var(--rc-verde, #0F5C3C);
+}
+
+#changelist table#result_list tbody td,
+#changelist table#result_list tbody th,
+#content-main .module table tbody td,
+#content-main .module table tbody th,
+#content-related .module table tbody td,
+#content-related .module table tbody th {
+  font-size: 12.5px;
+  vertical-align: top;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--hairline-color, #D8D8D2);
+}
+
+#changelist table#result_list tbody tr:last-child td,
+#changelist table#result_list tbody tr:last-child th,
+#content-main .module table tbody tr:last-child td,
+#content-main .module table tbody tr:last-child th,
+#content-related .module table tbody tr:last-child td,
+#content-related .module table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+#changelist table#result_list tbody tr:hover td,
+#changelist table#result_list tbody tr:hover th,
+#content-main .module table tbody tr:hover td,
+#content-main .module table tbody tr:hover th,
+#content-related .module table tbody tr:hover td,
+#content-related .module table tbody tr:hover th {
+  background: #fafafa;
+}
+
+#changelist table#result_list tbody tr.selected td,
+#changelist table#result_list tbody tr.selected th {
+  background: var(--rc-verde-claro, #E4F1EA);
+}
+
+html[data-theme="dark"] #changelist .results,
+html[data-theme="dark"] .dashboard #content-main .module table,
+html[data-theme="dark"] .dashboard #content-related .module table {
+  background: var(--darkened-bg, #1c231f);
+  border-color: var(--border-color, #343d38);
+}
+
+html[data-theme="dark"] #changelist table#result_list thead th,
+html[data-theme="dark"] #content-main .module table thead th,
+html[data-theme="dark"] #content-main .module table caption + tbody th,
+html[data-theme="dark"] #content-related .module table thead th,
+html[data-theme="dark"] #content-related .module table caption + tbody th {
+  background: #252b27 !important;
+  color: var(--body-quiet-color, #a8b0ab) !important;
+  border-bottom-color: var(--border-color, #343d38);
+}
+
+html[data-theme="dark"] #changelist table#result_list thead th .text a,
+html[data-theme="dark"] #changelist table#result_list thead th .text span {
+  color: var(--body-quiet-color, #a8b0ab);
+}
+
+html[data-theme="dark"] #changelist table#result_list tbody td,
+html[data-theme="dark"] #changelist table#result_list tbody th,
+html[data-theme="dark"] #content-main .module table tbody td,
+html[data-theme="dark"] #content-main .module table tbody th,
+html[data-theme="dark"] #content-related .module table tbody td,
+html[data-theme="dark"] #content-related .module table tbody th {
+  border-bottom-color: var(--border-color, #343d38);
+}
+
+html[data-theme="dark"] #changelist table#result_list tbody tr:hover td,
+html[data-theme="dark"] #changelist table#result_list tbody tr:hover th,
+html[data-theme="dark"] #content-main .module table tbody tr:hover td,
+html[data-theme="dark"] #content-main .module table tbody tr:hover th,
+html[data-theme="dark"] #content-related .module table tbody tr:hover td,
+html[data-theme="dark"] #content-related .module table tbody tr:hover th {
+  background: #1f2622;
+}

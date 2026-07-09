@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro Civil 03 — Portal Ciudadano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* ── Identidad institucional (Guía de identidad gráfica GOB.MX) ── */
+    --verde:        #0F5C3C;   /* verde institucional — acciones primarias */
+    --verde-dark:   #0A3F29;   /* barra superior / navbar */
+    --verde-claro:  #E4F1EA;   /* fondos suaves, chips */
+    --oro:          #9C7A22;   /* acento secundario — informativo */
+    --oro-claro:    #F6EFDC;
+    --gris-piedra:  #E9E8E4;   /* tono pétreo, no plano-blanco */
+    --superficie:   #FFFFFF;
+    --tinta:        #1B211E;
+    --tinta-muted:  #5B655E;
+    --tinta-tenue:  #93998F;
+    --borde:        #D8D8D2;
+    --rojo:         #A3281E;
+    --rojo-claro:   #F6E4E2;
+    --slate:        #34515A;   /* variante ubicación/contacto */
+    --slate-claro:  #E4EDEF;
+    --focus:        #1E7A50;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: var(--gris-piedra);
+    color: var(--tinta);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: 'Montserrat', Arial, sans-serif; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  /* ── BARRA SUPERIOR OFICIAL (patrón GOB.MX) ── */
+  .top-strip {
+    background: var(--verde-dark);
+    color: rgba(255,255,255,.82);
+    font-size: 11px;
+    letter-spacing: .3px;
+    padding: 6px 32px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .top-strip b { color: #fff; font-weight: 700; }
+
+  /* NAVBAR */
+  .navbar {
+    position: sticky; top: 0; z-index: 200;
+    background: var(--superficie);
+    display: flex; align-items: center;
+    padding: 0 32px; height: 68px;
+    border-bottom: 3px solid var(--verde);
+    box-shadow: 0 2px 10px rgba(10,63,41,.08);
+  }
+  .navbar-brand { display: flex; align-items: center; gap: 14px; color: var(--tinta); text-decoration: none; flex: 1; }
+  .navbar-brand .crest {
+    width: 42px; height: 42px; border-radius: 4px;
+    background: var(--verde); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px;
+    letter-spacing: .5px;
+  }
+  .navbar-brand .name { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: .2px; }
+  .navbar-brand .sub  { font-size: 11.5px; color: var(--tinta-muted); margin-top: 1px; }
+
+  /* HERO */
+  .hero {
+    background: var(--verde-dark);
+    color: #fff; padding: 56px 32px 68px; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
+    background: linear-gradient(90deg, var(--oro) 0%, var(--verde) 45%, var(--verde) 55%, var(--oro) 100%);
+  }
+  .hero-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--oro-claro); margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(24px,3.6vw,36px); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+  .hero p  { font-size: 14.5px; color: rgba(255,255,255,.78); max-width: 480px; margin: 0 auto; line-height: 1.65; }
+
+  /* MENU CARDS — agrupadas por función (acción / consulta / contacto) */
+  .menu-section { padding: 44px 24px 60px; max-width: 900px; margin: 0 auto; }
+  .menu-kicker { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--tinta-muted); text-align: center; margin-bottom: 22px; }
+  .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  .menu-card {
+    background: var(--superficie); border: 1px solid var(--borde);
+    border-radius: 6px; padding: 24px 18px 20px;
+    display: flex; flex-direction: column; align-items: flex-start;
+    text-align: left; cursor: pointer; text-decoration: none;
+    transition: box-shadow .15s, border-color .15s; position: relative;
+  }
+  .menu-card::before {
+    content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  }
+  .menu-card:hover { box-shadow: 0 6px 18px rgba(10,63,41,.1); border-color: var(--tinta-tenue); }
+
+  .menu-card.blue::before, .menu-card.green::before  { background: var(--verde); }
+  .menu-card.amber::before, .menu-card.red::before, .menu-card.purple::before { background: var(--oro); }
+  .menu-card.teal::before { background: var(--slate); }
+
+  .card-icon {
+    width: 40px; height: 40px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; color: #fff;
+  }
+  .blue   .card-icon, .green .card-icon { background: var(--verde); }
+  .amber  .card-icon, .red .card-icon, .purple .card-icon { background: var(--oro); }
+  .teal   .card-icon { background: var(--slate); }
+  .card-icon svg { width: 20px; height: 20px; }
+
+  .menu-card h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 7px; color: var(--tinta); }
+  .menu-card p  { font-size: 12.5px; color: var(--tinta-muted); line-height: 1.55; margin-bottom: 18px; flex: 1; }
+
+  .card-btn {
+    padding: 8px 16px; border-radius: 4px;
+    font-size: 12.5px; font-weight: 700; border: 1.5px solid; cursor: pointer;
+    font-family: 'Roboto', inherit; transition: all .15s; background: transparent;
+  }
+  .blue .card-btn, .green .card-btn { border-color: var(--verde); color: var(--verde); }
+  .amber .card-btn, .red .card-btn, .purple .card-btn { border-color: var(--oro); color: var(--oro); }
+  .teal .card-btn { border-color: var(--slate); color: var(--slate); }
+  .menu-card:hover .card-btn { color: #fff; }
+  .blue:hover .card-btn, .green:hover .card-btn { background: var(--verde); }
+  .amber:hover .card-btn, .red:hover .card-btn, .purple:hover .card-btn { background: var(--oro); }
+  .teal:hover .card-btn { background: var(--slate); }
+
+  /* SECCIONES */
+  .seccion { padding: 56px 24px; display: none; }
+  .seccion.visible { display: block; }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  .sec-header { display: flex; align-items: center; gap: 16px; margin-bottom: 30px; border-bottom: 1px solid var(--borde); padding-bottom: 16px; }
+  .sec-back {
+    background: var(--superficie); border: 1.5px solid var(--borde);
+    border-radius: 4px; padding: 8px 14px;
+    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    color: var(--tinta-muted); transition: all .15s;
+    font-family: 'Roboto', inherit;
+  }
+  .sec-back:hover { background: var(--gris-piedra); border-color: var(--verde); color: var(--verde); }
+  .sec-header h2 { font-size: 20px; font-weight: 800; color: var(--tinta); display: flex; align-items: center; gap: 10px; }
+  .sec-header h2 svg { width: 22px; height: 22px; color: var(--verde); }
+
+  /* GUÍA */
+  .pasos-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+  .paso-card { background: var(--superficie); border: 1px solid var(--borde); border-radius: 6px; padding: 18px; display: flex; gap: 15px; align-items: flex-start; }
+  .paso-num { width: 32px; height: 32px; border-radius: 4px; background: var(--verde); color: #fff; display: flex; align-items: center; justify-content: center; font-family:'Montserrat',sans-serif; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .paso-card h3 { font-size: 13.5px; font-weight: 700; margin-bottom: 4px; }
+  .paso-card p  { font-size: 12.5px; color: var(--tinta-muted); line-height: 1.55; }
+
+  /* TRAMITES */
+  .spinner { width: 26px; height: 26px; border: 3px solid var(--borde); border-top-color: var(--verde); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .seccion-bloque { margin-bottom: 22px; }
+  .seccion-nombre { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--verde); padding-bottom: 8px; border-bottom: 2px solid var(--verde-claro); margin-bottom: 10px; }
+  .tgrid-vitrina { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .tramite-vitrina { border: 1px solid var(--borde); border-radius: 4px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; background: var(--superficie); }
+  .tramite-vitrina span:first-child { font-size: 12.5px; font-weight: 500; }
+  .tramite-vitrina span:last-child  { font-size: 12.5px; font-weight: 700; color: var(--verde); margin-left: 8px; white-space: nowrap; }
+
+  /* UBICACIÓN */
+  .ubi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .mapa { background: var(--slate-claro); border-radius: 6px; overflow: hidden; border: 1px solid var(--borde); display: flex; flex-direction: column; }
+  .mapa iframe { width: 100%; height: 220px; border: 0; display: block; }
+  .mapa-body { padding: 14px 16px 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .mapa p { font-size: 12.5px; color: var(--slate); font-weight: 600; text-align: center; margin: 0; line-height: 1.45; }
+  .mapa a { background: var(--slate); color: white; padding: 9px 18px; border-radius: 4px; text-decoration: none; font-size: 12.5px; font-weight: 700; }
+  .info-card { background: var(--superficie); border-radius: 6px; padding: 20px; border: 1px solid var(--borde); }
+  .info-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--borde); align-items: flex-start; }
+  .info-row:last-child { border-bottom: none; }
+  .info-ico { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; color: var(--verde); }
+  .info-label { font-size: 10px; font-weight: 700; color: var(--tinta-muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 3px; }
+  .info-val   { font-size: 13px; font-weight: 600; color: var(--tinta); line-height: 1.4; }
+
+  /* FORMULARIO */
+  .stepper { display: flex; align-items: center; margin-bottom: 24px; }
+  .step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+  .step:not(:last-child)::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 2px; background: var(--borde); z-index: 0; }
+  .step.done:not(:last-child)::after { background: var(--verde); }
+  .step-circle { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family:'Montserrat',sans-serif; font-size: 12.5px; font-weight: 700; border: 2px solid var(--borde); background: var(--superficie); color: var(--tinta-muted); position: relative; z-index: 1; transition: all .3s; }
+  .step.active .step-circle { border-color: var(--verde); background: var(--verde); color: white; }
+  .step.done   .step-circle { border-color: var(--verde); background: var(--verde); color: white; }
+  .step-label { font-size: 10.5px; color: var(--tinta-muted); margin-top: 5px; text-align: center; }
+  .step.active .step-label { color: var(--verde); font-weight: 700; }
+
+  .fcard { background: var(--superficie); border: 1px solid var(--borde); border-radius: 6px; overflow: visible; display: none; max-width: 600px; margin: 0 auto; }
+  .fcard.active { display: block; }
+  .fcard-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--borde); }
+  .fcard-header h3 { font-size: 14.5px; font-weight: 700; }
+  .fcard-header p  { font-size: 12.5px; color: var(--tinta-muted); margin-top: 3px; }
+  .fcard-body   { padding: 22px; }
+  .fcard-footer { padding: 14px 22px; border-top: 1px solid var(--borde); display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; background: var(--superficie); }
+  #p4.active .fcard-footer { position: sticky; bottom: 0; z-index: 5; box-shadow: 0 -8px 24px rgba(27,33,30,.08); }
+  .confirmar-inline { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .confirmar-inline .btn { flex: 1 1 180px; }
+
+  .fg { margin-bottom: 16px; }
+  .fg label { display: block; font-size: 11px; font-weight: 700; color: var(--tinta-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
+  .fg input, .fg textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--borde); border-radius: 4px; font-size: 14px; color: var(--tinta); background: var(--superficie); transition: border .2s; font-family: inherit; }
+  .fg input:focus, .fg textarea:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(15,92,60,.12); }
+  .fg input.err { border-color: var(--rojo); }
+  .ferr { font-size: 11px; color: var(--rojo); margin-top: 4px; display: none; }
+  .ferr.show { display: block; }
+  .fhint { font-size: 11px; color: var(--tinta-tenue); margin-top: 4px; line-height: 1.4; }
+  .curp-progreso { font-size: 11px; color: var(--verde); margin-top: 4px; font-weight: 600; }
+  .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .frow-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .sec-form { font-size: 12px; font-weight: 700; color: var(--verde); text-transform: uppercase; letter-spacing: .4px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--borde); }
+  .sec-form:first-child { margin-top: 0; }
+
+  .sec-title-f { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--tinta-muted); padding: 8px 0 6px; border-bottom: 1px solid var(--borde); margin-bottom: 8px; }
+  .tgrid-f { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .titem { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1.5px solid var(--borde); border-radius: 4px; cursor: pointer; transition: all .15s; }
+  .titem:hover { background: var(--gris-piedra); }
+  .titem.sel { border-color: var(--verde); background: var(--verde-claro); }
+  .tradio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--borde); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .titem.sel .tradio { border-color: var(--verde); background: var(--verde); }
+  .titem.sel .tradio::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: white; display: block; }
+  .tnombre { flex: 1; font-size: 13px; font-weight: 500; }
+  .tcosto  { font-size: 13px; font-weight: 700; color: var(--verde); }
+
+  .costo-box { background: var(--verde-claro); border: 1px solid #BFDFCD; border-radius: 6px; padding: 12px 16px; display: none; margin-top: 12px; justify-content: space-between; align-items: center; }
+  .costo-box.show { display: flex; }
+
+  .hgrid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+  .hbtn { padding: 9px 6px; border: 1.5px solid var(--borde); border-radius: 4px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--tinta); transition: all .15s; background: var(--superficie); user-select: none; }
+  .hbtn:hover { background: var(--gris-piedra); }
+  .hbtn.sel  { background: var(--verde); color: white; border-color: var(--verde); }
+  .hbtn.busy { background: var(--gris-piedra); color: var(--tinta-tenue); cursor: not-allowed; text-decoration: line-through; }
+
+  .ritem { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--borde); font-size: 13px; }
+  .ritem:last-child { border-bottom: none; }
+  .rkey { color: var(--tinta-muted); font-weight: 500; }
+  .rval { font-weight: 600; text-align: right; }
+  .rtotal { background: var(--verde-claro); border-radius: 6px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+
+  .comprobante { text-align: center; padding: 10px 0 16px; }
+  .check-icon  { width: 52px; height: 52px; background: var(--verde-claro); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; color: var(--verde); }
+  .check-icon svg { width: 26px; height: 26px; }
+  .qr-box { background: white; border: 2px solid var(--borde); border-radius: 6px; padding: 16px; display: inline-block; margin: 12px 0; }
+  .qr-box img { width: 180px; height: 180px; display: block; }
+  .folio-badge { background: var(--verde-claro); color: var(--verde); padding: 5px 16px; border-radius: 3px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 14px; letter-spacing: .3px; }
+  .detalle-box { background: var(--gris-piedra); border-radius: 6px; padding: 14px; text-align: left; margin: 0 auto 16px; max-width: 420px; }
+  .qr-seccion { margin-top: 8px; }
+  .qr-seccion-titulo { font-size: 12px; font-weight: 700; color: var(--tinta-muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
+  .drow { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid var(--borde); }
+  .drow:last-child { border-bottom: none; }
+  .drow span:first-child { color: var(--tinta-muted); }
+  .drow span:last-child  { font-weight: 600; }
+
+  /* Jerarquía de botones GOB.MX v3: primario / secundario / alerta */
+  .btn { padding: 10px 20px; border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--borde); transition: all .15s; font-family: 'Roboto', inherit; }
+  .btn-sec  { background: var(--superficie); color: var(--tinta); }
+  .btn-sec:hover  { background: var(--gris-piedra); }
+  .btn-prim { background: var(--verde); color: white; border-color: var(--verde); }
+  .btn-prim:hover { background: var(--verde-dark); }
+  .btn-grn  { background: var(--verde); color: white; border-color: var(--verde); }
+  .btn-grn:hover  { background: var(--verde-dark); }
+
+  .err-banner { background: var(--rojo-claro); border: 1px solid #E4B6B1; border-radius: 4px; padding: 11px 14px; font-size: 13px; color: var(--rojo); display: none; margin-bottom: 14px; }
+  .err-banner.show { display: block; }
+  .loading { display: none; text-align: center; padding: 24px; }
+
+  /* FOOTER */
+  .footer { background: var(--verde-dark); color: rgba(255,255,255,.72); text-align: center; padding: 26px; font-size: 12px; line-height: 1.8; }
+  .footer strong { color: white; font-family: 'Montserrat', sans-serif; }
+
+  @media (max-width: 720px) {
+    .menu-grid { grid-template-columns: 1fr; }
+    .pasos-grid { grid-template-columns: 1fr; }
+    .ubi-grid { grid-template-columns: 1fr; }
+    .tgrid-vitrina { grid-template-columns: 1fr; }
+    .top-strip { flex-direction: column; gap: 2px; }
+    .frow, .frow-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- BARRA SUPERIOR OFICIAL -->
+<div class="top-strip">
+  <span>Gobierno del Estado de México</span>
+  <span><b>gob.mx</b> · Registro Civil 03, Villa Victoria</span>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#" class="navbar-brand" onclick="mostrarInicio()">
+    <div class="crest">RC</div>
+    <div>
+      <div class="name">Registro Civil 03</div>
+      <div class="sub">Villa Victoria · Portal ciudadano</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Servicio en línea · Sin necesidad de cuenta</div>
+  <h1>Agenda tu cita en el<br>Registro Civil desde casa</h1>
+  <p>Consulta trámites, elige fecha y hora disponible, y recibe tu comprobante con código QR al instante.</p>
+</section>
+
+<!-- MENÚ PRINCIPAL -->
+<div id="inicio">
+  <div class="menu-section">
+    <div class="menu-kicker">Servicios disponibles</div>
+    <div class="menu-grid">
+
+      <a class="menu-card blue" href="#" onclick="mostrarSeccion('agendar');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <h3>Agendar cita</h3>
+        <p>Solicita una cita para tu trámite y recibe tu comprobante con código QR al instante.</p>
+        <button class="card-btn">Agendar ahora</button>
+      </a>
+
+      <a class="menu-card green" href="#" onclick="mostrarSeccion('tramites');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div>
+        <h3>Trámites disponibles</h3>
+        <p>Consulta todos los servicios que ofrece el Registro Civil y sus costos oficiales.</p>
+        <button class="card-btn">Ver catálogo</button>
+      </a>
+
+      <a class="menu-card amber" href="#" onclick="mostrarSeccion('guia');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <h3>Guía paso a paso</h3>
+        <p>Aprende cómo funciona el proceso de agendado y qué documentos necesitas llevar.</p>
+        <button class="card-btn">Ver guía</button>
+      </a>
+
+      <a class="menu-card teal" href="#" onclick="mostrarSeccion('ubicacion');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3>Ubicación</h3>
+        <p>Encuentra la dirección, horarios de atención y datos de contacto de nuestra oficina.</p>
+        <button class="card-btn">Ver ubicación</button>
+      </a>
+
+      <a class="menu-card red" href="#" onclick="mostrarSeccion('requisitos');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+        <h3>Requisitos</h3>
+        <p>Consulta los documentos que debes presentar el día de tu cita según el trámite.</p>
+        <button class="card-btn">Ver requisitos</button>
+      </a>
+
+      <a class="menu-card purple" href="#" onclick="mostrarSeccion('preguntas');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.7-2 3.3M12 17h.01"/></svg></div>
+        <h3>Preguntas frecuentes</h3>
+        <p>Resolvemos las dudas más comunes sobre el proceso de agendado y atención.</p>
+        <button class="card-btn">Ver preguntas</button>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: AGENDAR -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="agendar">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Agendar cita</h2>
+    </div>
+
+    <div class="stepper" style="max-width:600px;margin:0 auto 24px;">
+      <div class="step active" id="s1"><div class="step-circle">1</div><div class="step-label">Tus datos</div></div>
+      <div class="step"        id="s2"><div class="step-circle">2</div><div class="step-label">Trámite</div></div>
+      <div class="step"        id="s3"><div class="step-circle">3</div><div class="step-label">Fecha y hora</div></div>
+      <div class="step"        id="s4"><div class="step-circle">4</div><div class="step-label">Confirmación</div></div>
+    </div>
+
+    <!-- PASO 1: DATOS DEL SOLICITANTE -->
+    <div class="fcard active" id="p1">
+      <div class="fcard-header"><h3>Datos del solicitante</h3><p>Captura tu CURP, nombre completo y domicilio de forma manual.</p></div>
+      <div class="fcard-body">
+        <div class="err-banner" id="e1"></div>
+        <div class="sec-form">Identificación</div>
+        <div class="fg"><label>CURP *</label><input type="text" id="f-curp" placeholder="Ej: LOPE800101HDFRNN09" maxlength="18" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false"><div class="fhint">Formato oficial: 4 letras, 6 números (fecha), H o M, 5 letras y 2 caracteres finales.</div><div class="curp-progreso" id="curp-progreso">0 / 18 caracteres</div><div class="ferr" id="fe-curp">La CURP no tiene un formato válido. Ejemplo: LOPE800101HDFRNN09.</div></div>
+        <div class="sec-form">Nombre</div>
+        <div class="frow-3">
+          <div class="fg"><label>Apellido paterno *</label><input type="text" id="f-ap-pat" placeholder="Ej: López" autocomplete="family-name"><div class="ferr" id="fe-ap-pat">Ingresa tu apellido paterno.</div></div>
+          <div class="fg"><label>Apellido materno *</label><input type="text" id="f-ap-mat" placeholder="Ej: Hernández" autocomplete="additional-name"><div class="ferr" id="fe-ap-mat">Ingresa tu apellido materno.</div></div>
+          <div class="fg"><label>Nombre(s) *</label><input type="text" id="f-nombre" placeholder="Ej: María Guadalupe" autocomplete="given-name"><div class="ferr" id="fe-nombre">Ingresa tu nombre.</div></div>
+        </div>
+        <div class="sec-form">Domicilio</div>
+        <div class="frow">
+          <div class="fg"><label>Calle *</label><input type="text" id="f-calle" placeholder="Ej: Av. Juárez" autocomplete="address-line1"><div class="ferr" id="fe-calle">Ingresa la calle.</div></div>
+          <div class="fg"><label>No. exterior *</label><input type="text" id="f-num-ext" placeholder="Ej: 123"><div class="ferr" id="fe-num-ext">Ingresa el número exterior.</div></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>No. interior</label><input type="text" id="f-num-int" placeholder="Ej: 4B (opcional)"></div>
+          <div class="fg"><label>Colonia *</label><input type="text" id="f-colonia" placeholder="Ej: Centro"><div class="ferr" id="fe-colonia">Ingresa la colonia.</div></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>Municipio *</label><input type="text" id="f-municipio" placeholder="Ej: Villa Victoria"><div class="ferr" id="fe-municipio">Ingresa el municipio.</div></div>
+          <div class="fg"><label>Estado *</label><input type="text" id="f-estado" value="Estado de México"><div class="ferr" id="fe-estado">Ingresa el estado.</div></div>
+        </div>
+        <div class="fg" style="max-width:220px;"><label>Código postal *</label><input type="text" id="f-cp" placeholder="5 dígitos" maxlength="5" inputmode="numeric" autocomplete="postal-code"><div class="ferr" id="fe-cp">El CP debe tener 5 dígitos.</div></div>
+      </div>
+      <div class="fcard-footer"><button class="btn btn-prim" onclick="goPaso1()">Continuar →</button></div>
+    </div>
+
+    <!-- PASO 2: TRÁMITE -->
+    <div class="fcard" id="p2">
+      <div class="fcard-header"><h3>¿Qué trámite deseas realizar?</h3><p>Selecciona una opción del catálogo de trámites disponibles.</p></div>
+      <div class="fcard-body">
+        <div class="err-banner" id="e2">Por favor selecciona un trámite.</div>
+        <div id="form-catalogo"><div class="loading" style="display:block;"><div class="spinner"></div><p style="font-size:13px;color:var(--tinta-muted)">Cargando trámites...</p></div></div>
+        <div class="costo-box" id="costo-box">
+          <div><div style="font-size:12px;font-weight:700;color:var(--verde);">Costo del trámite</div><div style="font-size:11px;color:var(--tinta-muted);">A pagar en ventanilla</div></div>
+          <div style="font-size:20px;font-weight:800;color:var(--verde);" id="costo-val">$0.00</div>
+        </div>
+      </div>
+      <div class="fcard-footer">
+        <button class="btn btn-sec" onclick="goStep(1)">← Anterior</button>
+        <button class="btn btn-prim" onclick="goPaso2()">Continuar →</button>
+      </div>
+    </div>
+
+    <!-- PASO 3: FECHA Y HORA -->
+    <div class="fcard" id="p3">
+      <div class="fcard-header"><h3>Elige tu fecha y hora</h3><p>Selecciona cuándo quieres venir.</p></div>
+      <div class="fcard-body">
+        <div class="err-banner" id="e3"></div>
+        <div class="fg"><label>Fecha de la cita *</label><input type="date" id="f-fecha"><div class="fhint" id="fecha-rango-hint">Puedes agendar desde mañana hasta un mes de anticipación.</div><div class="ferr" id="fe-fecha">Selecciona una fecha válida.</div></div>
+        <div class="fg" id="hgroup" style="display:none;"><label id="hlabel">Horario disponible *</label><p id="hduracion" style="font-size:12px;color:var(--tinta-muted);margin:4px 0 8px;display:none;"></p><div class="hgrid" id="hgrid"></div><p id="hsin-horarios" style="display:none;font-size:12.5px;color:var(--tinta-muted);margin-top:8px;">No hay horarios disponibles para este trámite en la fecha seleccionada.</p><div class="ferr" id="fe-hora">Selecciona un horario.</div></div>
+        <div class="loading" id="hloading" style="display:none;"><div class="spinner"></div><p style="font-size:13px;color:var(--tinta-muted)">Cargando horarios...</p></div>
+      </div>
+      <div class="fcard-footer">
+        <button class="btn btn-sec" onclick="goStep(2)">← Anterior</button>
+        <button class="btn btn-prim" onclick="goPaso3()">Ver resumen →</button>
+      </div>
+    </div>
+
+    <!-- PASO 4 -->
+    <div class="fcard" id="p4">
+      <div class="fcard-header"><h3>Confirma tu cita</h3><p>Revisa que todo sea correcto.</p></div>
+      <div class="fcard-body">
+        <div class="err-banner" id="e4"></div>
+        <div id="resumen"></div>
+        <div class="loading" id="lconfirmar"><div class="spinner"></div><p style="font-size:13px;color:var(--tinta-muted)">Agendando tu cita...</p></div>
+      </div>
+      <div class="fcard-footer" id="footer4">
+        <button class="btn btn-sec" onclick="goStep(3)">← Anterior</button>
+        <button class="btn btn-grn" onclick="confirmarCita()">Confirmar y agendar</button>
+      </div>
+    </div>
+
+    <!-- COMPROBANTE -->
+    <div class="fcard" id="p5">
+      <div class="fcard-body">
+        <div class="comprobante">
+          <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <h3 style="font-size:18px;font-weight:800;color:var(--verde);margin-bottom:6px;">Cita agendada</h3>
+          <p style="font-size:13px;color:var(--tinta-muted);margin-bottom:14px;">Guarda tu comprobante. Lo necesitarás el día de tu cita.</p>
+          <div class="folio-badge" id="folio-badge">Folio #—</div>
+          <div class="detalle-box" id="detalle-final"></div>
+          <div class="qr-seccion">
+            <div class="qr-seccion-titulo">Código QR — preséntalo en ventanilla</div>
+            <div class="qr-box"><img id="qr-img" src="" alt="Código QR"></div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+            <button type="button" id="btn-dl-pdf" class="btn btn-grn">Descargar comprobante PDF</button>
+            <a id="btn-dl" download="comprobante_qr.png" style="background:var(--superficie);color:var(--tinta);padding:10px 20px;border-radius:4px;text-decoration:none;font-size:13px;font-weight:700;border:1.5px solid var(--borde);">Descargar solo QR</a>
+            <button onclick="nuevaCita()" class="btn btn-sec">+ Agendar otra cita</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: TRÁMITES -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="tramites">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg> Trámites disponibles</h2>
+    </div>
+    <div id="vitrina-tramites"><div class="loading" style="display:block;"><div class="spinner"></div><p style="font-size:13px;color:var(--tinta-muted)">Cargando...</p></div></div>
+    <div style="margin-top:24px;text-align:center;">
+      <button class="btn btn-prim" onclick="mostrarSeccion('agendar')">Agendar mi cita →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: GUÍA -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="guia">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Guía paso a paso</h2>
+    </div>
+    <div class="pasos-grid">
+      <div class="paso-card"><div class="paso-num">1</div><div><h3>Ingresa tus datos</h3><p>Captura tu CURP, nombre completo y domicilio manualmente.</p></div></div>
+      <div class="paso-card"><div class="paso-num">2</div><div><h3>Elige tu trámite</h3><p>Selecciona el servicio que necesitas del catálogo de trámites disponibles en el portal.</p></div></div>
+      <div class="paso-card"><div class="paso-num">3</div><div><h3>Elige fecha y hora</h3><p>Selecciona el día y horario disponible que más te convenga para realizar tu trámite.</p></div></div>
+      <div class="paso-card"><div class="paso-num">4</div><div><h3>Recibe tu comprobante</h3><p>Descarga tu comprobante en PDF con tus datos y el código QR. Preséntalo el día de tu cita.</p></div></div>
+      <div class="paso-card"><div class="paso-num">5</div><div><h3>Llega a tiempo</h3><p>Preséntate 10 minutos antes de tu cita con tu identificación oficial y los documentos requeridos.</p></div></div>
+      <div class="paso-card"><div class="paso-num">6</div><div><h3>Paga en ventanilla</h3><p>El costo del trámite se paga directamente en la ventanilla de caja el día de tu visita.</p></div></div>
+    </div>
+    <div style="margin-top:24px;text-align:center;">
+      <button class="btn btn-prim" onclick="mostrarSeccion('agendar')">Agendar mi cita →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: UBICACIÓN -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="ubicacion">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Ubicación y contacto</h2>
+    </div>
+    <div class="ubi-grid">
+      <div class="mapa">
+        <iframe
+          title="Mapa {{ oficina.nombre }}"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://maps.google.com/maps?q={{ oficina.maps_lat }},{{ oficina.maps_lng }}&amp;hl=es&amp;z=16&amp;output=embed">
+        </iframe>
+        <div class="mapa-body">
+          <p><strong>{{ oficina.nombre }}</strong><br>{{ oficina.direccion_linea1 }}<br>{{ oficina.direccion_linea2 }}</p>
+          <a href="{{ oficina.maps_url }}" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="info-label">Oficina</div><div class="info-val">{{ oficina.nombre }}</div></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="info-label">Dirección</div><div class="info-val">{{ oficina.direccion_linea1 }}<br>{{ oficina.direccion_linea2 }}</div></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="info-label">Horario de atención</div><div class="info-val">{{ oficina.horario_semana }}<br>{{ oficina.horario_fin }}</div></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><div class="info-label">Teléfono</div><div class="info-val"><a href="tel:{{ oficina.telefono_enlace }}" style="color:inherit;text-decoration:none;">{{ oficina.telefono }}</a></div></div></div>
+        <div class="info-row"><div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg></div><div><div class="info-label">Correo</div><div class="info-val"><a href="mailto:{{ oficina.correo }}" style="color:inherit;text-decoration:none;">{{ oficina.correo }}</a></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: REQUISITOS -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="requisitos">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg> Requisitos generales</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:20px;">
+        <div style="font-size:13.5px;font-weight:700;margin-bottom:12px;color:var(--verde);">Documentos generales</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Identificación oficial vigente (INE, pasaporte)</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>CURP impresa o en formato digital</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Comprobante de domicilio reciente (no mayor a 3 meses)</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Comprobante QR de tu cita agendada</span></li>
+        </ul>
+      </div>
+      <div style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:20px;">
+        <div style="font-size:13.5px;font-weight:700;margin-bottom:12px;color:var(--oro);">Consideraciones importantes</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Preséntate 10 minutos antes de tu horario asignado</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>El pago se realiza en efectivo en ventanilla de caja</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Cada trámite puede requerir documentos adicionales</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>No se permiten acompañantes salvo menores de edad</span></li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center;">
+      <button class="btn btn-prim" onclick="mostrarSeccion('agendar')">Agendar mi cita →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: PREGUNTAS FRECUENTES -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="preguntas">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.7-2 3.3M12 17h.01"/></svg> Preguntas frecuentes</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:700px;margin:0 auto;">
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Necesito crear una cuenta para agendar?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">No. El portal es de acceso libre. Solo necesitas tu CURP y código postal para agendar tu cita.</p>
+      </details>
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Qué pasa si no puedo asistir a mi cita?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">Por el momento puedes agendar una nueva cita. Próximamente se habilitará la opción de cancelación en línea.</p>
+      </details>
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Dónde presento mi código QR?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">En {{ oficina.nombre }}, ubicada en {{ oficina.direccion_linea1 }}, {{ oficina.municipio }}. El personal escaneará tu código para confirmar tu asistencia.</p>
+      </details>
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Se puede pagar en línea?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">Por ahora el pago se realiza en la ventanilla de caja el día de tu cita, en efectivo.</p>
+      </details>
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Con cuánto tiempo de anticipación debo agendar?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">Puedes agendar a partir del día siguiente y hasta un mes de anticipación como máximo.</p>
+      </details>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <strong>{{ oficina.nombre }} — {{ oficina.municipio }}, {{ oficina.estado }}</strong><br>
+  Portal ciudadano · Servicio gratuito en línea<br>
+  <span style="font-size:11px;opacity:.65;">Para soporte contacta a la oficina en horario de atención.</span>
+</footer>
+
+<script>
+  const E = id => document.getElementById(id);
+  const st = {
+    apellidoPaterno:null, apellidoMaterno:null, nombrePila:null, nombre:null,
+    curp:null, cp:null,
+    calle:null, numExt:null, numInt:null, colonia:null, municipio:null, estado:null, dir:null,
+    tramiteId:null, tramiteNombre:null, tramiteCosto:null, tramiteDocumentos:null, tramiteDuracion:null,
+    fecha:null, hora:null
+  };
+  const RE_CURP = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/;
+  const ENTIDADES_CURP = new Set([
+    'AS','BC','BS','CC','CL','CM','CS','CH','DF','DG','GT','GR','HG','JC','MC','MN','MS','NT','NL','OC',
+    'PL','QT','QR','SP','SL','SR','TC','TS','TL','VZ','YN','ZS','NE'
+  ]);
+
+  function sanitizarCurp(valor) {
+    return String(valor || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 18);
+  }
+
+  function esCurpValida(curp) {
+    if (!RE_CURP.test(curp)) return false;
+    const mes = parseInt(curp.slice(6, 8), 10);
+    const dia = parseInt(curp.slice(8, 10), 10);
+    if (mes < 1 || mes > 12 || dia < 1 || dia > 31) return false;
+    return ENTIDADES_CURP.has(curp.slice(11, 13));
+  }
+
+  function actualizarProgresoCurp(curp) {
+    const el = E('curp-progreso');
+    if (!el) return;
+    el.textContent = `${curp.length} / 18 caracteres`;
+    el.style.color = curp.length === 18 && esCurpValida(curp) ? 'var(--verde)' : (curp.length === 18 ? 'var(--rojo)' : 'var(--tinta-tenue)');
+  }
+
+  function parseDocumentos(texto) {
+    if (!texto || !String(texto).trim()) return [];
+    return String(texto).split(/[\n,]+/).map(d => d.trim()).filter(Boolean);
+  }
+
+  function nombreCompleto(apPat, apMat, nombre) {
+    return [apPat, apMat, nombre].map(v => (v || '').trim()).filter(Boolean).join(' ');
+  }
+
+  function construirDireccion(d) {
+    let linea = d.calle.trim();
+    if (d.numExt) linea += ' No. ' + d.numExt.trim();
+    if (d.numInt) linea += ', Int. ' + d.numInt.trim();
+    linea += ', Col. ' + d.colonia.trim() + ', ' + d.municipio.trim() + ', ' + d.estado.trim() + ', C.P. ' + d.cp.trim();
+    return linea;
+  }
+
+  function leerDatosFormulario() {
+    return {
+      apellidoPaterno: E('f-ap-pat').value.trim(),
+      apellidoMaterno: E('f-ap-mat').value.trim(),
+      nombrePila: E('f-nombre').value.trim(),
+      curp: sanitizarCurp(E('f-curp').value),
+      cp: E('f-cp').value.replace(/\D/g, '').slice(0, 5),
+      calle: E('f-calle').value.trim(),
+      numExt: E('f-num-ext').value.trim(),
+      numInt: E('f-num-int').value.trim(),
+      colonia: E('f-colonia').value.trim(),
+      municipio: E('f-municipio').value.trim(),
+      estado: E('f-estado').value.trim(),
+    };
+  }
+
+  function guardarDatosEnEstado(d) {
+    st.apellidoPaterno = d.apellidoPaterno;
+    st.apellidoMaterno = d.apellidoMaterno;
+    st.nombrePila = d.nombrePila;
+    st.nombre = nombreCompleto(d.apellidoPaterno, d.apellidoMaterno, d.nombrePila);
+    st.curp = d.curp;
+    st.cp = d.cp;
+    st.calle = d.calle;
+    st.numExt = d.numExt;
+    st.numInt = d.numInt;
+    st.colonia = d.colonia;
+    st.municipio = d.municipio;
+    st.estado = d.estado;
+    st.dir = construirDireccion(d);
+  }
+
+  function htmlRequisitos(docs) {
+    const items = parseDocumentos(docs);
+    if (!items.length) return '';
+    return '<div class="requisitos-resumen" style="margin-top:12px;padding:14px;background:var(--gris-piedra);border-radius:6px;border:1px solid var(--borde);"><div style="font-size:13px;font-weight:700;color:var(--verde);margin-bottom:8px;">Documentos requeridos</div><ul style="margin:0;padding-left:18px;font-size:12px;color:var(--tinta-muted);line-height:1.7;">' + items.map(d => '<li>' + d + '</li>').join('') + '</ul></div>';
+  }
+
+  let comprobantePdfUrl = null;
+
+  function fechaLegible(fechaIso) {
+    const meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    const [y,m,d]=(fechaIso||'').split('-');
+    if (!y) return '';
+    return `${parseInt(d,10)} de ${meses[parseInt(m,10)-1]} de ${y}`;
+  }
+
+  function descargarComprobantePdf() {
+    if (!comprobantePdfUrl) {
+      alert('El comprobante PDF aún no está disponible. Agenda la cita primero.');
+      return;
+    }
+    window.location.href = comprobantePdfUrl;
+  }
+
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k,v] = c.trim().split('=');
+      if (k===n) return decodeURIComponent(v);
+    }
+    return null;
+  }
+
+  // ── Navegación ──
+  function mostrarInicio() {
+    E('inicio').style.display = 'block';
+    document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function mostrarSeccion(id) {
+    E('inicio').style.display = 'none';
+    document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+    E(id).classList.add('visible');
+    window.scrollTo({top:0, behavior:'smooth'});
+    if (id === 'tramites' && !vitrinaCargada) cargarVitrina();
+    if (id === 'agendar'  && !catalogoCargado) cargarCatalogo();
+  }
+
+  // ── Catálogo ──
+  let vitrinaCargada = false;
+  let catalogoCargado = false;
+  let tramitesData = null;
+
+  function fetchTramites() {
+    if (tramitesData) return Promise.resolve(tramitesData);
+    return fetch('/citas/api/tramites/').then(r=>r.json()).then(d=>{ tramitesData=d; return d; });
+  }
+
+  function cargarVitrina() {
+    fetchTramites().then(data => {
+      vitrinaCargada = true;
+      const cont = E('vitrina-tramites');
+      cont.innerHTML = '';
+      if (!data.secciones.length) { cont.innerHTML = '<p style="color:var(--tinta-muted);text-align:center;padding:20px;">No hay trámites disponibles.</p>'; return; }
+      data.secciones.forEach(sec => {
+        const bloque = document.createElement('div');
+        bloque.className = 'seccion-bloque';
+        bloque.innerHTML = `<div class="seccion-nombre">${sec.nombre}</div>
+          <div class="tgrid-vitrina">${sec.tramites.map(t=>`
+            <div class="tramite-vitrina">
+              <span>${t.nombre}</span>
+              <span>$${parseFloat(t.costo).toFixed(2)}</span>
+            </div>`).join('')}</div>`;
+        cont.appendChild(bloque);
+      });
+    }).catch(()=>{ E('vitrina-tramites').innerHTML='<p style="color:var(--rojo);text-align:center;padding:20px;">Error al cargar trámites.</p>'; });
+  }
+
+  function cargarCatalogo() {
+    fetchTramites().then(data => {
+      catalogoCargado = true;
+      const cont = E('form-catalogo');
+      cont.innerHTML = '';
+      data.secciones.forEach(sec => {
+        const title = document.createElement('div'); title.className = 'sec-title-f'; title.textContent = sec.nombre; cont.appendChild(title);
+        const grid = document.createElement('div'); grid.className = 'tgrid-f';
+        sec.tramites.forEach(t => {
+          const item = document.createElement('div');
+          item.className = 'titem';
+          item.innerHTML = `<div class="tradio"></div><span class="tnombre">${t.nombre}</span><span class="tcosto">$${parseFloat(t.costo).toFixed(2)}</span>`;
+          item.onclick = () => {
+            document.querySelectorAll('.titem').forEach(i=>i.classList.remove('sel'));
+            item.classList.add('sel');
+            st.tramiteId=t.id; st.tramiteNombre=t.nombre; st.tramiteCosto=t.costo;
+            st.tramiteDocumentos=t.documentos || ''; st.tramiteDuracion=t.duracion_minutos || 15;
+            st.hora=null;
+            E('costo-val').textContent='$'+parseFloat(t.costo).toFixed(2);
+            E('costo-box').classList.add('show');
+            E('e2').classList.remove('show');
+            if (E('f-fecha').value) cargarHorarios();
+          };
+          grid.appendChild(item);
+        });
+        cont.appendChild(grid);
+      });
+    }).catch(()=>{ E('form-catalogo').innerHTML='<p style="color:var(--rojo);text-align:center;padding:20px;">Error al cargar trámites.</p>'; });
+  }
+
+  // ── Stepper ──
+  function goStep(n) {
+    [1,2,3,4].forEach(i => {
+      const s=E('s'+i);
+      s.className='step'+(i<n?' done':i===n?' active':'');
+      s.querySelector('.step-circle').textContent=i<n?'✓':i;
+    });
+    [1,2,3,4,5].forEach(i=>{ const c=E('p'+i); if(c) c.className='fcard'+(i===n?' active':''); });
+    if (n === 4) resetConfirmacionUI();
+    E('agendar').scrollIntoView({behavior:'smooth'});
+  }
+
+  function resetConfirmacionUI() {
+    const footer = E('footer4');
+    const loading = E('lconfirmar');
+    if (footer) footer.style.display = 'flex';
+    if (loading) loading.style.display = 'none';
+    const err = E('e4');
+    if (err) err.classList.remove('show');
+  }
+
+  function showFerr(id,inp){ E(id).classList.add('show'); if(inp) E(inp).classList.add('err'); }
+  function hideFerr(id,inp){ E(id).classList.remove('show'); if(inp) E(inp).classList.remove('err'); }
+
+  function goPaso1(){
+    let ok = true;
+    const d = leerDatosFormulario();
+    E('f-curp').value = d.curp;
+    E('f-cp').value = d.cp;
+    actualizarProgresoCurp(d.curp);
+    E('e1').classList.remove('show');
+
+    if (!d.apellidoPaterno) { showFerr('fe-ap-pat','f-ap-pat'); ok=false; } else hideFerr('fe-ap-pat','f-ap-pat');
+    if (!d.apellidoMaterno) { showFerr('fe-ap-mat','f-ap-mat'); ok=false; } else hideFerr('fe-ap-mat','f-ap-mat');
+    if (!d.nombrePila) { showFerr('fe-nombre','f-nombre'); ok=false; } else hideFerr('fe-nombre','f-nombre');
+    if (!esCurpValida(d.curp)) { showFerr('fe-curp','f-curp'); ok=false; } else hideFerr('fe-curp','f-curp');
+    if (!/^[0-9]{5}$/.test(d.cp)) { showFerr('fe-cp','f-cp'); ok=false; } else hideFerr('fe-cp','f-cp');
+    if (!d.calle) { showFerr('fe-calle','f-calle'); ok=false; } else hideFerr('fe-calle','f-calle');
+    if (!d.numExt) { showFerr('fe-num-ext','f-num-ext'); ok=false; } else hideFerr('fe-num-ext','f-num-ext');
+    if (!d.colonia) { showFerr('fe-colonia','f-colonia'); ok=false; } else hideFerr('fe-colonia','f-colonia');
+    if (!d.municipio) { showFerr('fe-municipio','f-municipio'); ok=false; } else hideFerr('fe-municipio','f-municipio');
+    if (!d.estado) { showFerr('fe-estado','f-estado'); ok=false; } else hideFerr('fe-estado','f-estado');
+    if (!ok) return;
+
+    guardarDatosEnEstado(d);
+    if (!catalogoCargado) cargarCatalogo();
+    goStep(2);
+  }
+
+  function fechaIsoLocal(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+
+  function aplicarRangoFechaAgenda() {
+    const manana = new Date();
+    manana.setDate(manana.getDate() + 1);
+    const max = new Date();
+    max.setMonth(max.getMonth() + 1);
+    const minIso = fechaIsoLocal(manana);
+    const maxIso = fechaIsoLocal(max);
+    E('f-fecha').min = minIso;
+    E('f-fecha').max = maxIso;
+    const hint = E('fecha-rango-hint');
+    if (hint) hint.textContent = 'Disponible del ' + minIso.split('-').reverse().join('/') + ' al ' + maxIso.split('-').reverse().join('/') + ' (máximo un mes de anticipación).';
+    const val = E('f-fecha').value;
+    if (val && (val < minIso || val > maxIso)) E('f-fecha').value = '';
+  }
+
+  function fechaAgendaValida(fechaIso) {
+    if (!fechaIso) return false;
+    const min = E('f-fecha').min;
+    const max = E('f-fecha').max;
+    return fechaIso >= min && fechaIso <= max;
+  }
+
+  function goPaso2(){
+    if (!st.apellidoPaterno) { E('e1').textContent='Completa tus datos personales primero.'; E('e1').classList.add('show'); goStep(1); return; }
+    if (!st.tramiteId) { E('e2').classList.add('show'); return; }
+    E('e2').classList.remove('show');
+    aplicarRangoFechaAgenda();
+    goStep(3);
+    if (E('f-fecha').value) cargarHorarios();
+  }
+
+  function goPaso3(){
+    if (!E('f-fecha').value) { showFerr('fe-fecha','f-fecha'); return; }
+    if (!fechaAgendaValida(E('f-fecha').value)) {
+      E('fe-fecha').textContent = 'La fecha debe ser entre mañana y un mes de anticipación.';
+      showFerr('fe-fecha','f-fecha');
+      return;
+    }
+    hideFerr('fe-fecha','f-fecha');
+    if (!st.hora) { E('fe-hora').classList.add('show'); return; }
+    E('fe-hora').classList.remove('show');
+    if (!st.tramiteId) { E('e3').textContent='Selecciona un trámite en el paso 2.'; E('e3').classList.add('show'); goStep(2); return; }
+
+    const meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    const [y,m,d]=st.fecha.split('-');
+    const fl=`${parseInt(d)} de ${meses[parseInt(m)-1]} de ${y}`;
+    E('resumen').innerHTML=
+      '<div class="ritem"><span class="rkey">Trámite</span><span class="rval">' + st.tramiteNombre + (st.tramiteDuracion ? ' (' + st.tramiteDuracion + ' min)' : '') + '</span></div>' +
+      '<div class="ritem"><span class="rkey">CURP</span><span class="rval" style="font-family:monospace;letter-spacing:.5px;">' + st.curp + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Apellido paterno</span><span class="rval">' + st.apellidoPaterno + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Apellido materno</span><span class="rval">' + st.apellidoMaterno + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Nombre(s)</span><span class="rval">' + st.nombrePila + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Domicilio</span><span class="rval" style="max-width:58%;text-align:right;line-height:1.4;">' + st.dir + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Fecha</span><span class="rval">' + fl + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Hora</span><span class="rval">' + st.hora + '</span></div>' +
+      htmlRequisitos(st.tramiteDocumentos) +
+      '<div class="rtotal"><span style="font-size:13px;font-weight:700;color:var(--verde)">Total a pagar en ventanilla</span><span style="font-size:20px;font-weight:800;color:var(--verde)">$' + parseFloat(st.tramiteCosto).toFixed(2) + '</span></div>' +
+      '<div class="confirmar-inline" id="confirmar-inline">' +
+        '<button type="button" class="btn btn-grn" onclick="confirmarCita()">Confirmar y agendar</button>' +
+      '</div>';
+    resetConfirmacionUI();
+    goStep(4);
+    setTimeout(() => {
+      const target = E('footer4') || E('confirmar-inline');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 150);
+  }
+
+  function renderHorarios(data) {
+    st.tramiteDuracion = data.duracion_minutos || st.tramiteDuracion || 15;
+    E('hgroup').style.display = 'block';
+    E('hduracion').style.display = 'block';
+    E('hduracion').textContent = 'Duración estimada del trámite: ' + st.tramiteDuracion + ' min. Los horarios se muestran según esa duración.';
+    const grid = E('hgrid');
+    grid.innerHTML = '';
+    E('hsin-horarios').style.display = 'none';
+    const lista = data.horarios || [];
+    const libres = lista.filter(h => !h.ocupado);
+    if (data.dia_bloqueado || !lista.length) {
+      E('hsin-horarios').style.display = 'block';
+      E('hsin-horarios').textContent = 'Este día no tiene atención o está bloqueado para citas.';
+      return;
+    }
+    if (!libres.length) {
+      E('hsin-horarios').style.display = 'block';
+      E('hsin-horarios').textContent = 'No quedan horarios libres para este trámite en la fecha seleccionada.';
+    }
+    lista.forEach(h => {
+      const btn = document.createElement('div');
+      btn.className = 'hbtn' + (h.ocupado ? ' busy' : '');
+      btn.textContent = h.hora;
+      if (!h.ocupado) {
+        btn.onclick = () => {
+          document.querySelectorAll('.hbtn').forEach(b => b.classList.remove('sel'));
+          btn.classList.add('sel');
+          st.hora = h.hora;
+          E('fe-hora').classList.remove('show');
+        };
+      }
+      grid.appendChild(btn);
+    });
+  }
+
+  function cargarHorarios(){
+    const fecha=E('f-fecha').value;
+    if(!fecha) return;
+    if (!fechaAgendaValida(fecha)) {
+      E('e3').textContent = 'Solo puedes agendar hasta un mes de anticipación.';
+      E('e3').classList.add('show');
+      E('hgroup').style.display='none';
+      E('hloading').style.display='none';
+      return;
+    }
+    if(!st.tramiteId){
+      E('e3').textContent='Primero selecciona un trámite en el paso 2.';
+      E('e3').classList.add('show');
+      E('hgroup').style.display='none';
+      return;
+    }
+    st.fecha=fecha; st.hora=null;
+    E('e3').classList.remove('show');
+    E('hgroup').style.display='none';
+    E('hsin-horarios').style.display='none';
+    E('hloading').style.display='block';
+    fetch('/citas/api/horarios/?fecha=' + encodeURIComponent(fecha) + '&tramite_id=' + encodeURIComponent(st.tramiteId))
+      .then(r => r.json().then(data => ({ ok: r.ok, data })))
+      .then(({ ok, data }) => {
+        if (!ok || data.error) {
+          E('e3').textContent = data.error || 'Error al cargar horarios.';
+          E('e3').classList.add('show');
+          return;
+        }
+        renderHorarios(data);
+      })
+      .catch(() => {
+        E('e3').textContent = 'Error al cargar horarios. Intenta de nuevo.';
+        E('e3').classList.add('show');
+      })
+      .finally(() => {
+        E('hloading').style.display = 'none';
+      });
+  }
+
+  function confirmarCita(){
+    E('footer4').style.display='none';
+    const inline = E('confirmar-inline');
+    if (inline) inline.style.display='none';
+    E('lconfirmar').style.display='block';
+    E('e4').classList.remove('show');
+    fetch('/citas/agendar/',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},
+      body:JSON.stringify({tramite_id:st.tramiteId,nombre:st.nombre,curp:st.curp,cp:st.cp,direccion:st.dir,fecha:st.fecha,hora:st.hora})
+    })
+    .then(async r => {
+      let data = {};
+      try { data = await r.json(); } catch (e) {
+        throw new Error(r.status === 403 ? 'Sesión expirada. Recarga la página e intenta de nuevo.' : 'Respuesta inválida del servidor.');
+      }
+      return { ok: r.ok, data };
+    })
+    .then(({ ok, data }) => {
+      E('lconfirmar').style.display='none';
+      if (ok && data.ok) { mostrarComprobante(data); return; }
+      resetConfirmacionUI();
+      const inline = E('confirmar-inline');
+      if (inline) inline.style.display='flex';
+      E('e4').textContent = data.error || 'Error al agendar.';
+      E('e4').classList.add('show');
+    })
+    .catch(err => {
+      E('lconfirmar').style.display='none';
+      resetConfirmacionUI();
+      const inline = E('confirmar-inline');
+      if (inline) inline.style.display='flex';
+      E('e4').textContent = err.message || 'Error de conexión.';
+      E('e4').classList.add('show');
+    });
+  }
+
+  function mostrarComprobante(data){
+    comprobantePdfUrl = data.pdf_url || null;
+    E('folio-badge').textContent='Folio #'+data.folio;
+    E('qr-img').src=data.qr_url;
+    E('btn-dl').href=data.qr_url;
+    const btnPdf = E('btn-dl-pdf');
+    if (btnPdf) {
+      btnPdf.onclick = descargarComprobantePdf;
+      btnPdf.disabled = !comprobantePdfUrl;
+    }
+    E('detalle-final').innerHTML=
+      '<div class="drow"><span>Trámite</span><span>' + st.tramiteNombre + (st.tramiteDuracion ? ' (' + st.tramiteDuracion + ' min)' : '') + '</span></div>' +
+      '<div class="drow"><span>CURP</span><span style="font-family:monospace;">' + st.curp + '</span></div>' +
+      '<div class="drow"><span>Apellido paterno</span><span>' + st.apellidoPaterno + '</span></div>' +
+      '<div class="drow"><span>Apellido materno</span><span>' + st.apellidoMaterno + '</span></div>' +
+      '<div class="drow"><span>Nombre(s)</span><span>' + st.nombrePila + '</span></div>' +
+      '<div class="drow"><span>Domicilio</span><span style="max-width:62%;text-align:right;line-height:1.4;">' + st.dir + '</span></div>' +
+      '<div class="drow"><span>Fecha</span><span>' + fechaLegible(st.fecha) + '</span></div>' +
+      '<div class="drow"><span>Hora</span><span>' + st.hora + '</span></div>' +
+      '<div class="drow"><span>Costo a pagar</span><span>$' + parseFloat(st.tramiteCosto).toFixed(2) + '</span></div>';
+    [1,2,3,4,5].forEach(i=>{ const c=E('p'+i); if(c) c.className='fcard'+(i===5?' active':''); });
+  }
+
+  function nuevaCita(){
+    st.apellidoPaterno=null; st.apellidoMaterno=null; st.nombrePila=null; st.nombre=null;
+    st.curp=null; st.cp=null; st.calle=null; st.numExt=null; st.numInt=null; st.colonia=null; st.municipio=null; st.estado=null; st.dir=null;
+    st.tramiteId=null; st.tramiteNombre=null; st.tramiteCosto=null; st.tramiteDocumentos=null; st.tramiteDuracion=null;
+    st.fecha=null; st.hora=null;
+    comprobantePdfUrl=null;
+    goStep(1);
+    document.querySelectorAll('.titem').forEach(i=>i.classList.remove('sel'));
+    E('costo-box').classList.remove('show');
+    ['f-ap-pat','f-ap-mat','f-nombre','f-curp','f-calle','f-num-ext','f-num-int','f-colonia','f-municipio','f-cp','f-fecha'].forEach(id=>{ const el=E(id); if(el) el.value=''; });
+    if (E('f-estado')) E('f-estado').value = 'Estado de México';
+    E('hgroup').style.display='none';
+    E('hduracion').style.display='none';
+    E('hsin-horarios').style.display='none';
+    E('hloading').style.display='none';
+    actualizarProgresoCurp('');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const curpInput = E('f-curp');
+    const fechaInput = E('f-fecha');
+
+    if (curpInput) {
+      curpInput.addEventListener('paste', (ev) => {
+        ev.preventDefault();
+        const texto = (ev.clipboardData || window.clipboardData).getData('text');
+        curpInput.value = sanitizarCurp(texto);
+        actualizarProgresoCurp(curpInput.value);
+        if (esCurpValida(curpInput.value)) hideFerr('fe-curp', 'f-curp');
+      });
+      curpInput.addEventListener('input', () => {
+        const limpio = sanitizarCurp(curpInput.value);
+        if (curpInput.value !== limpio) curpInput.value = limpio;
+        actualizarProgresoCurp(limpio);
+        if (limpio.length === 18) {
+          if (esCurpValida(limpio)) hideFerr('fe-curp', 'f-curp');
+          else showFerr('fe-curp', 'f-curp');
+        } else {
+          hideFerr('fe-curp', 'f-curp');
+        }
+      });
+      curpInput.addEventListener('blur', () => {
+        curpInput.value = sanitizarCurp(curpInput.value);
+        actualizarProgresoCurp(curpInput.value);
+        if (curpInput.value.length === 18 && !esCurpValida(curpInput.value)) {
+          showFerr('fe-curp', 'f-curp');
+        } else if (esCurpValida(curpInput.value)) {
+          hideFerr('fe-curp', 'f-curp');
+        }
+      });
+    }
+
+    if (fechaInput) {
+      fechaInput.addEventListener('change', cargarHorarios);
+      fechaInput.addEventListener('input', cargarHorarios);
+    }
+
+    const cpInput = E('f-cp');
+    if (cpInput) {
+      cpInput.addEventListener('input', () => {
+        cpInput.value = cpInput.value.replace(/\D/g, '').slice(0, 5);
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

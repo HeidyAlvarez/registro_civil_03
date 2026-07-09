@@ -1,0 +1,112 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/login.css' %}">
+  {{ form.media }}
+</head>
+<body class="login-page">
+
+<div class="login-top">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <aside class="login-aside">
+      <div class="geo-layer"></div>
+      <div class="aside-brand">
+        <div class="crest">RC</div>
+        <h1>Registro Civil</h1>
+        <p>Oficialía 03 · Sistema interno de gestión de citas</p>
+      </div>
+      <div class="side-tabs">
+        <div class="side-tab active">Acceso</div>
+        <div class="side-tab">RC 03</div>
+      </div>
+    </aside>
+
+    <main class="login-main">
+      <div class="login-form-box">
+
+        <div class="login-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+          </svg>
+        </div>
+        <h2>Iniciar sesión</h2>
+
+        {% if form.errors and not form.non_field_errors %}
+        <p class="errornote">Por favor corrige el error indicado.</p>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+          <p class="errornote">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <p class="errornote">
+          Ya iniciaste sesión como {{ user.username }}, pero no tienes permiso para esta página.
+        </p>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">
+          {% csrf_token %}
+
+          <div class="field">
+            <label class="field-label" for="id_username">Usuario</label>
+            <div class="field-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+              </svg>
+              <input type="text" name="username" id="id_username" placeholder="Usuario"
+                value="{{ form.username.value|default:'' }}" autocomplete="username" required autofocus>
+            </div>
+            {% if form.username.errors %}
+              {% for error in form.username.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="id_password">Contraseña</label>
+            <div class="field-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="5" y="11" width="14" height="10" rx="2"/>
+                <path d="M8 11V8a4 4 0 118 0v3"/>
+              </svg>
+              <input type="password" name="password" id="id_password" placeholder="Contraseña"
+                autocomplete="current-password" required>
+            </div>
+            {% if form.password.errors %}
+              {% for error in form.password.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+            {% endif %}
+          </div>
+
+          <input type="hidden" name="next" value="{{ next }}">
+
+          <div class="form-actions">
+            <span></span>
+            <button type="submit" class="btn-login">Iniciar sesión</button>
+          </div>
+        </form>
+
+        <p class="login-footer-note">Acceso restringido al personal autorizado</p>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+</body>
+</html>

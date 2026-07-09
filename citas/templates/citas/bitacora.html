@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Bitácora de Auditoría — Registro Civil</title>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <link rel="stylesheet" href="{% static 'citas/css/bitacora.css' %}?v=2">
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Bitácora de auditoría</span>
+    </span>
+  </a>
+</header>
+
+<nav class="rc-breadcrumbs" aria-label="Ruta de navegación">
+  {% if request.user.is_staff %}
+  <a href="{% url 'admin:index' %}">Inicio</a>
+  <span class="rc-bc-sep" aria-hidden="true">›</span>
+  <a href="{% url 'admin:app_list' app_label='citas' %}">Citas</a>
+  <span class="rc-bc-sep" aria-hidden="true">›</span>
+  {% else %}
+  <a href="{{ panel_inicio_url }}">Inicio</a>
+  <span class="rc-bc-sep" aria-hidden="true">›</span>
+  {% endif %}
+  <span class="rc-bc-current">
+    <svg class="rc-bc-icon" viewBox="0 0 24 24" fill="#E8C547" aria-hidden="true"><path d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-6l-2-2z"/></svg>
+    Bitácora de Auditoría (Logs)
+  </span>
+</nav>
+
+{% include 'citas/includes/barra_usuario.html' %}
+
+<main class="page">
+  <div class="bitacora-page">
+    <div class="bitacora-card">
+      <div class="bitacora-head">
+        <div>
+          <h1 class="bitacora-title">Bitácora de Auditoría</h1>
+          <p class="bitacora-subtitle">Registro inmutable de acciones del personal autorizado. Solo lectura.</p>
+        </div>
+        <a class="btn-panel-inicio" href="{{ panel_inicio_url }}">Inicio</a>
+      </div>
+
+      <form class="bitacora-filters" method="get" action="">
+        <div class="bitacora-field bitacora-field-search">
+          <label for="bitacora-buscar">Buscar</label>
+          <input id="bitacora-buscar" type="search" name="q" value="{{ filtro_q }}" placeholder="Usuario, descripción, IP…">
+        </div>
+        <div class="bitacora-field">
+          <label for="bitacora-accion">Acción</label>
+          <select id="bitacora-accion" name="accion">
+            <option value="">Todas</option>
+            {% for valor, etiqueta in acciones %}
+            <option value="{{ valor }}"{% if filtro_accion == valor %} selected{% endif %}>{{ etiqueta }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="bitacora-field">
+          <label for="bitacora-usuario">Usuario</label>
+          <select id="bitacora-usuario" name="usuario">
+            <option value="">Todos</option>
+            <option value="__none__"{% if filtro_usuario == '__none__' %} selected{% endif %}>desconocido</option>
+            {% for nombre in usuarios %}
+            <option value="{{ nombre }}"{% if filtro_usuario == nombre %} selected{% endif %}>{{ nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="bitacora-filter-btn" type="submit">Filtrar</button>
+      </form>
+
+      <div class="bitacora-table-wrap">
+        <table class="bitacora-table">
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Usuario</th>
+              <th>Acción</th>
+              <th>Descripción</th>
+              <th>IP</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for registro in registros %}
+            <tr>
+              <td>{{ registro.fecha_hora|date:"d/m/Y H:i:s" }}</td>
+              <td>{{ registro.nombre_usuario_log }}</td>
+              <td><span class="pill {{ registro.clase_pill_accion }}">{{ registro.get_accion_display }}</span></td>
+              <td>{{ registro.descripcion }}</td>
+              <td>{{ registro.ip_direccion|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="bitacora-empty">No hay registros que coincidan con los filtros.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if registros.has_other_pages %}
+      <div class="bitacora-pagination">
+        {% if registros.has_previous %}
+        <a href="?q={{ filtro_q|urlencode }}&amp;accion={{ filtro_accion|urlencode }}&amp;usuario={{ filtro_usuario|urlencode }}&amp;page={{ registros.previous_page_number }}">← Anterior</a>
+        {% endif %}
+        <span class="current">Página {{ registros.number }} de {{ registros.paginator.num_pages }}</span>
+        {% if registros.has_next %}
+        <a href="?q={{ filtro_q|urlencode }}&amp;accion={{ filtro_accion|urlencode }}&amp;usuario={{ filtro_usuario|urlencode }}&amp;page={{ registros.next_page_number }}">Siguiente →</a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <p class="bitacora-note">Los registros no pueden editarse ni eliminarse desde esta pantalla.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

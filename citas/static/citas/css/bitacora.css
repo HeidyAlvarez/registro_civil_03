@@ -1,0 +1,195 @@
+/* Bitácora de auditoría — vista personalizada */
+.bitacora-page { max-width: 1100px; margin: 28px auto; padding: 0 20px 48px; }
+.bitacora-card {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 28px 28px 22px;
+  box-shadow: 0 4px 20px rgba(10,63,41,.08);
+}
+.bitacora-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.bitacora-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--verde-dark);
+  margin: 0 0 6px;
+}
+.bitacora-subtitle {
+  font-size: 13px;
+  color: var(--tinta-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+.bitacora-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+  background: #fafafa;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.bitacora-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .45px;
+  color: var(--tinta-muted);
+  margin-bottom: 5px;
+}
+.bitacora-field input,
+.bitacora-field select {
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #fff;
+  color: var(--tinta);
+  min-width: 140px;
+}
+.bitacora-field-search { flex: 1 1 220px; }
+.bitacora-field-search input { width: 100%; min-width: 220px; }
+.bitacora-filter-btn {
+  margin-left: auto;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: var(--gris-piedra);
+  color: var(--tinta-muted);
+  cursor: pointer;
+}
+.bitacora-filter-btn:hover { background: #dddcd8; }
+.bitacora-table-wrap {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+.bitacora-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+.bitacora-table th {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  background: #f5f5f4;
+  padding: 11px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+  color: var(--tinta-muted);
+}
+.bitacora-table td {
+  font-size: 12.5px;
+  vertical-align: top;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--borde);
+}
+.bitacora-table tr:last-child td { border-bottom: none; }
+.bitacora-table td:first-child {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.bitacora-table td:nth-child(2) { font-weight: 600; }
+.bitacora-table td:nth-child(4) {
+  max-width: 420px;
+  line-height: 1.45;
+  color: var(--tinta-muted);
+}
+.bitacora-table td:nth-child(5) {
+  font-family: Consolas, 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: var(--tinta-muted);
+  white-space: nowrap;
+}
+.bitacora-table .pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+.pill-bit-cita { background: #EAF3DE; color: #0F5C3C; }
+.pill-bit-txn { background: #E6F1FB; color: #1E5A8A; }
+.pill-bit-login { background: #FAEEDA; color: #9C7A22; }
+.pill-bit-deny { background: #F6E4E2; color: #A3281E; }
+.pill-bit-costo { background: #EAEAE7; color: #5C6460; }
+.bitacora-note {
+  font-size: 12px;
+  color: var(--tinta-tenue);
+  margin-top: 16px;
+  font-style: italic;
+}
+.bitacora-empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--tinta-muted);
+  font-size: 13px;
+}
+.bitacora-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.bitacora-pagination a { color: var(--verde); text-decoration: none; }
+.bitacora-pagination a:hover { text-decoration: underline; }
+.bitacora-pagination .current { color: var(--tinta-muted); }
+
+/* Migas de pan — mismo estilo que Django Admin */
+.rc-breadcrumbs {
+  background: var(--verde-dark);
+  padding: 10px 28px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.rc-breadcrumbs a {
+  color: #ffffff;
+  text-decoration: underline;
+  font-weight: 500;
+}
+.rc-breadcrumbs a:hover {
+  color: rgba(255, 255, 255, 0.92);
+}
+.rc-bc-sep {
+  margin: 0 6px;
+  color: rgba(255, 255, 255, 0.78);
+}
+.rc-bc-current {
+  color: rgba(255, 255, 255, 0.78);
+}
+.rc-bc-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  vertical-align: -2px;
+  opacity: 0.95;
+}
+
+@media (max-width: 860px) {
+  .bitacora-filters { flex-direction: column; align-items: stretch; }
+  .bitacora-filter-btn { margin-left: 0; width: 100%; }
+  .bitacora-field input, .bitacora-field select { width: 100%; min-width: 0; }
+}

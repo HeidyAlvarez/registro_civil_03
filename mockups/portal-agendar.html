@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup — Portal agendar cita</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/maqueta.css">
+</head>
+<body>
+  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
+  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
+  <nav class="navbar">
+    <a class="navbar-brand" href="portal-inicio.html"><span class="crest">RC</span><span><span class="brand-name">Registro Civil 03</span><span class="brand-sub">Agendar cita</span></span></a>
+  </nav>
+
+  <div class="wizard-steps">
+    <span class="wstep done">① Trámite</span>
+    <span class="wstep active">② Datos</span>
+    <span class="wstep">③ Horario</span>
+    <span class="wstep">④ Confirmar</span>
+  </div>
+
+  <div class="form-panel">
+    <h2 style="font-size:17px;margin-bottom:6px">Datos del solicitante</h2>
+    <p style="font-size:13px;color:var(--tinta-muted);margin-bottom:20px">Captura tu CURP, nombre y domicilio de forma manual. Trámite: <strong>Acta de nacimiento</strong> · $485.00</p>
+    <div class="form-grid">
+      <div class="field full"><label>CURP</label><input placeholder="18 caracteres alfanuméricos" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px;text-transform:uppercase"></div>
+      <div class="field"><label>Apellido paterno</label><input placeholder="Ej: Álvarez" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px"></div>
+      <div class="field"><label>Apellido materno</label><input placeholder="Ej: Hernández" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px"></div>
+      <div class="field full"><label>Nombre(s)</label><input placeholder="Ej: Merari Lizeth" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px"></div>
+      <div class="field"><label>Código postal</label><input disabled value="50900" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px"></div>
+      <div class="field"><label>Teléfono</label><input disabled placeholder="10 dígitos" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px"></div>
+      <div class="field full"><label>Dirección</label><textarea disabled rows="2" style="width:100%;padding:10px;border:1px solid var(--borde);border-radius:4px;resize:vertical">Calle Principal #123, Col. Centro</textarea></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:24px">
+      <a class="btn btn-sm btn-ghost" href="portal-inicio.html">← Anterior</a>
+      <button class="btn btn-sm" type="button" disabled>Siguiente →</button>
+    </div>
+  </div>
+
+  <div class="form-panel" style="opacity:.55;margin-top:24px">
+    <p style="font-size:12px;font-weight:700;color:var(--tinta-muted);margin-bottom:12px">Vista previa — Paso 3 (Horario)</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      <button class="btn btn-sm btn-outline" disabled>09:00</button>
+      <button class="btn btn-sm" disabled>09:15</button>
+      <button class="btn btn-sm btn-outline" disabled>09:30</button>
+      <button class="btn btn-sm btn-ghost btn-off" disabled>09:45</button>
+    </div>
+  </div>
+</body>
+</html>

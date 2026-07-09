@@ -1,0 +1,304 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --verde:        #0F5C3C;
+  --verde-dark:   #0A3F29;
+  --verde-mid:    #157A52;
+  --verde-claro:  #E4F1EA;
+  --oro:          #9C7A22;
+  --gris-piedra:  #E9E8E4;
+  --superficie:   #FFFFFF;
+  --tinta:        #1B211E;
+  --tinta-muted:  #5B655E;
+  --tinta-tenue:  #93998F;
+  --borde:        #D8D8D2;
+  --rojo:         #A3281E;
+  --focus:        #1E7A50;
+}
+
+html, body {
+  min-height: 100vh;
+  font-family: 'Roboto', Arial, sans-serif;
+  background: var(--gris-piedra);
+  color: var(--tinta);
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-top {
+  background: var(--verde-dark);
+  color: rgba(255,255,255,.82);
+  font-size: 11px;
+  padding: 7px 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login-top b { color: #fff; }
+
+.login-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.login-card {
+  display: flex;
+  width: min(860px, 100%);
+  min-height: 460px;
+  background: var(--superficie);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(10,63,41,.14);
+}
+
+.login-aside {
+  position: relative;
+  width: 38%;
+  min-width: 240px;
+  background: var(--verde-dark);
+  overflow: hidden;
+}
+
+.geo-layer {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, transparent 42%, rgba(255,255,255,.06) 42%, rgba(255,255,255,.06) 44%, transparent 44%),
+    linear-gradient(155deg, var(--verde-dark) 0%, var(--verde) 38%, #1a6b48 62%, var(--verde-mid) 100%);
+}
+
+.geo-layer::before,
+.geo-layer::after {
+  content: '';
+  position: absolute;
+  background: rgba(255,255,255,.08);
+  transform: skewX(-18deg);
+}
+
+.geo-layer::before {
+  width: 140%;
+  height: 55%;
+  left: -30%;
+  top: 18%;
+}
+
+.geo-layer::after {
+  width: 120%;
+  height: 40%;
+  left: -10%;
+  bottom: -5%;
+  background: rgba(0,0,0,.12);
+}
+
+.aside-brand {
+  position: relative;
+  z-index: 2;
+  padding: 36px 28px;
+  color: #fff;
+}
+
+.aside-brand .crest {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.aside-brand h1 {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.aside-brand p {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(255,255,255,.78);
+  max-width: 200px;
+}
+
+.side-tabs {
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.side-tab {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 18px 10px;
+  border-radius: 8px 0 0 8px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+}
+
+.side-tab.active {
+  background: var(--superficie);
+  color: var(--verde);
+  box-shadow: -4px 0 14px rgba(0,0,0,.08);
+}
+
+.login-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 36px;
+}
+
+.login-form-box {
+  width: min(340px, 100%);
+}
+
+.login-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  background: linear-gradient(145deg, var(--verde), var(--verde-mid));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(15,92,60,.28);
+}
+
+.login-avatar svg { width: 28px; height: 28px; }
+
+.login-form-box h2 {
+  text-align: center;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--verde);
+  margin-bottom: 28px;
+  letter-spacing: .3px;
+}
+
+.errornote {
+  background: #f6e4e2;
+  color: var(--rojo);
+  border: 1px solid #e8c4c0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  margin-bottom: 16px;
+  line-height: 1.45;
+}
+
+.field {
+  margin-bottom: 22px;
+}
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .45px;
+  color: var(--tinta-muted);
+  margin-bottom: 8px;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1.5px solid var(--borde);
+  padding-bottom: 8px;
+  transition: border-color .2s;
+}
+
+.field-row:focus-within { border-bottom-color: var(--verde); }
+
+.field-row svg {
+  width: 18px;
+  height: 18px;
+  color: var(--tinta-tenue);
+  flex-shrink: 0;
+}
+
+.field-row input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--tinta);
+  background: transparent;
+  font-family: inherit;
+  padding: 4px 0;
+}
+
+.field-row input::placeholder { color: var(--tinta-tenue); }
+
+.field-error {
+  font-size: 11px;
+  color: var(--rojo);
+  margin-top: 5px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  gap: 12px;
+}
+
+.btn-login {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 28px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+
+.btn-login:hover { background: var(--verde-dark); }
+.btn-login:active { transform: scale(.98); }
+
+.login-footer-note {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 11.5px;
+  color: var(--tinta-tenue);
+}
+
+@media (max-width: 720px) {
+  .login-card { flex-direction: column; min-height: auto; }
+  .login-aside { width: 100%; min-width: 0; min-height: 160px; }
+  .side-tabs { display: none; }
+  .aside-brand { padding: 24px; }
+  .login-main { padding: 28px 22px 32px; }
+}

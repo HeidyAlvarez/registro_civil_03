@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Caja Simultánea — Registro Civil</title>
+  {% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Caja Simultánea</span>
+    </span>
+  </a>
+</header>
+
+{% include 'citas/includes/barra_usuario.html' %}
+
+<main class="page">
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+    <div>
+      <h2>Fila de caja</h2>
+      <p>Ciudadanos que validaron su QR y esperan registrar su pago en ventanilla.</p>
+    </div>
+  </div>
+
+  <!-- FLUJO VISUAL -->
+  <div class="flujo">
+    <span class="flujo-step fs-done"> Pendiente</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-active"> Asistida</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-next"> Pagada</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-next"> Finalizada</span>
+    <span style="margin-left:auto;font-size:11px;color:var(--text-muted);">Estás aquí: registrando cobro</span>
+  </div>
+
+  <!-- MENSAJES -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="msg msg-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- TABLA -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3>🚶 Ciudadanos en fila para pago</h3>
+      {% if fila %}
+        <span class="badge badge-amber">{{ fila|length }} en espera</span>
+      {% endif %}
+    </div>
+
+    {% if fila %}
+    <table>
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Hora</th>
+          <th>Ciudadano</th>
+          <th>Trámite</th>
+          <th>Costo</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody id="fila-tbody">
+        {% for cita in fila %}
+        <tr data-cita-id="{{ cita.id }}">
+          <td><span class="folio">#{{ cita.id }}</span></td>
+          <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
+          <td>
+            <div class="nombre">{{ cita.nombre_ciudadano }}</div>
+            <div class="curp">{{ cita.curp_ciudadano }}</div>
+          </td>
+          <td>
+            <div class="tramite-nombre">{{ cita.tramite.nombre }}</div>
+            {% if cita.tramite.seccion %}
+              <div class="tramite-sec">{{ cita.tramite.seccion.nombre }}</div>
+            {% endif %}
+          </td>
+          <td><span class="costo">${{ cita.tramite.costo }}</span></td>
+          <td><span class="pill pill-asist">🏦 Asistida</span></td>
+          <td>
+            <button type="button" class="btn-cobrar" data-id="{{ cita.id }}" data-nombre="{{ cita.nombre_ciudadano }}" data-costo="{{ cita.tramite.costo }}"
+              onclick="cobrarCita(this)">💵 Registrar cobro</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% else %}
+    <div class="empty">
+      <div class="empty-icon">🎉</div>
+      <h3>No hay ciudadanos en fila</h3>
+      <p>Las citas aparecerán aquí automáticamente cuando el capturista escanee su QR.</p>
+      <a href="/citas/agenda/" class="btn-agenda">📅 Ver agenda del día</a>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+</main>
+
+<script>
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k,v] = c.trim().split('=');
+      if (k===n) return decodeURIComponent(v);
+    }
+    return null;
+  }
+
+  function cobrarCita(btn) {
+    const id = btn.dataset.id;
+    const nombre = btn.dataset.nombre;
+    const costo = btn.dataset.costo;
+    if (!confirm(`¿Confirmar cobro de $${costo} para ${nombre}?`)) return;
+    btn.disabled = true;
+    fetch(`/citas/caja/cobrar/${id}/`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken'), 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        const fila = document.querySelector(`tr[data-cita-id="${id}"]`);
+        if (fila) fila.remove();
+        if (!document.querySelector('#fila-tbody tr')) location.reload();
+      } else {
+        alert(data.error || 'No se pudo registrar el cobro.');
+        btn.disabled = false;
+      }
+    })
+    .catch(() => { alert('Error de conexión.'); btn.disabled = false; });
+  }
+
+  function actualizarFilaCaja() {
+    fetch('/citas/api/citas/?estado=ASISTIDA')
+      .then(r => r.json())
+      .then(data => {
+        const tbody = document.getElementById('fila-tbody');
+        if (!tbody) return;
+        const idsActuales = new Set([...tbody.querySelectorAll('tr')].map(r => r.dataset.citaId));
+        const idsNuevos = new Set(data.citas.map(c => String(c.id)));
+        data.citas.forEach(c => {
+          if (!idsActuales.has(String(c.id))) location.reload();
+        });
+      })
+      .catch(() => {});
+  }
+
+  setInterval(actualizarFilaCaja, 8000);
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup — Citas pagadas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/maqueta.css">
+</head>
+<body>
+  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
+  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
+  <header class="navbar">
+    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Citas pagadas</span></span></a>
+  </header>
+  <div class="gobmx-barra-usuario">
+    <span class="gobmx-usuario">Martín López Sandoval</span>
+    <span class="barra-spacer"></span>
+    <a class="btn-inicio" href="panel-oficial.html">Inicio</a>
+  </div>
+  <main class="page">
+    <div class="main">
+      <h2 class="page-title">Trámites pendientes de finalizar</h2>
+      <p class="page-sub">Citas ya cobradas que esperan confirmación de entrega.</p>
+      <div class="flujo">
+        <span class="flujo-step done">Pendiente</span><span class="flujo-arrow">→</span>
+        <span class="flujo-step done">Asistida</span><span class="flujo-arrow">→</span>
+        <span class="flujo-step active">Pagada</span><span class="flujo-arrow">→</span>
+        <span class="flujo-step">Finalizada</span>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><strong>Citas con pago registrado</strong><p style="font-size:12px;color:var(--tinta-muted);font-weight:400;margin-top:2px">Marca como «Finalizada» cuando el documento haya sido entregado.</p></div>
+        <table>
+          <thead><tr><th>Folio</th><th>Ciudadano</th><th>Trámite</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>#35</td><td><strong>Pérez Ana</strong></td><td>Matrimonio</td><td>$620.00</td><td><span class="pill pill-pagada">Pagada</span></td><td><button class="btn btn-sm">Finalizar</button> <button class="btn btn-sm btn-outline" style="color:var(--rojo);border-color:var(--rojo)">Cancelar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

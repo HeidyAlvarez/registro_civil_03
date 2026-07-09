@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup — Fila de caja</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/maqueta.css">
+</head>
+<body>
+  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
+  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
+  <header class="navbar">
+    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Caja Simultánea</span></span></a>
+  </header>
+  <div class="gobmx-barra-usuario">
+    <span class="gobmx-usuario">Laura Capturista</span>
+    <span class="barra-spacer"></span>
+    <a class="btn-inicio" href="panel-capturista.html">Inicio</a>
+  </div>
+  <main class="page">
+    <div class="main">
+      <h2 class="page-title">Fila de caja</h2>
+      <p class="page-sub">Ciudadanos que validaron su QR y esperan registrar su pago en ventanilla.</p>
+      <div class="flujo">
+        <span class="flujo-step done">Pendiente</span><span class="flujo-arrow">→</span>
+        <span class="flujo-step active">Asistida</span><span class="flujo-arrow">→</span>
+        <span class="flujo-step">Pagada</span><span class="flujo-arrow">→</span>
+        <span class="flujo-step">Finalizada</span>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header">Ciudadanos en espera de cobro</div>
+        <table>
+          <thead><tr><th>Folio</th><th>Ciudadano</th><th>Trámite</th><th>Monto</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>#37</td><td><strong>Álvarez MERARI</strong></td><td>Aclaración actas</td><td><strong style="color:var(--verde)">$485.00</strong></td><td><button class="btn btn-sm">Cobrar</button></td></tr>
+            <tr><td>#38</td><td><strong>Ruiz Pedro</strong></td><td>Defunción</td><td><strong style="color:var(--verde)">$320.00</strong></td><td><button class="btn btn-sm">Cobrar</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

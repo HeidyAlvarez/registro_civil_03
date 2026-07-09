@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Reporte de Caja — Registro Civil</title>
+  {% load static humanize %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <style>
+    .rc-main { max-width: 1060px; margin: 28px auto; padding: 0 20px 60px; }
+
+    .rc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .rc-header h2 { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .rc-header p { font-size: 13px; color: var(--tinta-muted); margin: 0; }
+
+    .rc-menu { position: relative; }
+    .rc-menu-btn {
+      width: 36px; height: 36px; border: 1px solid var(--borde); border-radius: 6px;
+      background: var(--superficie); color: var(--tinta-muted); font-size: 18px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .rc-menu-btn:hover { border-color: var(--tinta-tenue); color: var(--tinta); }
+    .rc-menu-panel {
+      display: none; position: absolute; right: 0; top: calc(100% + 6px); min-width: 200px;
+      background: var(--superficie); border: 1px solid var(--borde); border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(10,63,41,.12); z-index: 50; padding: 6px 0;
+    }
+    .rc-menu.open .rc-menu-panel { display: block; }
+    .rc-menu-panel a, .rc-menu-panel button {
+      display: block; width: 100%; text-align: left; padding: 9px 14px;
+      font-size: 12.5px; font-weight: 600; color: var(--tinta); background: none; border: none;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+    }
+    .rc-menu-panel a:hover, .rc-menu-panel button:hover { background: var(--gris-piedra); }
+    .rc-menu-panel .rc-menu-divider { height: 1px; background: var(--borde); margin: 4px 0; }
+    .rc-menu-panel a.active { color: var(--verde); font-weight: 700; }
+
+    .rc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+    .rc-stat {
+      background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px;
+      padding: 18px 20px; box-shadow: 0 1px 4px rgba(10,63,41,.05);
+    }
+    .rc-stat-label {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .5px; color: var(--tinta-muted); margin-bottom: 10px;
+    }
+    .rc-stat-val {
+      font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800;
+      color: var(--tinta); line-height: 1.1;
+    }
+    .rc-stat-val.verde { color: var(--verde); }
+    .rc-stat-val .rc-unit { font-size: 16px; font-weight: 700; color: var(--tinta-muted); }
+
+    .rc-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+    .rc-chart-card {
+      background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px;
+      padding: 18px 20px 14px; box-shadow: 0 1px 4px rgba(10,63,41,.05);
+    }
+    .rc-chart-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+    .rc-chart-box { height: 220px; position: relative; }
+    .rc-chart-pie-wrap { display: flex; align-items: center; gap: 12px; height: 220px; }
+    .rc-chart-pie-canvas { flex: 0 0 46%; height: 200px; position: relative; }
+    .rc-legend { flex: 1; font-size: 12.5px; }
+    .rc-legend-item {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 5px 0;
+    }
+    .rc-legend-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .rc-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .rc-legend-label { color: var(--tinta-muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rc-legend-val { font-weight: 800; color: var(--tinta); flex-shrink: 0; }
+
+    @media (max-width: 900px) {
+      .rc-stats { grid-template-columns: repeat(2, 1fr); }
+      .rc-charts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .rc-stats { grid-template-columns: 1fr; }
+      .rc-chart-pie-wrap { flex-direction: column; height: auto; }
+      .rc-chart-pie-canvas { flex: none; width: 100%; }
+    }
+    @media print {
+      .d-print-none, .gobmx-barra-usuario, .rc-menu { display: none !important; }
+      .rc-main { max-width: none; margin: 0; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Reporte de caja</span>
+    </span>
+  </a>
+</header>
+
+{% include 'citas/includes/barra_usuario.html' with show_logout=False barra_extra_class='d-print-none' %}
+
+<main class="page">
+
+<div class="rc-main">
+
+  <header class="rc-header">
+    <div>
+      <h2>Control de Ingresos Mensuales</h2>
+      <p>Período: {{ mes_nombre }} {{ anio }}</p>
+    </div>
+    <div class="rc-menu d-print-none" id="rc-menu">
+      <button type="button" class="rc-menu-btn" onclick="toggleMenu()" aria-label="Opciones">⋯</button>
+      <div class="rc-menu-panel">
+        <button type="button" onclick="window.print()">Imprimir reporte</button>
+        <div class="rc-menu-divider"></div>
+        <a href="{% url 'reporte_caja' %}" class="{% if es_mes_actual %}active{% endif %}">Mes actual</a>
+        {% for m in meses_historial %}
+          <a href="{% url 'reporte_caja_historial' anio=m.anio mes=m.mes %}">{{ m.etiqueta }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </header>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="msg msg-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="panel" style="margin-bottom:22px;">
+    <div class="panel-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h3>Corte de caja del día — {{ fecha_hoy|date:"d/m/Y" }}</h3>
+      </div>
+      {% if not corte_hoy and total_hoy %}
+      <form method="post" action="{% url 'cerrar_corte_diario' %}">
+        {% csrf_token %}
+        <input type="hidden" name="fecha" value="{{ fecha_hoy|date:'Y-m-d' }}">
+        <button type="submit" class="btn btn-prim" style="font-size:12px;padding:8px 16px;">Cerrar corte del día</button>
+      </form>
+      {% elif corte_hoy %}
+      <span class="pill pill-asist">Corte cerrado · ${{ corte_hoy.total_recaudado|floatformat:2|intcomma }}</span>
+      {% endif %}
+    </div>
+    {% if desglose_hoy %}
+    <table>
+      <thead>
+        <tr><th>Sección</th><th>Trámite</th><th>Pagos</th><th style="text-align:right;">Total</th></tr>
+      </thead>
+      <tbody>
+        {% for item in desglose_hoy %}
+        <tr>
+          <td>{{ item.cita__tramite__seccion__nombre|default:"General" }}</td>
+          <td>{{ item.cita__tramite__nombre }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td style="text-align:right;">${{ item.total|floatformat:2|intcomma }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" style="font-weight:700;text-align:right;">Total del día</td>
+          <td style="text-align:right;font-weight:800;color:var(--verde);">${{ total_hoy|floatformat:2|intcomma }}</td>
+        </tr>
+      </tfoot>
+    </table>
+    {% else %}
+    <div class="empty"><p>Sin cobros registrados hoy.</p></div>
+    {% endif %}
+  </div>
+
+  {% if cortes_historial %}
+  <div class="panel" style="margin-bottom:22px;">
+    <div class="panel-header"><h3>Historial de cortes diarios</h3></div>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Pagos</th><th style="text-align:right;">Total</th><th>Cerrado por</th></tr>
+      </thead>
+      <tbody>
+        {% for c in cortes_historial %}
+        <tr>
+          <td>{{ c.fecha|date:"d/m/Y" }}</td>
+          <td>{{ c.cantidad_pagos }}</td>
+          <td style="text-align:right;">${{ c.total_recaudado|floatformat:2|intcomma }}</td>
+          <td>{{ c.cerrado_por.username }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="rc-stats">
+    <div class="rc-stat">
+      <div class="rc-stat-label">Trámites este mes</div>
+      <div class="rc-stat-val">{{ total_tramites }}</div>
+    </div>
+    <div class="rc-stat">
+      <div class="rc-stat-label">Tiempo promedio</div>
+      <div class="rc-stat-val">{{ tiempo_promedio }}<span class="rc-unit"> min</span></div>
+    </div>
+    <div class="rc-stat">
+      <div class="rc-stat-label">Usuarios activos</div>
+      <div class="rc-stat-val">{{ usuarios_activos|stringformat:"02d" }}</div>
+    </div>
+    <div class="rc-stat">
+      <div class="rc-stat-label">Ingresos mes</div>
+      <div class="rc-stat-val verde">${{ total_acumulado|floatformat:0|intcomma }}</div>
+    </div>
+  </div>
+
+  <div class="rc-charts">
+    <div class="rc-chart-card">
+      <h3>Productividad Semanal</h3>
+      <div class="rc-chart-box">
+        <canvas id="chartSemanal"></canvas>
+      </div>
+    </div>
+
+    <div class="rc-chart-card">
+      <h3>Distribución de Trámites</h3>
+      <div class="rc-chart-pie-wrap">
+        <div class="rc-chart-pie-canvas">
+          <canvas id="chartDona"></canvas>
+        </div>
+        <div class="rc-legend" id="js-legend"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <h3>Desglose por tipo de trámite</h3>
+    </div>
+    {% if reporte_tramites %}
+    <table>
+      <thead>
+        <tr>
+          <th>Sección</th>
+          <th>Trámite</th>
+          <th>Cantidad</th>
+          <th style="text-align:right;">Recaudado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in reporte_tramites %}
+        <tr>
+          <td>{{ item.cita__tramite__seccion__nombre|default:"General" }}</td>
+          <td class="nombre">{{ item.cita__tramite__nombre }}</td>
+          <td>{{ item.cantidad_solicitudes }}</td>
+          <td style="text-align:right;" class="costo">${{ item.dinero_recaudado|floatformat:2|intcomma }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">
+      <p>No se han registrado cobros en este período.</p>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const datosSemana = {{ datos_semana_json|safe }};
+  const labelsDona = {{ labels_grafica_json|safe }};
+  const datosDona = {{ datos_grafica_json|safe }};
+
+  const COLOR_VERDE = '#0F5C3C';
+  const COLOR_ORO = '#9C7A22';
+  const COLOR_SLATE = '#34515A';
+  const COLOR_GRIS = '#C8CBC4';
+
+  const ctxSemanal = document.getElementById('chartSemanal').getContext('2d');
+  new Chart(ctxSemanal, {
+    type: 'bar',
+    data: {
+      labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+      datasets: [{
+        data: datosSemana,
+        backgroundColor: [
+          COLOR_VERDE, COLOR_VERDE, COLOR_VERDE, COLOR_VERDE, COLOR_VERDE,
+          COLOR_ORO, COLOR_ORO
+        ],
+        borderRadius: 6,
+        borderSkipped: false,
+        barThickness: 32,
+        maxBarThickness: 40
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: { font: { size: 11, weight: '600' }, color: '#5B655E' }
+        },
+        y: {
+          grid: { color: '#E9E8E4', drawBorder: false },
+          border: { display: false },
+          ticks: { stepSize: 1, precision: 0, font: { size: 11 }, color: '#93998F' },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  const pieColors = [COLOR_VERDE, COLOR_SLATE, COLOR_ORO, COLOR_GRIS];
+  const ctxDona = document.getElementById('chartDona').getContext('2d');
+  new Chart(ctxDona, {
+    type: 'pie',
+    data: {
+      labels: labelsDona,
+      datasets: [{
+        data: datosDona,
+        backgroundColor: labelsDona.map((_, i) => pieColors[i % pieColors.length]),
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  const legendDiv = document.getElementById('js-legend');
+  if (!labelsDona.length) {
+    legendDiv.innerHTML = '<p style="color:var(--tinta-muted);font-size:12.5px;margin:0;">Sin operaciones en el mes.</p>';
+  } else {
+    legendDiv.innerHTML = labelsDona.map((label, i) =>
+      '<div class="rc-legend-item">' +
+        '<span class="rc-legend-left">' +
+          '<span class="rc-legend-dot" style="background:' + pieColors[i % pieColors.length] + '"></span>' +
+          '<span class="rc-legend-label">' + label + '</span>' +
+        '</span>' +
+        '<span class="rc-legend-val">' + datosDona[i] + '</span>' +
+      '</div>'
+    ).join('');
+  }
+
+  function toggleMenu() {
+    document.getElementById('rc-menu').classList.toggle('open');
+  }
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('rc-menu');
+    if (menu && !menu.contains(e.target)) menu.classList.remove('open');
+  });
+</script>
+
+</main>
+</body>
+</html>

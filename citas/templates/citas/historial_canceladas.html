@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Historial de Citas Canceladas — Registro Civil</title>
+  {% load static humanize %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <style>
+    .hc-main { max-width: 960px; margin: 28px auto; padding: 0 20px 60px; }
+    .hc-header { margin-bottom: 22px; }
+    .hc-header h2 { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .hc-header p { font-size: 13px; color: var(--tinta-muted); margin: 0; line-height: 1.5; }
+    .hc-nav { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; font-size: 12px; font-weight: 700; }
+    .hc-nav a { color: var(--verde); text-decoration: none; }
+    .hc-nav a:hover { text-decoration: underline; }
+    .hc-stat {
+      background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px;
+      padding: 16px 18px; margin-bottom: 22px; max-width: 320px;
+    }
+    .hc-stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--tinta-muted); margin-bottom: 6px; }
+    .hc-stat-val { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 800; color: var(--rojo); }
+    .hc-panel { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
+    .hc-panel-head { padding: 14px 18px; border-bottom: 1px solid var(--borde); }
+    .hc-panel-head h3 { font-size: 14px; font-weight: 700; margin: 0; }
+    .hc-mes-row {
+      display: grid; grid-template-columns: 1fr auto auto;
+      gap: 16px; align-items: center;
+      padding: 14px 18px; border-bottom: 1px solid var(--borde); font-size: 13px;
+    }
+    .hc-mes-row:last-child { border-bottom: none; }
+    .hc-mes-row:hover { background: var(--gris-piedra); }
+    .hc-mes-nombre { font-weight: 700; color: var(--tinta); }
+    .hc-mes-meta { color: var(--rojo); font-size: 12.5px; font-weight: 700; text-align: right; }
+    .hc-mes-link a { font-size: 12px; font-weight: 700; color: var(--verde); text-decoration: none; white-space: nowrap; }
+    .hc-mes-link a:hover { text-decoration: underline; }
+    .hc-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 18px; border-bottom: 1px solid var(--borde); font-size: 13px;
+    }
+    .hc-item:last-child { border-bottom: none; }
+    .hc-item-main { flex: 1; min-width: 0; }
+    .hc-folio { font-size: 11.5px; font-weight: 700; color: var(--tinta-muted); }
+    .hc-nombre { font-size: 14px; font-weight: 700; margin-top: 2px; }
+    .hc-tramite { font-size: 12px; color: var(--tinta-muted); margin-top: 2px; }
+    .hc-fecha { font-size: 12px; color: var(--tinta-muted); text-align: right; min-width: 88px; }
+    .hc-empty { text-align: center; padding: 40px 20px; color: var(--tinta-muted); font-size: 13px; }
+    @media (max-width: 640px) {
+      .hc-mes-row { grid-template-columns: 1fr; gap: 6px; }
+      .hc-mes-meta, .hc-mes-link { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Historial de citas canceladas</span>
+    </span>
+  </a>
+</header>
+
+{% include 'citas/includes/barra_usuario.html' %}
+
+<main class="page">
+<div class="hc-main">
+
+  <div class="hc-header">
+    {% if mes_detalle %}
+      <h2>{{ mes_nombre }} {{ anio }}</h2>
+      <p>Citas canceladas por administrador u oficial en este periodo.</p>
+    {% else %}
+      <h2>Historial de citas canceladas</h2>
+      <p>Resumen mensual de citas canceladas. Selecciona un mes para ver el detalle.</p>
+    {% endif %}
+  </div>
+
+  <div class="hc-nav">
+    {% if mes_detalle %}
+      <a href="{% url 'vista_historial_canceladas' %}">← Volver al resumen por mes</a>
+    {% else %}
+      <a href="{% url 'vista_historial_finalizadas' %}">Historial finalizadas</a>
+      <a href="{% url 'vista_citas_pagadas' %}">Citas pagadas</a>
+    {% endif %}
+  </div>
+
+  <div class="hc-stat">
+    <div class="hc-stat-label">{% if mes_detalle %}Canceladas en {{ mes_nombre }}{% else %}Total histórico cancelado{% endif %}</div>
+    <div class="hc-stat-val">{% if mes_detalle %}{{ total_mes_citas|intcomma }}{% else %}{{ total_global_citas|intcomma }}{% endif %}</div>
+  </div>
+
+  <div class="hc-panel">
+    <div class="hc-panel-head">
+      <h3>{% if mes_detalle %}Detalle — {{ mes_nombre }} {{ anio }}{% else %}Resumen por mes{% endif %}</h3>
+    </div>
+    {% if mes_detalle %}
+      {% if citas_mes %}
+        {% for cita in citas_mes %}
+        <div class="hc-item">
+          <div class="hc-item-main">
+            <div class="hc-folio">Folio #{{ cita.id }}</div>
+            <div class="hc-nombre">{{ cita.nombre_ciudadano }}</div>
+            <div class="hc-tramite">{{ cita.tramite.nombre }}{% if cita.tramite.seccion %} · {{ cita.tramite.seccion.nombre }}{% endif %}</div>
+          </div>
+          <div class="hc-fecha">{{ cita.fecha|date:"d/m/Y" }}<br>{{ cita.hora|time:"H:i" }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="hc-empty">No hay citas canceladas en este mes.</div>
+      {% endif %}
+    {% elif meses %}
+      {% for m in meses %}
+      <div class="hc-mes-row">
+        <div class="hc-mes-nombre">{{ m.etiqueta }}</div>
+        <div class="hc-mes-meta">{{ m.cantidad }} cancelada{{ m.cantidad|pluralize:"s" }}</div>
+        <div class="hc-mes-link">
+          <a href="{% url 'vista_historial_canceladas_mes' m.anio m.mes %}">Ver detalle →</a>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="hc-empty">Aún no hay citas canceladas registradas en el sistema.</div>
+    {% endif %}
+  </div>
+
+</div>
+</main>
+</body>
+</html>

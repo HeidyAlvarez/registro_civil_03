@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Panel Oficial — Registro Civil</title>
+  {% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/qr-scanner.css' %}?v=2">
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script src="{% static 'citas/js/qr-scanner.js' %}?v=2"></script>
+<script src="{% static 'citas/js/qr-validar.js' %}?v=1"></script>
+<script src="{% static 'citas/js/cita-estados.js' %}?v=1"></script>
+<script src="{% static 'citas/js/dashboard-citas.js' %}?v=2"></script>
+
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Panel del Oficial</span>
+    </span>
+  </a>
+</header>
+
+<main class="page">
+
+{% include 'citas/includes/barra_usuario.html' %}
+
+<!-- MAIN -->
+<div class="main" data-dashboard-citas data-dashboard-modo="oficial" data-tbody-id="citas-hoy-tbody" data-empty-id="citas-hoy-empty">
+
+  <div class="welcome">
+    <div class="welcome-tag">Oficial Principal</div>
+    <h1>Bienvenido, {{ request.user.get_full_name|default:request.user.username }} </h1>
+    <p>{{ hoy|date:"l, d \d\e F \d\e Y" }}</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Pendientes</div>
+      <div class="stat-val" style="color:var(--amber);" id="stat-pendientes">{{ citas_pendientes }}</div>
+      <div class="stat-sub">sin validar QR</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Asistidas</div>
+      <div class="stat-val" style="color:var(--blue);" id="stat-caja">{{ citas_en_caja }}</div>
+      <div class="stat-sub">por cobrar</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Pagadas</div>
+      <div class="stat-val" style="color:var(--slate);" id="stat-pagadas">{{ citas_pagadas }}</div>
+      <div class="stat-sub">cobro registrado</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/></svg> Finalizadas</div>
+      <div class="stat-val" style="color:var(--tinta-muted);" id="stat-finalizadas">{{ citas_finalizadas }}</div>
+      <div class="stat-sub">trámite entregado</div>
+    </div>
+  </div>
+
+  <div class="section-label">Acceso rápido</div>
+  <div class="quick-grid">
+
+    <a href="/admin/citas/cita/" class="qbtn">
+      <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
+      <div><div class="qbtn-name">Gestionar citas</div><div class="qbtn-desc">Ver y editar</div></div>
+    </a>
+
+    <a href="/citas/agenda/" class="qbtn">
+      <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+      <div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div>
+    </a>
+
+    <div class="qbtn" onclick="abrirQR()">
+      <div class="qbtn-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+      <div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar ciudadano</div></div>
+    </div>
+
+    <a href="/citas/caja/" class="qbtn">
+      <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1110.34 18M7 6h1v4M16.71 13.88l.7.71-2.82 2.82"/></svg></div>
+      <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
+    </a>
+
+    <a href="{% url 'vista_citas_pagadas' %}" class="qbtn">
+      <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+      <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega de documentos</div></div>
+    </a>
+
+    <a href="{% url 'vista_historial_finalizadas' %}" class="qbtn">
+      <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/><path d="M8 12h8M8 16h5"/></svg></div>
+      <div><div class="qbtn-name">Historial finalizadas</div><div class="qbtn-desc">Resumen mensual</div></div>
+    </a>
+
+    <a href="{% url 'vista_historial_canceladas' %}" class="qbtn">
+      <div class="qbtn-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+      <div><div class="qbtn-name">Historial canceladas</div><div class="qbtn-desc">Resumen mensual</div></div>
+    </a>
+
+    <a href="/citas/caja/reporte/" class="qbtn">
+      <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg></div>
+      <div><div class="qbtn-name">Reporte financiero</div><div class="qbtn-desc">Ingresos del mes</div></div>
+    </a>
+
+    <a href="{% url 'vista_bitacora' %}" class="qbtn">
+      <div class="qbtn-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+      <div><div class="qbtn-name">Bitácora</div><div class="qbtn-desc">Auditoría del sistema</div></div>
+    </a>
+
+  </div>
+
+  <a href="/citas/horarios/gestionar/" class="qbtn">
+    <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    <div><div class="qbtn-name">Gestionar horarios</div><div class="qbtn-desc">Bloquear disponibilidad</div></div>
+  </a>
+
+  <div class="section-label" style="margin-bottom:12px;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Citas de hoy</div>
+  <div class="panel">
+    <div class="panel-header">
+      <h3>Resumen del día</h3>
+      <a href="/citas/agenda/">Ver agenda completa →</a>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Hora</th>
+          <th>Ciudadano</th>
+          <th>Trámite</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody id="citas-hoy-tbody">
+        {% for cita in citas_hoy %}
+        <tr data-cita-id="{{ cita.id }}" data-estado="{{ cita.estado }}">
+          <td><span class="folio">#{{ cita.id }}</span></td>
+          <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
+          <td>
+            <div class="nombre">{{ cita.nombre_ciudadano }}</div>
+            <div class="curp">{{ cita.curp_ciudadano }}</div>
+          </td>
+          <td>{{ cita.tramite.nombre }}</td>
+          <td>
+            {% if cita.estado == 'PENDIENTE' %}
+              <span class="pill pill-pend">Pendiente</span>
+            {% elif cita.estado == 'ASISTIDA' %}
+              <span class="pill pill-asist">Asistida</span>
+            {% elif cita.estado == 'PAGADA' %}
+              <span class="pill pill-pagada">Pagada</span>
+            {% elif cita.estado == 'FINALIZADA' %}
+              <span class="pill pill-fin">Finalizada</span>
+            {% else %}
+              <span class="pill pill-cancel">Cancelada</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if cita.puede_cancelarse %}
+              <button type="button" class="btn-cancelar-cita" data-cita-id="{{ cita.id }}" title="Cancelar cita">Cancelar</button>
+            {% else %}
+              <span class="cita-sin-accion">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="empty" id="citas-hoy-empty"{% if citas_hoy %} style="display:none;"{% endif %}>
+      <div class="empty-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></div>
+      <p>No hay citas registradas para hoy.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL QR -->
+<div class="modal-overlay" id="qr-overlay">
+  <div class="modal modal-qr">
+    <div class="qr-card-header qr-card-header-modal">
+      <svg class="qr-header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+      <span class="qr-header-title">Validación de Cita por QR</span>
+      <button type="button" class="qr-header-close" onclick="cerrarQR()" aria-label="Cerrar">×</button>
+    </div>
+    <div class="qr-card-body">
+      <p class="qr-instruction">Acerca el código QR de la cita a la cámara.</p>
+      <div class="qr-scanner-wrap" id="qr-scanner"></div>
+      <div class="qr-resultado" id="qr-result">
+        <div class="qr-resultado-icon" id="qr-icon">✓</div>
+        <div class="qr-resultado-titulo" id="qr-name">¡Asistencia Registrada!</div>
+        <div class="qr-resultado-detalle" id="qr-sub"></div>
+        <div class="qr-resultado-detalle" id="qr-msg"></div>
+      </div>
+      <div class="qr-actions" id="qr-actions">
+        <button type="button" class="btn-qr-sec" id="btn-reintentar" onclick="reintentarQR()" style="display:none;">Escanear otro</button>
+        <button type="button" class="btn-qr-sec" onclick="cerrarQR()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+  const E = id => document.getElementById(id);
+
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k,v] = c.trim().split('=');
+      if (k===n) return decodeURIComponent(v);
+    }
+    return null;
+  }
+
+  let scannerActivo = false;
+
+  function abrirQR() {
+    E('qr-overlay').classList.add('open');
+    E('qr-result').className = 'qr-resultado';
+    E('qr-result').style.display = 'none';
+    E('qr-actions').classList.remove('visible');
+    E('btn-reintentar').style.display = 'none';
+    if (!scannerActivo) iniciarScanner();
+  }
+
+  function cerrarQR() {
+    E('qr-overlay').classList.remove('open');
+    detenerScanner();
+  }
+
+  function iniciarScanner() {
+    RegistroQR.start(E('qr-scanner'), onScanExitoso);
+    scannerActivo = true;
+  }
+
+  function detenerScanner() {
+    RegistroQR.stop();
+    scannerActivo = false;
+  }
+
+  function reintentarQR() {
+    E('qr-result').className = 'qr-resultado';
+    E('qr-result').style.display = 'none';
+    E('qr-actions').classList.remove('visible');
+    E('btn-reintentar').style.display = 'none';
+    E('qr-scanner').innerHTML = '';
+    scannerActivo = false;
+    iniciarScanner();
+  }
+
+  function onScanExitoso(decodedText) {
+    detenerScanner();
+    const parsed = parseQrCita(decodedText);
+    if (!parsed || !parsed.token) { mostrarResultado('error', 'QR inválido', '', '', 'Token de seguridad no encontrado.'); return; }
+    mostrarResultado('ok', 'Procesando…', '', '', '');
+    enviarValidacionQr(parsed.citaId, parsed.token, getCookie('csrftoken'))
+    .then(data => {
+      if (data.status === 'success') {
+        mostrarResultado('ok', '¡Asistencia Registrada!', data.ciudadano, data.tramite, '');
+        if (data.cita_id) DashboardCitas.actualizarFilaEstado(data.cita_id, data.nuevo_estado || 'ASISTIDA');
+        DashboardCitas.refrescarDashboard({ modo: 'oficial', tbodyId: 'citas-hoy-tbody', emptyId: 'citas-hoy-empty' });
+      } else {
+        mostrarResultado('error', data.message || 'No se pudo validar', '', '', '');
+      }
+    })
+    .catch(() => mostrarResultado('error', 'Error de conexión', '', '', 'No se pudo conectar al servidor.'));
+  }
+
+  function mostrarResultado(tipo, titulo, ciudadano, tramite, msg) {
+    const res = E('qr-result');
+    res.style.display = 'block';
+    res.className = 'qr-resultado visible' + (tipo === 'error' ? ' error' : '');
+    E('qr-icon').textContent = tipo === 'error' ? '✕' : '✓';
+    E('qr-name').textContent = titulo;
+    E('qr-sub').textContent = ciudadano ? 'Ciudadano: ' + ciudadano : '';
+    E('qr-msg').textContent = tramite ? 'Trámite: ' + tramite : (msg || '');
+    if (tipo !== 'error' && titulo !== 'Procesando…') {
+      E('btn-reintentar').style.display = 'inline-flex';
+    }
+    E('qr-actions').classList.add('visible');
+  }
+
+  E('qr-overlay').onclick = e => { if (e.target === E('qr-overlay')) cerrarQR(); };
+
+  DashboardCitas.iniciarPolling({
+    modo: 'oficial',
+    tbodyId: 'citas-hoy-tbody',
+    emptyId: 'citas-hoy-empty',
+    intervalo: 8000,
+  });
+</script>
+</body>
+</html>

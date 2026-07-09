@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Panel Capturista — Registro Civil</title>
+  {% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/qr-scanner.css' %}?v=2">
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script src="{% static 'citas/js/qr-scanner.js' %}?v=2"></script>
+<script src="{% static 'citas/js/qr-validar.js' %}?v=1"></script>
+</head>
+<body class="panel-capturista">
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{% url 'dashboard_capturista' %}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Panel de Capturista</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">{{ request.user.get_full_name|default:request.user.username }}</span>
+    <form action="{% url 'admin:logout' %}" method="post" style="display:inline;">{% csrf_token %}
+      <button type="submit" class="gobmx-link-btn">Cerrar sesión</button>
+    </form>
+  </div>
+</header>
+
+<main class="page">
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- INICIO: MENÚ -->
+  <div id="inicio">
+    <div class="sec-tag">Panel de operaciones</div>
+    <div class="sec-title">Bienvenida, {{ request.user.get_full_name|default:request.user.username }}</div>
+
+    <div class="menu-grid">
+      <div class="menu-card compact" onclick="mostrarSeccion('agenda')">
+        <h3>Agenda del día</h3>
+        <p id="menu-citas-pendientes">{{ citas_pendientes }} cita{{ citas_pendientes|pluralize }} pendiente{{ citas_pendientes|pluralize }}</p>
+      </div>
+
+      <div class="menu-card compact" onclick="abrirQR()">
+        <h3>Escanear QR</h3>
+        <p>Validar asistencia</p>
+      </div>
+
+      <div class="menu-card compact mc-amber" onclick="mostrarSeccion('tramites')">
+        <h3>Trámites</h3>
+        <p>Requisitos y costos</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: AGENDA -->
+  <div class="seccion" id="agenda">
+    <div class="sec-header">
+      <button class="btn-back" onclick="mostrarInicio()">← Inicio</button>
+      <div>
+        <div class="sec-tag">Operaciones</div>
+        <div class="sec-title" style="font-size:16px;margin-bottom:0;">📅 Agenda del día — {{ hoy|date:"d/m/Y" }}</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">Citas pendientes y activas <span id="agenda-sync" style="font-size:11px;color:var(--text-muted);font-weight:400;margin-left:8px;"></span></div>
+      <div id="agenda-contenido">
+      {% if citas %}
+      <table>
+        <thead>
+          <tr>
+            <th>Folio</th>
+            <th>Hora</th>
+            <th>Ciudadano</th>
+            <th>Trámite</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="agenda-tbody">
+          {% for cita in citas %}
+          <tr data-cita-id="{{ cita.id }}">
+            <td><span class="folio">#{{ cita.id }}</span></td>
+            <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
+            <td>
+              <div class="nombre">{{ cita.nombre_ciudadano }}</div>
+              <div class="curp">{{ cita.curp_ciudadano }}</div>
+            </td>
+            <td>{{ cita.tramite.nombre }}</td>
+            <td>
+              {% if cita.estado == 'PENDIENTE' %}
+                <span class="pill pill-pend">⏳ Pendiente</span>
+              {% elif cita.estado == 'ASISTIDA' %}
+                <span class="pill pill-asist">✅ Asistida</span>
+              {% else %}
+                <span class="pill pill-fin">🏁 Finalizado</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if cita.estado == 'PENDIENTE' %}
+                <button class="btn-qr" onclick="abrirQR()">📷 Escanear</button>
+              {% else %}
+                <button class="btn-qr off" disabled>— —</button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty" id="agenda-empty">
+        <div class="empty-icon">🎉</div>
+        <h3>Sin citas pendientes</h3>
+        <p>No hay citas registradas para hoy.</p>
+      </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN: TRÁMITES -->
+  <div class="seccion" id="tramites">
+    <div class="sec-header">
+      <button class="btn-back" onclick="mostrarInicio()">← Inicio</button>
+      <div>
+        <div class="sec-tag">Catálogo</div>
+        <div class="sec-title" style="font-size:16px;margin-bottom:0;">📋 Trámites, requisitos y costos</div>
+      </div>
+    </div>
+    <div class="buscador-tramites">
+      <input type="search" id="buscar-tramite" placeholder="Buscar trámite…" autocomplete="off" oninput="filtrarTramites(this.value)">
+      <button type="button" class="buscador-tramites-btn" onclick="buscarTramites()">Buscar</button>
+    </div>
+    <div id="tramites-container">
+      <div class="tramites-loading"><div class="spinner"></div>Cargando trámites...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL QR -->
+<div class="modal-overlay" id="qr-overlay">
+  <div class="modal modal-qr">
+    <div class="qr-card-header qr-card-header-modal">
+      <svg class="qr-header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+      <span class="qr-header-title">Validación de Cita por QR</span>
+      <button type="button" class="qr-header-close" onclick="cerrarQR()" aria-label="Cerrar">×</button>
+    </div>
+    <div class="qr-card-body">
+      <p class="qr-instruction">Acerca el código QR de la cita a la cámara.</p>
+      <div class="qr-scanner-wrap" id="qr-scanner"></div>
+      <div class="qr-resultado" id="qr-result">
+        <div class="qr-resultado-icon" id="qr-icon">✓</div>
+        <div class="qr-resultado-titulo" id="qr-name">¡Asistencia Registrada!</div>
+        <div class="qr-resultado-detalle" id="qr-sub"></div>
+        <div class="qr-resultado-detalle" id="qr-msg"></div>
+      </div>
+      <div class="qr-actions" id="qr-actions">
+        <button type="button" class="btn-qr-sec" id="btn-reintentar" onclick="reintentarQR()" style="display:none;">Escanear otro</button>
+        <button type="button" class="btn-qr-sec" onclick="cerrarQR()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <strong>{{ oficina.nombre_corto }} — {{ oficina.municipio }}</strong>
+</footer>
+
+<script>
+  const E = id => document.getElementById(id);
+
+  // ── Navegación ──
+  function mostrarInicio() {
+    E('inicio').style.display = 'block';
+    document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function mostrarSeccion(id) {
+    E('inicio').style.display = 'none';
+    document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+    E(id).classList.add('visible');
+    window.scrollTo({top:0, behavior:'smooth'});
+    if (id === 'tramites') cargarTramites();
+    if (id === 'agenda') actualizarAgenda();
+  }
+
+  // ── Catálogo de trámites ──
+  let tramitesCargados = false;
+  let tramitesDataCache = null;
+
+  function parseDocumentos(texto) {
+    if (!texto || !String(texto).trim()) return [];
+    return String(texto).split(/[\n\r,]+/).map(d => d.trim()).filter(Boolean);
+  }
+
+  function renderDocumentos(docs) {
+    const items = parseDocumentos(docs);
+    if (!items.length) return '<span style="color:var(--text-light);font-size:11px;">Sin requisitos registrados</span>';
+    return items.map(d => `<span>${d}</span>`).join('');
+  }
+
+  function cargarTramites() {
+    E('tramites-container').innerHTML = '<div class="tramites-loading"><div class="spinner"></div>Cargando trámites...</div>';
+    fetch('/citas/api/tramites/?_=' + Date.now(), { cache: 'no-store' })
+      .then(r => r.json())
+      .then(data => {
+        tramitesCargados = true;
+        tramitesDataCache = data;
+        renderTramites(data);
+      })
+      .catch(() => {
+        E('tramites-container').innerHTML = '<p style="text-align:center;color:var(--red);padding:30px;">Error al cargar trámites.</p>';
+      });
+  }
+
+  function renderTramites(data, filtro = '') {
+    const cont = E('tramites-container');
+    cont.innerHTML = '';
+    const term = filtro.trim().toLowerCase();
+    if (!data.secciones.length) {
+      cont.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px;">No hay trámites registrados.</p>';
+      return;
+    }
+    let hayResultados = false;
+    data.secciones.forEach(sec => {
+      const tramitesFiltrados = sec.tramites.filter(t =>
+        !term || t.nombre.toLowerCase().includes(term) || sec.nombre.toLowerCase().includes(term)
+      );
+      if (!tramitesFiltrados.length) return;
+      hayResultados = true;
+      const bloque = document.createElement('div');
+      bloque.className = 'seccion-bloque';
+      bloque.innerHTML = `<div class="sec-nombre">${sec.nombre}</div>
+        <div class="tramites-lista">${tramitesFiltrados.map(t => `
+          <div class="tramite-item" data-nombre="${t.nombre.toLowerCase()}">
+            <div class="tramite-info">
+              <div class="tramite-nombre">${t.nombre}</div>
+              <div class="tramite-docs">${renderDocumentos(t.documentos)}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">⏱ ${t.duracion_minutos || 15} min</div>
+            </div>
+            <div class="tramite-precio">
+              <div class="precio-val">$${parseFloat(t.costo).toFixed(2)}</div>
+              <div class="precio-label">Costo oficial</div>
+            </div>
+          </div>`).join('')}
+        </div>`;
+      cont.appendChild(bloque);
+    });
+    if (!hayResultados) {
+      cont.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px;">No se encontraron trámites con ese nombre.</p>';
+    }
+  }
+
+  function filtrarTramites(valor) {
+    if (tramitesDataCache) renderTramites(tramitesDataCache, valor);
+  }
+
+  function buscarTramites() {
+    const input = E('buscar-tramite');
+    if (input) filtrarTramites(input.value);
+  }
+
+  // ── Actualización en tiempo real ──
+  const ESTADO_PILL = {
+    PENDIENTE: '<span class="pill pill-pend">⏳ Pendiente</span>',
+    ASISTIDA: '<span class="pill pill-asist">✅ Asistida</span>',
+    PAGADA: '<span class="pill pill-fin">💳 Pagada</span>',
+    FINALIZADA: '<span class="pill pill-fin">🏁 Finalizada</span>',
+  };
+
+  function actualizarAgenda() {
+    fetch('/citas/api/citas/?estado=PENDIENTE,ASISTIDA')
+      .then(r => r.json())
+      .then(data => {
+        const cont = E('agenda-contenido');
+        if (!data.citas.length) {
+          cont.innerHTML = '<div class="empty" id="agenda-empty"><div class="empty-icon">🎉</div><h3>Sin citas pendientes</h3><p>No hay citas activas en este momento.</p></div>';
+          return;
+        }
+        cont.innerHTML = `<table><thead><tr><th>Folio</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="agenda-tbody">${data.citas.map(c => `
+          <tr data-cita-id="${c.id}">
+            <td><span class="folio">#${c.id}</span></td>
+            <td><span class="hora-badge">${c.hora}</span></td>
+            <td><div class="nombre">${c.nombre}</div><div class="curp">${c.curp}</div></td>
+            <td>${c.tramite}</td>
+            <td>${ESTADO_PILL[c.estado] || c.estado}</td>
+            <td>${c.estado === 'PENDIENTE' ? '<button class="btn-qr" onclick="abrirQR()">📷 Escanear</button>' : '<button class="btn-qr off" disabled>— —</button>'}</td>
+          </tr>`).join('')}</tbody></table>`;
+        const pendientes = data.citas.filter(c => c.estado === 'PENDIENTE').length;
+        const menuPend = E('menu-citas-pendientes');
+        if (menuPend) {
+          menuPend.textContent = pendientes + (pendientes === 1 ? ' cita pendiente' : ' citas pendientes');
+        }
+        const sync = E('agenda-sync');
+        if (sync) sync.textContent = '· actualizado ' + new Date().toLocaleTimeString('es-MX');
+      })
+      .catch(() => {});
+  }
+
+  function actualizarFilaCita(citaId, nuevoEstado) {
+    const fila = document.querySelector(`tr[data-cita-id="${citaId}"]`);
+    if (!fila) { actualizarAgenda(); return; }
+    const celdaEstado = fila.cells[4];
+    const celdaAccion = fila.cells[5];
+    if (celdaEstado) celdaEstado.innerHTML = ESTADO_PILL[nuevoEstado] || nuevoEstado;
+    if (celdaAccion) celdaAccion.innerHTML = '<button class="btn-qr off" disabled>— —</button>';
+  }
+
+  setInterval(() => {
+    if (document.querySelector('#agenda.visible')) actualizarAgenda();
+  }, 8000);
+
+  // Sesión: aviso antes de expirar (30 min)
+  let ultimaActividad = Date.now();
+  ['click', 'keypress', 'scroll', 'mousemove'].forEach(ev =>
+    document.addEventListener(ev, () => { ultimaActividad = Date.now(); }, { passive: true })
+  );
+  setInterval(() => {
+    const inactivo = (Date.now() - ultimaActividad) / 1000;
+    if (inactivo > 1680 && inactivo < 1740) {
+      alert('Tu sesión expirará en 2 minutos por inactividad.');
+    }
+  }, 30000);
+
+  // ── Escáner QR ──
+  let scannerActivo = false;
+
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k,v] = c.trim().split('=');
+      if (k===n) return decodeURIComponent(v);
+    }
+    return null;
+  }
+
+  function abrirQR() {
+    E('qr-overlay').classList.add('open');
+    E('qr-result').className = 'qr-resultado';
+    E('qr-result').style.display = 'none';
+    E('qr-actions').classList.remove('visible');
+    E('btn-reintentar').style.display = 'none';
+    if (!scannerActivo) iniciarScanner();
+  }
+
+  function cerrarQR() {
+    E('qr-overlay').classList.remove('open');
+    detenerScanner();
+  }
+
+  function iniciarScanner() {
+    RegistroQR.start(E('qr-scanner'), onScanExitoso);
+    scannerActivo = true;
+  }
+
+  function detenerScanner() {
+    RegistroQR.stop();
+    scannerActivo = false;
+  }
+
+  function reintentarQR() {
+    E('qr-result').className = 'qr-resultado';
+    E('qr-result').style.display = 'none';
+    E('qr-actions').classList.remove('visible');
+    E('btn-reintentar').style.display = 'none';
+    E('qr-scanner').innerHTML = '';
+    scannerActivo = false;
+    iniciarScanner();
+  }
+
+  function onScanExitoso(decodedText) {
+    detenerScanner();
+    const parsed = parseQrCita(decodedText);
+    if (!parsed || !parsed.token) {
+      mostrarResultado('error', 'QR inválido', '', '', 'El código no contiene un token de seguridad válido.');
+      return;
+    }
+    mostrarResultado('ok', 'Procesando…', '', '', '');
+
+    enviarValidacionQr(parsed.citaId, parsed.token, getCookie('csrftoken'))
+    .then(data => {
+      if (data.status === 'success') {
+        mostrarResultado('ok', '¡Asistencia Registrada!', data.ciudadano, data.tramite, '');
+        if (data.cita_id) actualizarFilaCita(data.cita_id, data.nuevo_estado || 'ASISTIDA');
+      } else {
+        mostrarResultado('error', data.message || 'No se pudo validar', '', '', '');
+      }
+    })
+    .catch(() => {
+      mostrarResultado('error', 'Error de conexión', '', '', 'No se pudo conectar al servidor.');
+    });
+  }
+
+  function mostrarResultado(tipo, titulo, ciudadano, tramite, msg) {
+    const res = E('qr-result');
+    res.style.display = 'block';
+    res.className = 'qr-resultado visible' + (tipo === 'error' ? ' error' : '');
+    E('qr-icon').textContent = tipo === 'error' ? '✕' : '✓';
+    E('qr-name').textContent = titulo;
+    E('qr-sub').textContent = ciudadano ? 'Ciudadano: ' + ciudadano : '';
+    E('qr-msg').textContent = tramite ? 'Trámite: ' + tramite : (msg || '');
+    if (tipo !== 'error' && titulo !== 'Procesando…') {
+      E('btn-reintentar').style.display = 'inline-flex';
+    }
+    E('qr-actions').classList.add('visible');
+  }
+
+  // Cerrar modal al hacer clic fuera
+  E('qr-overlay').onclick = e => { if (e.target === E('qr-overlay')) cerrarQR(); };
+</script>
+</body>
+</html>

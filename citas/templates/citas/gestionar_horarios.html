@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Gestión de Horarios — Registro Civil</title>
+  {% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Gestión de horarios</span>
+    </span>
+  </a>
+</header>
+
+{% include 'citas/includes/barra_usuario.html' %}
+
+<main class="page">
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="page-title">Bloqueo de disponibilidad</div>
+  <div class="page-sub">Bloquea días completos o horarios específicos. Los ciudadanos no podrán agendar en los bloques bloqueados.</div>
+
+  <!-- MENSAJES -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="msg msg-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- INFO HORARIO BASE -->
+  <div class="info-box">
+    <span class="ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+    <div>
+      Horario de atención regular: <strong>Lunes a Viernes de 9:00 a.m. a 5:00 p.m.</strong> y <strong>Sábados de 9:00 a.m. a 1:00 p.m.</strong> (Domingos cerrado). Usa esta herramienta para bloquear excepciones.
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="card">
+    <div class="card-header"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Nuevo bloqueo</div>
+    <div class="card-body">
+
+      <div class="tabs">
+        <div class="tab active" id="tab-dia" onclick="cambiarTab('dia')"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Bloquear día completo</div>
+        <div class="tab" id="tab-hora" onclick="cambiarTab('hora')"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Bloquear horario específico</div>
+      </div>
+
+      <!-- PANEL: DÍA COMPLETO -->
+      <form method="POST" class="form-panel active" id="panel-dia">
+        {% csrf_token %}
+        <input type="hidden" name="tipo" value="dia_completo">
+        <div class="fg">
+          <label>Fecha a bloquear</label>
+          <input type="date" name="fecha" required>
+          <div class="hint">Todo el día quedará indisponible para citas (ej. día festivo).</div>
+        </div>
+        <div class="fg">
+          <label>Motivo (opcional)</label>
+          <input type="text" name="motivo" placeholder="Ej: Día festivo, capacitación, mantenimiento">
+        </div>
+        <button type="submit" class="btn btn-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Bloquear día completo</button>
+      </form>
+
+      <!-- PANEL: HORARIO ESPECÍFICO -->
+      <form method="POST" class="form-panel" id="panel-hora">
+        {% csrf_token %}
+        <input type="hidden" name="tipo" value="horario_especifico">
+        <div class="fg">
+          <label>Fecha</label>
+          <input type="date" name="fecha" required>
+        </div>
+        <div class="fg">
+          <label>Horas a bloquear (puedes seleccionar varias)</label>
+          <select name="hora" multiple required style="height: 200px;">
+            <option value="09:00">09:00</option>
+            <option value="09:30">09:30</option>
+            <option value="10:00">10:00</option>
+            <option value="10:30">10:30</option>
+            <option value="11:00">11:00</option>
+            <option value="11:30">11:30</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+            <option value="14:00">14:00</option>
+            <option value="14:30">14:30</option>
+            <option value="15:00">15:00</option>
+            <option value="15:30">15:30</option>
+            <option value="16:00">16:00</option>
+            <option value="16:30">16:30</option>
+          </select>
+          <div class="hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias horas.</div>
+        </div>
+        <div class="fg">
+          <label>Motivo (opcional)</label>
+          <input type="text" name="motivo" placeholder="Ej: Reunión, trámite interno">
+        </div>
+        <button type="submit" class="btn btn-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Bloquear horario</button>
+      </form>
+
+      <!-- REFERENCIA RÁPIDA -->
+      <div class="horario-ref">
+        <div class="ref-item">
+          <div class="ref-day">Lunes a Viernes</div>
+          <div class="ref-time">9:00 AM – 5:00 PM</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-day">Sábados</div>
+          <div class="ref-time">9:00 AM – 1:00 PM</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TABLA DE BLOQUEOS ACTIVOS -->
+  <div class="card">
+    <div class="card-header"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Bloqueos activos (próximos)</div>
+   {% if bloqueos %}
+<table>
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Bloqueo</th>
+      <th>Motivo</th>
+      <th>Creado por</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% regroup bloqueos by fecha as bloqueos_por_fecha %}
+    {% for grupo in bloqueos_por_fecha %}
+      {% with horas=grupo.list %}
+        {% if horas.0.hora == None %}
+        <tr>
+          <td><strong>{{ grupo.grouper|date:"d/m/Y" }}</strong></td>
+          <td><span class="tipo-pill tipo-dia"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Día completo</span></td>
+          <td class="motivo">{{ horas.0.motivo|default:"—" }}</td>
+          <td class="motivo">{{ horas.0.creado_por.username|default:"—" }}</td>
+          <td>
+            <form method="POST" action="/citas/horarios/eliminar/{{ horas.0.id }}/" onsubmit="return confirm('¿Eliminar bloqueo?');" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn-delete"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg> Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td><strong>{{ grupo.grouper|date:"d/m/Y" }}</strong></td>
+          {% with ultima_hora=horas.last %}
+       <td>
+          <span class="tipo-pill tipo-hora">
+             <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> {{ horas.0.hora|time:"H:i" }} – {{ ultima_hora.hora|time:"H:i" }}
+         </span>
+       </td>
+       {% endwith %}
+          <td class="motivo">{{ horas.0.motivo|default:"—" }}</td>
+          <td class="motivo">{{ horas.0.creado_por.username|default:"—" }}</td>
+          <td>
+            {% for h in horas %}
+            <form method="POST" action="/citas/horarios/eliminar/{{ h.id }}/" style="display:inline;">
+              {% csrf_token %}
+            </form>
+            {% endfor %}
+            <form method="POST" action="/citas/horarios/eliminar-dia/{{ grupo.grouper|date:'Y-m-d' }}/" onsubmit="return confirm('¿Eliminar todos los bloqueos de este día?');">
+              {% csrf_token %}
+              <button type="submit" class="btn-delete"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg> Eliminar día</button>
+            </form>
+          </td>
+        </tr>
+        {% endif %}
+      {% endwith %}
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty">No hay bloqueos activos próximos.</div>
+{% endif %}
+  </div>
+
+</div>
+
+</main>
+
+<script>
+  function cambiarTab(tipo) {
+    document.getElementById('tab-dia').classList.toggle('active', tipo === 'dia');
+    document.getElementById('tab-hora').classList.toggle('active', tipo === 'hora');
+    document.getElementById('panel-dia').classList.toggle('active', tipo === 'dia');
+    document.getElementById('panel-hora').classList.toggle('active', tipo === 'hora');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Citas Pagadas — Registro Civil</title>
+  {% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <style>
+    .cp-page-header { margin-bottom: 20px; }
+    .cp-page-header h2 { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .cp-page-header p { font-size: 13px; color: var(--tinta-muted); line-height: 1.5; }
+
+    .cp-flujo { margin-bottom: 22px; }
+    .cp-flujo .flujo-step { font-size: 12px; padding: 6px 14px; }
+
+    .cp-panel .panel-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 14px 18px;
+    }
+    .cp-panel .panel-header h3 { font-size: 14px; font-weight: 700; margin: 0; }
+    .cp-panel .panel-header p { font-size: 12px; color: var(--tinta-muted); font-weight: 400; margin: 0; }
+
+    .cp-lista { list-style: none; margin: 0; padding: 0; }
+    .cp-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--borde);
+      transition: background .12s;
+    }
+    .cp-item:last-child { border-bottom: none; }
+    .cp-item:hover { background: var(--gris-piedra); }
+
+    .cp-item-main { flex: 1; min-width: 0; }
+    .cp-folio { font-size: 12px; font-weight: 700; color: var(--tinta-muted); margin-bottom: 3px; }
+    .cp-nombre { font-size: 14.5px; font-weight: 700; color: var(--tinta); line-height: 1.3; }
+    .cp-tramite { font-size: 12.5px; color: var(--tinta-muted); margin-top: 3px; line-height: 1.4; }
+
+    .cp-meta { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .cp-monto {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--verde);
+      min-width: 72px;
+      text-align: right;
+    }
+    .cp-pill {
+      background: var(--slate-claro);
+      color: var(--slate);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .btn-finalizar {
+      padding: 8px 18px;
+      border-radius: 5px;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+    .btn-cancelar-pagada {
+      padding: 8px 14px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      border: 1px solid var(--rojo);
+      background: var(--rojo-claro);
+      color: var(--rojo);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-cancelar-pagada:hover { background: #f0d4d1; }
+
+    @media (max-width: 720px) {
+      .cp-item { flex-wrap: wrap; gap: 12px; }
+      .cp-meta { width: 100%; justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar">
+  <a href="{{ panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Citas pagadas</span>
+    </span>
+  </a>
+</header>
+
+<main class="page">
+
+{% include 'citas/includes/barra_usuario.html' with show_logout=False %}
+
+<div class="main">
+
+  <header class="cp-page-header">
+    <h2>Trámites pendientes de finalizar</h2>
+    <p>Citas ya cobradas que esperan confirmación de entrega.</p>
+  </header>
+
+  <div class="flujo cp-flujo" aria-label="Flujo del trámite">
+    <span class="flujo-step fs-done">Pendiente</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-done">Asistida</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-active">Pagada</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-next">Finalizada</span>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="msg msg-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="panel cp-panel">
+    <div class="panel-header">
+      <h3>Citas con pago registrado</h3>
+      <p>Marca como «Finalizada» cuando el documento haya sido entregado al ciudadano.</p>
+    </div>
+
+    {% if citas %}
+    <ul class="cp-lista" id="lista-citas-pagadas">
+      {% for cita in citas %}
+      <li class="cp-item" data-cita-id="{{ cita.id }}">
+        <div class="cp-item-main">
+          <div class="cp-folio">#{{ cita.id }}</div>
+          <div class="cp-nombre">{{ cita.nombre_ciudadano }}</div>
+          <div class="cp-tramite">{{ cita.tramite.nombre }}</div>
+        </div>
+        <div class="cp-meta">
+          <span class="cp-monto">${{ cita.monto_pagado|floatformat:2 }}</span>
+          <span class="cp-pill">Pagada</span>
+          <button type="button" class="btn-cancelar-pagada"
+            data-id="{{ cita.id }}"
+            data-monto="{{ cita.monto_pagado|floatformat:2 }}"
+            onclick="cancelarCitaPagada(this)">
+            Cancelar cita
+          </button>
+          <button type="button" class="btn-finalizar"
+            data-id="{{ cita.id }}"
+            data-nombre="{{ cita.nombre_ciudadano }}"
+            data-tramite="{{ cita.tramite.nombre }}"
+            data-fecha="{{ cita.fecha|date:'d/m/Y' }}"
+            onclick="abrirModal(this)">
+            Finalizar
+          </button>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+    <div class="empty">
+      <div class="empty-icon">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/><circle cx="12" cy="12" r="10"/></svg>
+      </div>
+      <h3>¡Todo al día!</h3>
+      <p>No hay trámites pagados pendientes de finalizar.</p>
+      <a href="{% url 'fila_caja' %}" class="btn-agenda" style="margin-top:14px;display:inline-flex;">Ir a fila de caja</a>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-titulo">Confirmar finalización</h3>
+      <button type="button" class="modal-close" onclick="cerrarModal()" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-body">
+      <p>¿Confirmas que el documento fue entregado al ciudadano y el trámite está completo?</p>
+      <div class="modal-detail" id="modal-detalle"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-modal btn-modal-sec" onclick="cerrarModal()">Cancelar</button>
+      <form id="form-finalizar" method="POST" style="flex:1;">
+        {% csrf_token %}
+        <button type="button" class="btn-modal btn-modal-grn" style="width:100%;" onclick="confirmarFinalizar()">Sí, finalizar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+  function abrirModal(btn) {
+    const id      = btn.dataset.id;
+    const nombre  = btn.dataset.nombre;
+    const tramite = btn.dataset.tramite;
+    const fecha   = btn.dataset.fecha;
+
+    document.getElementById('modal-overlay').classList.add('open');
+    document.getElementById('form-finalizar').action = '/citas/citas/finalizar/' + id + '/';
+    document.getElementById('modal-detalle').innerHTML =
+      '<div class="modal-detail-row"><span>Ciudadano</span><span>' + nombre + '</span></div>' +
+      '<div class="modal-detail-row"><span>Trámite</span><span>' + tramite + '</span></div>' +
+      '<div class="modal-detail-row"><span>Fecha de cita</span><span>' + fecha + '</span></div>';
+  }
+
+  function cerrarModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k,v] = c.trim().split('=');
+      if (k === n) return decodeURIComponent(v);
+    }
+    return null;
+  }
+
+  function confirmarFinalizar() {
+    const form = document.getElementById('form-finalizar');
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken'), 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        const fila = document.querySelector('.cp-item[data-cita-id="' + data.cita_id + '"]');
+        if (fila) fila.remove();
+        cerrarModal();
+        if (!document.querySelector('.cp-item')) location.reload();
+      } else {
+        alert(data.error || 'No se pudo finalizar la cita.');
+      }
+    })
+    .catch(() => alert('Error de conexión.'));
+  }
+
+  function cancelarCitaPagada(btn) {
+    const id = btn.dataset.id;
+    const monto = btn.dataset.monto;
+    const msg = monto
+      ? '¿Cancelar la cita #' + id + '? Se descontará $' + monto + ' de los ingresos.'
+      : '¿Cancelar la cita #' + id + '?';
+    if (!confirm(msg)) return;
+    fetch('/citas/citas/cancelar/' + id + '/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken'), 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        const fila = document.querySelector('.cp-item[data-cita-id="' + data.cita_id + '"]');
+        if (fila) fila.remove();
+        if (!document.querySelector('.cp-item')) location.reload();
+        else if (data.message) alert(data.message);
+      } else {
+        alert(data.error || 'No se pudo cancelar la cita.');
+      }
+    })
+    .catch(() => alert('Error de conexión.'));
+  }
+
+  document.getElementById('modal-overlay').onclick = function(e) {
+    if (e.target === document.getElementById('modal-overlay')) cerrarModal();
+  };
+</script>
+</body>
+</html>

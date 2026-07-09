@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup — Bitácora de auditoría</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/maqueta.css">
+</head>
+<body>
+  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
+  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
+  <header class="navbar">
+    <a class="navbar-brand" href="panel-oficial.html"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Bitácora de auditoría</span></span></a>
+  </header>
+  <nav class="rc-breadcrumbs" aria-label="Ruta de navegación">
+    <a href="django-admin.html">Inicio</a>
+    <span class="rc-bc-sep" aria-hidden="true">›</span>
+    <a href="django-admin.html">Citas</a>
+    <span class="rc-bc-sep" aria-hidden="true">›</span>
+    <span class="rc-bc-current">
+      <svg class="rc-bc-icon" viewBox="0 0 24 24" fill="#E8C547" aria-hidden="true"><path d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-6l-2-2z"/></svg>
+      Bitácora de Auditoría (Logs)
+    </span>
+  </nav>
+  <div class="gobmx-barra-usuario">
+    <span class="gobmx-usuario">Martín López Sandoval</span>
+    <span class="barra-spacer"></span>
+  </div>
+
+  <main class="page">
+    <div class="main bitacora-page">
+      <div class="bitacora-card">
+        <div class="bitacora-head">
+          <div>
+            <h1 class="bitacora-title">Bitácora de Auditoría</h1>
+            <p class="bitacora-subtitle">Registro inmutable de acciones del personal autorizado. Solo lectura.</p>
+          </div>
+          <a class="btn-inicio" href="panel-oficial.html">Inicio</a>
+        </div>
+
+        <div class="bitacora-filters">
+          <div class="bitacora-field bitacora-field-search">
+            <label for="bitacora-buscar">Buscar</label>
+            <input id="bitacora-buscar" type="search" placeholder="Usuario, descripción, IP…">
+          </div>
+          <div class="bitacora-field">
+            <label for="bitacora-accion">Acción</label>
+            <select id="bitacora-accion">
+              <option selected>Todas</option>
+              <option>Modificación cita</option>
+              <option>Transacción</option>
+              <option>Login</option>
+              <option>Acceso denegado</option>
+              <option>Modificación costo</option>
+            </select>
+          </div>
+          <div class="bitacora-field">
+            <label for="bitacora-usuario">Usuario</label>
+            <select id="bitacora-usuario">
+              <option selected>Todos</option>
+              <option>laura.capturista</option>
+              <option>martin.oficial</option>
+              <option>maria.admin</option>
+            </select>
+          </div>
+          <button class="btn btn-sm btn-ghost bitacora-filter-btn" type="button">Filtrar</button>
+        </div>
+
+        <div class="bitacora-table-wrap">
+          <table class="bitacora-table">
+            <thead>
+              <tr>
+                <th>Fecha y hora</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Descripción</th>
+                <th>IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>06/07/2026 14:32:18</td>
+                <td>laura.capturista</td>
+                <td><span class="pill pill-bit-cita">Modificación cita</span></td>
+                <td>Cita #436 marcada como ASISTIDA por validación QR.</td>
+                <td>192.168.8.44</td>
+              </tr>
+              <tr>
+                <td>06/07/2026 14:15:02</td>
+                <td>martin.oficial</td>
+                <td><span class="pill pill-bit-txn">Transacción</span></td>
+                <td>Cobro de $485.00 registrado para cita #435.</td>
+                <td>192.168.8.51</td>
+              </tr>
+              <tr>
+                <td>06/07/2026 09:01:44</td>
+                <td>maria.admin</td>
+                <td><span class="pill pill-bit-login">Login</span></td>
+                <td>Inicio de sesión exitoso (maria.admin).</td>
+                <td>192.168.8.10</td>
+              </tr>
+              <tr>
+                <td>05/07/2026 18:22:09</td>
+                <td>desconocido</td>
+                <td><span class="pill pill-bit-deny">Acceso denegado</span></td>
+                <td>Intento fallido de inicio de sesión (usuario.test).</td>
+                <td>192.168.8.99</td>
+              </tr>
+              <tr>
+                <td>05/07/2026 11:08:33</td>
+                <td>maria.admin</td>
+                <td><span class="pill pill-bit-costo">Modificación costo</span></td>
+                <td>El trámite «Acta de nacimiento» cambió su costo de $450.00 a $485.00.</td>
+                <td>192.168.8.10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="bitacora-note">Los registros no pueden editarse ni eliminarse desde esta pantalla.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

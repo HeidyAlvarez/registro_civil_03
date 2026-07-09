@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Entorno virtual
+venv/
+.venv/
+env/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Variables de entorno y secretos
+.env
+.env.*
+*.pem
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Copia duplicada del proyecto (no subir)
+citas/templates/citas/autenticacion (3)/
+
+# Cursor / assets temporales
+.cursor/
+
+# Archivos temporales de Office
+~$*
+~WRL*.tmp
+
+# Respaldos comprimidos
+*.zip
