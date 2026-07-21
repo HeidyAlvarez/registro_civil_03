@@ -2,28 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.db.models import Sum, Count, Avg, Q
-from django.core.paginator import Paginator
 from django.utils import timezone
-from django.db.models.functions import TruncMonth, ExtractWeekDay
-from django.contrib.admin.views.decorators import staff_member_required
-from django.db import transaction, IntegrityError
-import json
-import re
-from datetime import datetime, date
-from .models import BitacoraAuditoria, Cita, PagoCaja, Tramite, SeccionTramite, HorarioBloqueado, CorteCajaDiario
+from .models import Cita, Tramite, BitacoraAuditoria
 from .office_info import OFICINA_REGISTRO_CIVIL
 from .comprobante_pdf import generar_comprobante_pdf
-from .utils import (
-    generar_slots_dia, citas_ocupadas_en_fecha, horarios_bloqueados_en_fecha,
-    slot_disponible, validar_disponibilidad, format_minutes, obtener_ip,
-    fin_jornada_minutos, pagos_para_ingresos, validar_fecha_agendado, rango_fechas_agendado,
-)
-from .auditoria import registrar_log, registrar_log_seguridad
-from .validators import validar_curp
+from .auditoria import registrar_log
+from .servicios import Bitacora, Caja, Calendario, CitaNegocio, QR, TramiteNegocio
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
+import json
+from datetime import datetime
 
 
 # ==========================================
@@ -59,17 +47,12 @@ def dashboard_personalizado(request):
     if not (request.user.is_staff or es_oficial_o_admin(request.user) or es_administrador(request.user)):
         return redirect('/admin/login/')
     hoy = timezone.now().date()
+    resumen = CitaNegocio.resumen_dashboard(hoy)
     contexto = {
         'titulo': 'Panel de Control - Registro Civil',
-        'total_citas_hoy': Cita.objects.filter(fecha=hoy).count(),
-        'citas_pendientes': Cita.objects.filter(fecha=hoy, estado='PENDIENTE').count(),
-        'citas_en_caja': Cita.objects.filter(fecha=hoy, estado='ASISTIDA').count(),
-        'citas_pagadas': Cita.objects.filter(fecha=hoy, estado='PAGADA').count(),
-        'citas_finalizadas': Cita.objects.filter(fecha=hoy, estado='FINALIZADA').count(),
-        'ingresos_hoy': pagos_para_ingresos().filter(
-            fecha_pago__date=hoy
-        ).aggregate(Sum('monto_cobrado'))['monto_cobrado__sum'] or 0,
-        'citas_hoy': Cita.objects.filter(fecha=hoy).select_related('tramite').order_by('hora'),
+        'hoy': hoy,
+        'mostrar_admin_sistema': es_administrador(request.user) or request.user.is_superuser,
+        **resumen,
     }
     return render(request, 'citas/dashboard_personalizado.html', contexto)
 
@@ -82,11 +65,8 @@ def dashboard_personalizado(request):
 @user_passes_test(es_capturista_o_superior)
 def vista_agenda(request):
     hoy = timezone.now().date()
-    citas_hoy = Cita.objects.filter(
-        estado='PENDIENTE',
-    ).select_related('tramite__seccion').order_by('fecha', 'hora')
     return render(request, 'citas/agenda.html', {
-        'citas': citas_hoy,
+        'citas': CitaNegocio.listar_pendientes_agenda(incluir_futuras=True),
         'hoy': hoy,
         'puede_revertir': es_oficial_o_admin(request.user),
     })
@@ -116,41 +96,19 @@ def validar_cita(request, cita_id, token=None):
 @user_passes_test(es_capturista_o_superior)
 @require_POST
 def procesar_validacion_qr(request, cita_id):
-    try:
-        cita = Cita.objects.get(id=cita_id)
-        token = (request.POST.get('token') or '').strip()
-        if not token or str(cita.qr_codigo) != token:
-            registrar_log(
-                request, 'SEGURIDAD',
-                f"QR rechazado: token inválido para cita #{cita_id}.",
-            )
-            return JsonResponse({'status': 'error', 'message': 'Código QR no válido o alterado.'})
-        if cita.estado == 'PENDIENTE':
-            cita.estado = 'ASISTIDA'
-            cita.usuario_atendio = request.user
-            cita.save()
-            registrar_log(
-                request, 'MODIFICACION_CITA',
-                f"Cita #{cita.id} ({cita.nombre_ciudadano}) marcada como ASISTIDA por validación QR."
-            )
-            return JsonResponse({
-                'status': 'success',
-                'ciudadano': cita.nombre_ciudadano,
-                'tramite': cita.tramite.nombre,
-                'cita_id': cita.id,
-                'nuevo_estado': 'ASISTIDA',
-            })
-        registrar_log(
-            request, 'MODIFICACION_CITA',
-            f"Intento QR rechazado: cita #{cita.id} ya en estado {cita.estado}.",
-        )
-        return JsonResponse({'status': 'error', 'message': f'La cita ya está como: {cita.estado}'})
-    except Cita.DoesNotExist:
-        registrar_log(
-            request, 'SEGURIDAD',
-            f"Intento de validación QR con folio inexistente (#{cita_id}).",
-        )
-        return JsonResponse({'status': 'error', 'message': 'Código QR no reconocido.'})
+    token = (request.POST.get('token') or '').strip()
+    ok, payload = QR.validar_y_marcar_asistida(cita_id, token, request.user)
+    if 'log' in payload:
+        registrar_log(request, payload['log'][0], payload['log'][1])
+    if ok:
+        return JsonResponse({
+            'status': payload['status'],
+            'ciudadano': payload['ciudadano'],
+            'tramite': payload['tramite'],
+            'cita_id': payload['cita_id'],
+            'nuevo_estado': payload['nuevo_estado'],
+        })
+    return JsonResponse({'status': payload['status'], 'message': payload['message']})
 
 
 # ==========================================
@@ -160,35 +118,19 @@ def procesar_validacion_qr(request, cita_id):
 @login_required
 @user_passes_test(es_capturista_o_superior)
 def vista_fila_caja(request):
-    fila_espera = Cita.objects.filter(estado='ASISTIDA').select_related('tramite__seccion').order_by('hora')
-    return render(request, 'citas/fila_caja.html', {'fila': fila_espera})
+    return render(request, 'citas/fila_caja.html', {'fila': CitaNegocio.listar_fila_caja()})
 
 @login_required
 @user_passes_test(es_capturista_o_superior)
 @require_POST
 def registrar_pago_ventanilla(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id)
-    if cita.estado != 'ASISTIDA':
-        registrar_log(
-            request, 'TRANSACCION',
-            f"Cobro rechazado cita #{cita_id}: estado {cita.estado}.",
-        )
+    ok, error = Caja.registrar_pago(cita, request.user)
+    if not ok:
+        registrar_log(request, 'TRANSACCION', f"Cobro rechazado cita #{cita_id}: {error}")
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'ok': False, 'error': f'La cita está en estado {cita.estado}.'})
-        return redirect('fila_caja')
-    try:
-        with transaction.atomic():
-            PagoCaja.objects.create(
-                cita=cita,
-                monto_cobrado=cita.tramite.costo,
-                cajero=request.user
-            )
-            cita.estado = 'PAGADA'
-            cita.save()
-    except IntegrityError:
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'ok': False, 'error': 'Esta cita ya tiene un pago registrado.'})
-        messages.error(request, 'Esta cita ya tiene un pago registrado.')
+            return JsonResponse({'ok': False, 'error': error})
+        messages.error(request, error)
         return redirect('fila_caja')
     registrar_log(
         request, 'TRANSACCION',
@@ -204,22 +146,16 @@ def registrar_pago_ventanilla(request, cita_id):
 def finalizar_cita(request, cita_id):
     """ El Oficial marca el trámite como completamente finalizado """
     cita = get_object_or_404(Cita, id=cita_id)
-    if cita.estado == 'PAGADA':
-        cita.estado = 'FINALIZADA'
-        cita.save()
-        registrar_log(
-            request, 'MODIFICACION_CITA',
-            f"Cita #{cita.id} ({cita.nombre_ciudadano}) marcada como FINALIZADA."
-        )
+    ok, msg = CitaNegocio.finalizar(cita)
+    if ok:
+        registrar_log(request, 'MODIFICACION_CITA', msg)
         messages.success(request, f"Trámite de {cita.nombre_ciudadano} finalizado.")
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'ok': True, 'cita_id': cita.id, 'nuevo_estado': 'FINALIZADA'})
     elif request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        registrar_log(
-            request, 'MODIFICACION_CITA',
-            f"Finalización rechazada cita #{cita_id}: estado {cita.estado}.",
-        )
-        return JsonResponse({'ok': False, 'error': f'La cita está en estado {cita.estado}.'})
+        registrar_log(request, 'MODIFICACION_CITA', f"Finalización rechazada cita #{cita_id}: {msg}")
+        return JsonResponse({'ok': False, 'error': msg})
+    messages.error(request, msg)
     return redirect('vista_citas_pagadas')
 
 @login_required
@@ -228,37 +164,18 @@ def finalizar_cita(request, cita_id):
 def cancelar_cita(request, cita_id):
     """ Admin u oficial cancela una cita (no permitido si ya está finalizada). """
     cita = get_object_or_404(Cita, id=cita_id)
-    if cita.estado == 'FINALIZADA':
-        msg = 'No se puede cancelar una cita que ya fue finalizada.'
-    elif cita.estado == 'CANCELADA':
-        msg = 'Esta cita ya está cancelada.'
-    elif not cita.puede_cancelarse():
-        msg = f'No se puede cancelar una cita en estado {cita.estado}.'
-    else:
-        monto_descontado = None
-        if cita.estado == 'PAGADA':
-            try:
-                monto_descontado = cita.pagocaja.monto_cobrado
-            except ObjectDoesNotExist:
-                pass
-        cita.estado = 'CANCELADA'
-        cita.save(update_fields=['estado'])
-        desc_log = f"Cita #{cita.id} ({cita.nombre_ciudadano}) cancelada por {request.user.username}."
-        if monto_descontado is not None:
-            desc_log += f" Ingreso descontado: ${monto_descontado}."
-        registrar_log(request, 'MODIFICACION_CITA', desc_log)
-        ok_msg = 'Cita cancelada correctamente.'
-        if monto_descontado is not None:
-            ok_msg += f' Se descontó ${monto_descontado} de los ingresos.'
+    ok, msg, extra = CitaNegocio.cancelar(cita, request.user.username)
+    if ok:
+        registrar_log(request, 'MODIFICACION_CITA', extra['log'])
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'ok': True,
                 'cita_id': cita.id,
-                'nuevo_estado': 'CANCELADA',
-                'message': ok_msg,
-                'ingreso_descontado': float(monto_descontado) if monto_descontado is not None else None,
+                'nuevo_estado': extra['nuevo_estado'],
+                'message': msg,
+                'ingreso_descontado': extra['ingreso_descontado'],
             })
-        messages.success(request, ok_msg)
+        messages.success(request, msg)
         return redirect(request.META.get('HTTP_REFERER', 'dashboard_oficial'))
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -274,19 +191,13 @@ def cancelar_cita(request, cita_id):
 def revertir_asistencia_cita(request, cita_id):
     """ HU-4: Solo Oficial o Administrador revierten una asistencia marcada por error. """
     cita = get_object_or_404(Cita, id=cita_id)
-    if cita.estado != 'ASISTIDA':
-        msg = f'Solo se puede revertir una cita en estado Asistida (actual: {cita.estado}).'
+    ok, msg = CitaNegocio.revertir_asistencia(cita)
+    if not ok:
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'ok': False, 'error': msg}, status=400)
         messages.error(request, msg)
         return redirect(request.META.get('HTTP_REFERER', 'vista_agenda'))
-    cita.estado = 'PENDIENTE'
-    cita.usuario_atendio = None
-    cita.save(update_fields=['estado', 'usuario_atendio'])
-    registrar_log(
-        request, 'CANCELACION_ERROR',
-        f"Asistencia revertida: cita #{cita.id} ({cita.nombre_ciudadano}) regresó a PENDIENTE.",
-    )
+    registrar_log(request, 'CANCELACION_ERROR', msg)
     ok_msg = 'Asistencia revertida. La cita volvió a estado Pendiente.'
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'ok': True, 'cita_id': cita.id, 'nuevo_estado': 'PENDIENTE', 'message': ok_msg})
@@ -296,190 +207,47 @@ def revertir_asistencia_cita(request, cita_id):
 @login_required
 @user_passes_test(es_oficial_o_admin)
 def vista_citas_pagadas(request):
-    """ Lista de citas PAGADAS pendientes de finalizar """
-    citas = Cita.objects.filter(
-        estado='PAGADA'
-    ).select_related('tramite__seccion', 'pagocaja').order_by('fecha', 'hora')
-    for cita in citas:
-        try:
-            cita.monto_pagado = cita.pagocaja.monto_cobrado
-        except ObjectDoesNotExist:
-            cita.monto_pagado = cita.tramite.costo
-    return render(request, 'citas/citas_pagadas.html', {'citas': citas})
-
-
-MESES_ESPANOL = {
-    1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
-    5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
-    9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre',
-}
+    return render(request, 'citas/citas_pagadas.html', {'citas': CitaNegocio.listar_pagadas()})
 
 
 @login_required
 @user_passes_test(puede_ver_panel_citas)
 def vista_historial_finalizadas(request, anio=None, mes=None):
-    """ Historial de citas finalizadas agrupado por mes (resumen + detalle). """
-    totales_globales = Cita.objects.filter(estado='FINALIZADA').aggregate(
-        total_citas=Count('id'),
-        total_ingresos=Sum('pagocaja__monto_cobrado'),
+    return render(
+        request,
+        'citas/historial_finalizadas.html',
+        CitaNegocio.historial_finalizadas(anio, mes),
     )
-    resumen_meses = (
-        Cita.objects.filter(estado='FINALIZADA')
-        .annotate(mes=TruncMonth('fecha'))
-        .values('mes')
-        .annotate(
-            cantidad=Count('id'),
-            ingresos=Sum('pagocaja__monto_cobrado'),
-        )
-        .order_by('-mes')
-    )
-    meses = []
-    for item in resumen_meses:
-        dt = item['mes']
-        if not dt:
-            continue
-        meses.append({
-            'anio': dt.year,
-            'mes': dt.month,
-            'etiqueta': f"{MESES_ESPANOL.get(dt.month, 'Mes')} {dt.year}",
-            'cantidad': item['cantidad'],
-            'ingresos': item['ingresos'] or 0,
-        })
-
-    contexto = {
-        'meses': meses,
-        'total_global_citas': totales_globales['total_citas'] or 0,
-        'total_global_ingresos': totales_globales['total_ingresos'] or 0,
-        'mes_detalle': None,
-        'citas_mes': [],
-        'mes_nombre': '',
-        'anio': None,
-        'mes': None,
-        'total_mes_citas': 0,
-        'total_mes_ingresos': 0,
-    }
-
-    if anio is not None and mes is not None:
-        citas_qs = (
-            Cita.objects.filter(estado='FINALIZADA', fecha__year=anio, fecha__month=mes)
-            .select_related('tramite__seccion')
-            .order_by('-fecha', '-hora')
-        )
-        citas = list(citas_qs)
-        total_ingresos = 0
-        for cita in citas:
-            try:
-                cita.monto_pagado = cita.pagocaja.monto_cobrado
-            except ObjectDoesNotExist:
-                cita.monto_pagado = cita.tramite.costo
-            total_ingresos += cita.monto_pagado
-
-        contexto.update({
-            'mes_detalle': True,
-            'citas_mes': citas,
-            'mes_nombre': MESES_ESPANOL.get(mes, 'Mes'),
-            'anio': anio,
-            'mes': mes,
-            'total_mes_citas': len(citas),
-            'total_mes_ingresos': total_ingresos,
-        })
-
-    return render(request, 'citas/historial_finalizadas.html', contexto)
 
 
 @login_required
 @user_passes_test(puede_ver_panel_citas)
 def vista_historial_canceladas(request, anio=None, mes=None):
-    """ Historial de citas canceladas agrupado por mes (resumen + detalle). """
-    total_global = Cita.objects.filter(estado='CANCELADA').count()
-    resumen_meses = (
-        Cita.objects.filter(estado='CANCELADA')
-        .annotate(mes=TruncMonth('fecha'))
-        .values('mes')
-        .annotate(cantidad=Count('id'))
-        .order_by('-mes')
+    return render(
+        request,
+        'citas/historial_canceladas.html',
+        CitaNegocio.historial_canceladas(anio, mes),
     )
-    meses = []
-    for item in resumen_meses:
-        dt = item['mes']
-        if not dt:
-            continue
-        meses.append({
-            'anio': dt.year,
-            'mes': dt.month,
-            'etiqueta': f"{MESES_ESPANOL.get(dt.month, 'Mes')} {dt.year}",
-            'cantidad': item['cantidad'],
-        })
-
-    contexto = {
-        'meses': meses,
-        'total_global_citas': total_global,
-        'mes_detalle': None,
-        'citas_mes': [],
-        'mes_nombre': '',
-        'anio': None,
-        'mes': None,
-        'total_mes_citas': 0,
-    }
-
-    if anio is not None and mes is not None:
-        citas = list(
-            Cita.objects.filter(estado='CANCELADA', fecha__year=anio, fecha__month=mes)
-            .select_related('tramite__seccion')
-            .order_by('-fecha', '-hora')
-        )
-        contexto.update({
-            'mes_detalle': True,
-            'citas_mes': citas,
-            'mes_nombre': MESES_ESPANOL.get(mes, 'Mes'),
-            'anio': anio,
-            'mes': mes,
-            'total_mes_citas': len(citas),
-        })
-
-    return render(request, 'citas/historial_canceladas.html', contexto)
 
 
 @login_required
 @user_passes_test(puede_ver_panel_citas)
 def vista_bitacora(request):
     """Bitácora de auditoría — solo lectura, con filtros."""
-    qs = BitacoraAuditoria.objects.select_related('usuario').order_by('-fecha_hora')
-
-    q = request.GET.get('q', '').strip()
-    accion = request.GET.get('accion', '').strip()
-    usuario = request.GET.get('usuario', '').strip()
-
-    if q:
-        qs = qs.filter(
-            Q(descripcion__icontains=q)
-            | Q(usuario__username__icontains=q)
-            | Q(ip_direccion__icontains=q)
-        )
-    if accion:
-        qs = qs.filter(accion=accion)
-    if usuario == '__none__':
-        qs = qs.filter(usuario__isnull=True)
-    elif usuario:
-        qs = qs.filter(usuario__username=usuario)
-
-    paginator = Paginator(qs, 50)
-    registros = paginator.get_page(request.GET.get('page'))
-
-    usuarios = (
-        BitacoraAuditoria.objects.exclude(usuario__isnull=True)
-        .values_list('usuario__username', flat=True)
-        .distinct()
-        .order_by('usuario__username')
+    registros, usuarios = Bitacora.consultar(
+        q=request.GET.get('q', '').strip(),
+        accion=request.GET.get('accion', '').strip(),
+        usuario=request.GET.get('usuario', '').strip(),
+        page=request.GET.get('page'),
     )
 
     return render(request, 'citas/bitacora.html', {
         'registros': registros,
         'usuarios': usuarios,
         'acciones': BitacoraAuditoria.TIPO_ACCION_CHOICES,
-        'filtro_q': q,
-        'filtro_accion': accion,
-        'filtro_usuario': usuario,
+        'filtro_q': request.GET.get('q', '').strip(),
+        'filtro_accion': request.GET.get('accion', '').strip(),
+        'filtro_usuario': request.GET.get('usuario', '').strip(),
     })
 
 
@@ -492,51 +260,47 @@ def vista_bitacora(request):
 def agregar_elemento_catalogo(request):
     if request.method == 'POST':
         if 'btn_crear_seccion' in request.POST:
-            nombre_seccion = request.POST.get('nombre_seccion', '').strip()
-            if nombre_seccion:
-                SeccionTramite.objects.get_or_create(nombre=nombre_seccion)
-                registrar_log(request, 'INFO', f"Sección de catálogo creada: '{nombre_seccion}'.")
-                messages.success(request, f"Sección '{nombre_seccion}' creada correctamente.")
-                return redirect('agregar_elemento_catalogo')
+            ok, msg, seccion = TramiteNegocio.crear_seccion(request.POST.get('nombre_seccion'))
+            if ok:
+                registrar_log(request, 'INFO', f"Sección de catálogo creada: '{seccion.nombre}'.")
+                messages.success(request, msg)
+            else:
+                messages.error(request, msg)
+            return redirect('agregar_elemento_catalogo')
 
         elif 'btn_crear_tramite' in request.POST:
-            seccion_id = request.POST.get('seccion_asociada')
-            nombre_tramite = request.POST.get('nombre_tramite', '').strip()
-            costo_tramite = request.POST.get('costo_tramite', 0)
-            duracion = request.POST.get('duracion_tramite', 15)
-            documentos = request.POST.get('documentos_tramite', '').strip()
-            if seccion_id and nombre_tramite:
-                seccion = SeccionTramite.objects.get(id=seccion_id)
-                Tramite.objects.create(
-                    seccion=seccion,
-                    nombre=nombre_tramite,
-                    costo=costo_tramite,
-                    duracion_minutos=int(duracion) if duracion else 15,
-                    documentos_requeridos=documentos or None,
-                )
+            ok, msg, tramite = TramiteNegocio.crear_tramite(
+                request.POST.get('seccion_asociada'),
+                request.POST.get('nombre_tramite'),
+                request.POST.get('costo_tramite', 0),
+                request.POST.get('duracion_tramite', 15),
+                request.POST.get('documentos_tramite', ''),
+            )
+            if ok:
                 registrar_log(
                     request, 'MODIFICACION_COSTO',
-                    f"Trámite creado: '{nombre_tramite}' en '{seccion.nombre}' (${costo_tramite}).",
+                    f"Trámite creado: '{tramite.nombre}' en '{tramite.seccion.nombre}' (${tramite.costo}).",
                 )
-                messages.success(request, f"Opción '{nombre_tramite}' vinculada con éxito.")
-                return redirect('agregar_elemento_catalogo')
+                messages.success(request, msg)
+            else:
+                messages.error(request, msg)
+            return redirect('agregar_elemento_catalogo')
 
         elif 'btn_editar_tramite' in request.POST:
-            tramite_id = request.POST.get('tramite_id')
-            tramite = get_object_or_404(Tramite, id=tramite_id)
-            costo_anterior = tramite.costo
-            tramite.nombre = request.POST.get('nombre_tramite', tramite.nombre).strip()
-            tramite.costo = request.POST.get('costo_tramite', tramite.costo)
-            tramite.duracion_minutos = int(request.POST.get('duracion_tramite', tramite.duracion_minutos) or 15)
-            tramite.documentos_requeridos = request.POST.get('documentos_tramite', '').strip() or None
-            seccion_id = request.POST.get('seccion_asociada')
-            if seccion_id:
-                tramite.seccion = SeccionTramite.objects.get(id=seccion_id)
-            try:
-                tramite.save()
-            except ValidationError as exc:
-                messages.error(request, '; '.join(getattr(exc, 'messages', [str(exc)])))
+            ok, msg, costo_anterior = TramiteNegocio.actualizar_tramite(
+                request.POST.get('tramite_id'),
+                {
+                    'nombre': request.POST.get('nombre_tramite'),
+                    'costo': request.POST.get('costo_tramite'),
+                    'duracion': request.POST.get('duracion_tramite'),
+                    'documentos': request.POST.get('documentos_tramite', ''),
+                    'seccion_id': request.POST.get('seccion_asociada'),
+                },
+            )
+            if not ok:
+                messages.error(request, msg)
                 return redirect('agregar_elemento_catalogo')
+            tramite = Tramite.objects.get(id=request.POST.get('tramite_id'))
             if costo_anterior != tramite.costo:
                 registrar_log(
                     request, 'MODIFICACION_COSTO',
@@ -544,30 +308,20 @@ def agregar_elemento_catalogo(request):
                 )
             else:
                 registrar_log(request, 'INFO', f"Trámite actualizado: '{tramite.nombre}'.")
-            messages.success(request, f"Trámite '{tramite.nombre}' actualizado.")
+            messages.success(request, msg)
             return redirect('agregar_elemento_catalogo')
 
         elif 'btn_toggle_tramite' in request.POST:
-            tramite = get_object_or_404(Tramite, id=request.POST.get('tramite_id'))
-            if tramite.activo and tramite.tiene_citas_pendientes_futuras():
-                messages.error(
-                    request,
-                    f"No se puede desactivar '{tramite.nombre}': tiene citas futuras Pendientes.",
-                )
+            ok, msg, estado_txt = TramiteNegocio.alternar_activo(request.POST.get('tramite_id'))
+            if not ok:
+                messages.error(request, msg)
                 return redirect('agregar_elemento_catalogo')
-            tramite.activo = not tramite.activo
-            try:
-                tramite.save()
-            except ValidationError as exc:
-                messages.error(request, '; '.join(exc.messages))
-                return redirect('agregar_elemento_catalogo')
-            estado_txt = 'activado' if tramite.activo else 'desactivado'
+            tramite = Tramite.objects.get(id=request.POST.get('tramite_id'))
             registrar_log(request, 'INFO', f"Trámite '{tramite.nombre}' {estado_txt}.")
-            messages.success(request, f"Trámite '{tramite.nombre}' {estado_txt}.")
+            messages.success(request, msg)
             return redirect('agregar_elemento_catalogo')
 
-    secciones = SeccionTramite.objects.all().order_by('nombre')
-    tramites = Tramite.objects.select_related('seccion').order_by('seccion__nombre', 'nombre', '-activo')
+    secciones, tramites = TramiteNegocio.listar_catalogo_admin()
     return render(request, 'citas/agregar_catalogo.html', {
         'secciones': secciones,
         'tramites': tramites,
@@ -581,110 +335,7 @@ def agregar_elemento_catalogo(request):
 @login_required
 @user_passes_test(es_oficial_o_admin)
 def vista_reporte_caja(request, anio=None, mes=None):
-    ahora = timezone.now()
-    anio_filtrar = int(anio) if anio else ahora.year
-    mes_filtrar = int(mes) if mes else ahora.month
-    es_mes_actual = (anio_filtrar == ahora.year and mes_filtrar == ahora.month)
-
-    pagos_mes = pagos_para_ingresos().filter(
-        fecha_pago__year=anio_filtrar,
-        fecha_pago__month=mes_filtrar,
-        cita__tramite__isnull=False,
-        cita__tramite__seccion__isnull=False
-    ).select_related('cita__tramite__seccion', 'cajero')
-
-    total_acumulado = pagos_mes.aggregate(Sum('monto_cobrado'))['monto_cobrado__sum'] or 0
-    total_tramites = pagos_mes.count()
-    usuarios_activos = pagos_mes.values('cajero').distinct().count()
-    promedio_duracion = pagos_mes.aggregate(prom=Avg('cita__tramite__duracion_minutos'))['prom']
-    tiempo_promedio = round(promedio_duracion) if promedio_duracion else 0
-
-    citas_por_dia = (
-        pagos_mes.annotate(dia_sem=ExtractWeekDay('fecha_pago'))
-        .values('dia_sem')
-        .annotate(total=Count('id'))
-    )
-    dias_datos = [0] * 7
-    for c in citas_por_dia:
-        dias_datos[c['dia_sem'] - 1] = c['total']
-    datos_semana_reales = [dias_datos[1], dias_datos[2], dias_datos[3],
-                           dias_datos[4], dias_datos[5], dias_datos[6], dias_datos[0]]
-    datos_semana_json = json.dumps(datos_semana_reales)
-
-    reporte_por_tramite = (
-        pagos_mes.values('cita__tramite__seccion__nombre', 'cita__tramite__nombre')
-        .annotate(cantidad_solicitudes=Count('id'), dinero_recaudado=Sum('monto_cobrado'))
-        .order_by('-cantidad_solicitudes')
-    )
-
-    reporte_por_seccion = (
-        pagos_mes.values('cita__tramite__seccion__nombre')
-        .annotate(cantidad=Count('id'))
-        .order_by('-cantidad')
-    )
-
-    labels_top, cantidades_top, otros_total = [], [], 0
-    for i, item in enumerate(reporte_por_seccion):
-        nombre = item['cita__tramite__seccion__nombre'] or 'General'
-        if i < 3:
-            labels_top.append(nombre)
-            cantidades_top.append(item['cantidad'])
-        else:
-            otros_total += item['cantidad']
-    if otros_total > 0:
-        labels_top.append('Otros')
-        cantidades_top.append(otros_total)
-
-    meses_con_datos = (
-        pagos_para_ingresos().annotate(month=TruncMonth('fecha_pago'))
-        .values('month').annotate(total=Count('id')).order_by('-month')
-    )
-
-    meses_espanol = {
-        1: "Enero", 2: "Febrero", 3: "Marzo", 4: "Abril",
-        5: "Mayo", 6: "Junio", 7: "Julio", 8: "Agosto",
-        9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"
-    }
-
-    meses_historial = []
-    for item in meses_con_datos:
-        dt = item['month']
-        meses_historial.append({
-            'anio': dt.year,
-            'mes': dt.month,
-            'etiqueta': f"{meses_espanol.get(dt.month, 'Mes')} {dt.year}",
-        })
-
-    hoy = ahora.date()
-    pagos_hoy = pagos_para_ingresos().filter(fecha_pago__date=hoy)
-    desglose_hoy = list(
-        pagos_hoy.values('cita__tramite__nombre', 'cita__tramite__seccion__nombre')
-        .annotate(cantidad=Count('id'), total=Sum('monto_cobrado'))
-        .order_by('-total')
-    )
-    total_hoy = pagos_hoy.aggregate(t=Sum('monto_cobrado'))['t'] or 0
-    corte_hoy = CorteCajaDiario.objects.filter(fecha=hoy).first()
-    cortes_historial = CorteCajaDiario.objects.all().order_by('-fecha')[:12]
-
-    return render(request, 'citas/reporte_caja.html', {
-        'total_acumulado': total_acumulado,
-        'total_tramites': total_tramites,
-        'usuarios_activos': usuarios_activos,
-        'tiempo_promedio': tiempo_promedio,
-        'reporte_tramites': reporte_por_tramite,
-        'mes_nombre': meses_espanol.get(mes_filtrar, "Mes Desconocido"),
-        'anio': anio_filtrar,
-        'es_mes_actual': es_mes_actual,
-        'meses_historial': meses_historial,
-        'datos_semana_json': datos_semana_json,
-        'labels_grafica_json': json.dumps(labels_top),
-        'datos_grafica_json': json.dumps(cantidades_top),
-        'corte_hoy': corte_hoy,
-        'desglose_hoy': desglose_hoy,
-        'total_hoy': total_hoy,
-        'fecha_hoy': hoy,
-        'cortes_historial': cortes_historial,
-    })
+    return render(request, 'citas/reporte_caja.html', Caja.reporte_mensual(anio, mes))
 
 
 @login_required
@@ -692,53 +343,16 @@ def vista_reporte_caja(request, anio=None, mes=None):
 @require_POST
 def cerrar_corte_diario(request):
     """ HU-8: Genera corte de caja diario inmutable desglosado por trámite. """
-    fecha_str = request.POST.get('fecha')
-    try:
-        fecha = datetime.strptime(fecha_str, '%Y-%m-%d').date() if fecha_str else timezone.now().date()
-    except ValueError:
-        fecha = timezone.now().date()
-
-    if CorteCajaDiario.objects.filter(fecha=fecha).exists():
-        messages.warning(request, f'El corte del {fecha} ya fue cerrado.')
+    fecha = Caja.parsear_fecha_corte(request.POST.get('fecha'))
+    ok, mensaje, datos = Caja.cerrar_corte_diario(fecha, request.user)
+    if not ok:
+        messages.warning(request, mensaje)
         return redirect('reporte_caja')
-
-    pagos = pagos_para_ingresos().filter(fecha_pago__date=fecha, corte_cierre_listo=False)
-    if not pagos.exists():
-        messages.warning(request, f'No hay pagos pendientes de corte para el {fecha}.')
-        return redirect('reporte_caja')
-
-    desglose_qs = (
-        pagos.values('cita__tramite__nombre', 'cita__tramite__seccion__nombre')
-        .annotate(cantidad=Count('id'), total=Sum('monto_cobrado'))
-        .order_by('-total')
-    )
-    desglose = [
-        {
-            'tramite': item['cita__tramite__nombre'],
-            'seccion': item['cita__tramite__seccion__nombre'],
-            'cantidad': item['cantidad'],
-            'total': float(item['total'] or 0),
-        }
-        for item in desglose_qs
-    ]
-    total = pagos.aggregate(t=Sum('monto_cobrado'))['t'] or 0
-    cantidad = pagos.count()
-
-    with transaction.atomic():
-        CorteCajaDiario.objects.create(
-            fecha=fecha,
-            total_recaudado=total,
-            desglose_tramites=desglose,
-            cantidad_pagos=cantidad,
-            cerrado_por=request.user,
-        )
-        pagos.update(corte_cierre_listo=True)
-
     registrar_log(
         request, 'CIERRE_CORTE',
-        f"Corte diario {fecha}: ${total} en {cantidad} pago(s).",
+        f"Corte diario {fecha}: ${datos['total']} en {datos['cantidad']} pago(s).",
     )
-    messages.success(request, f'Corte del {fecha} cerrado correctamente (${total}).')
+    messages.success(request, mensaje)
     return redirect('reporte_caja')
 
 # ==========================================
@@ -758,37 +372,15 @@ def vista_registrar(request):
 @ensure_csrf_cookie
 def portal_agendar(request):
     """ Vista principal del portal ciudadano (sin login) """
-    return render(request, 'citas/agendar.html', {'oficina': OFICINA_REGISTRO_CIVIL})
-
-
-def _serializar_tramite(tramite):
-    return {
-        'id': tramite.id,
-        'nombre': tramite.nombre,
-        'costo': float(tramite.costo),
-        'duracion_minutos': tramite.duracion_minutos,
-        'documentos': tramite.documentos_requeridos or '',
-    }
+    return render(request, 'citas/agendar.html', {
+        'oficina': OFICINA_REGISTRO_CIVIL,
+        'dias_cancelacion_portal': CitaNegocio.DIAS_MINIMOS_CANCELACION_CIUDADANO,
+    })
 
 
 def api_tramites(request):
     """ API: Devuelve todos los trámites activos agrupados por sección """
-    tramites_qs = (
-        Tramite.objects.filter(activo=True)
-        .select_related('seccion')
-        .order_by('seccion__nombre', 'nombre')
-    )
-    grupos = {}
-    orden = []
-    for tramite in tramites_qs:
-        clave = tramite.seccion_id or 0
-        if clave not in grupos:
-            nombre_sec = tramite.seccion.nombre if tramite.seccion else 'Otros trámites'
-            grupos[clave] = {'nombre': nombre_sec, 'tramites': []}
-            orden.append(clave)
-        grupos[clave]['tramites'].append(_serializar_tramite(tramite))
-
-    response = JsonResponse({'secciones': [grupos[k] for k in orden]})
+    response = JsonResponse({'secciones': TramiteNegocio.listar_activos_agrupados()})
     response['Cache-Control'] = 'no-store, no-cache, must-revalidate'
     return response
 
@@ -808,46 +400,57 @@ def api_horarios(request):
         return JsonResponse({'error': 'Trámite no válido.'}, status=400)
 
     try:
-        tramite = Tramite.objects.get(id=tramite_id_int, activo=True)
+        tramite = TramiteNegocio.obtener_activo(tramite_id_int)
         duracion = tramite.duracion_minutos
     except Tramite.DoesNotExist:
         return JsonResponse({'error': 'Trámite no encontrado.'}, status=400)
 
-    fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
-    ok_fecha, err_fecha = validar_fecha_agendado(fecha_obj)
-    if not ok_fecha:
-        return JsonResponse({'error': err_fecha}, status=400)
+    resultado = Calendario.horarios_para_fecha(fecha, duracion)
+    if 'error' in resultado:
+        return JsonResponse({'error': resultado['error']}, status=400)
+    return JsonResponse(resultado)
 
-    dia_semana = fecha_obj.weekday()
 
-    tipo_bloqueo, bloqueos = horarios_bloqueados_en_fecha(fecha_obj)
-    if tipo_bloqueo == 'dia_completo':
-        return JsonResponse({'horarios': [], 'dia_bloqueado': True, 'duracion_minutos': duracion})
+@require_POST
+def api_validar_curp_portal(request):
+    """ API portal: verifica CURP y si ya tiene cita activa (estilo INE). """
+    try:
+        body = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'message': 'Datos inválidos.'}, status=400)
+    ok, mensaje, extra = CitaNegocio.validar_curp_disponible(body.get('curp'))
+    payload = {'ok': ok, 'message': mensaje}
+    if extra:
+        payload.update(extra)
+    return JsonResponse(payload, status=200 if ok else 409)
 
-    fin_jornada = fin_jornada_minutos(dia_semana)
-    if fin_jornada is None:
-        return JsonResponse({'horarios': [], 'dia_bloqueado': True, 'duracion_minutos': duracion})
 
-    slots_base = generar_slots_dia(dia_semana, duracion)
-    intervalos_ocupados = citas_ocupadas_en_fecha(fecha_obj)
+@require_POST
+def api_consultar_cita_portal(request):
+    """ API portal: consulta cita por folio y CURP. """
+    try:
+        body = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'error': 'Datos inválidos.'}, status=400)
+    ok, error, datos = CitaNegocio.consultar_portal(body.get('folio'), body.get('curp'))
+    if not ok:
+        return JsonResponse({'ok': False, 'error': error}, status=404)
+    if datos.get('pdf_url'):
+        datos['pdf_url'] = request.build_absolute_uri(datos['pdf_url'])
+    return JsonResponse({'ok': True, 'cita': datos})
 
-    horarios = []
-    for inicio in slots_base:
-        disponible = slot_disponible(inicio, duracion, fin_jornada, intervalos_ocupados, bloqueos)
-        horarios.append({
-            'hora': format_minutes(inicio),
-            'ocupado': not disponible,
-            'duracion_minutos': duracion,
-        })
 
-    return JsonResponse({
-        'horarios': horarios,
-        'dia_bloqueado': False,
-        'duracion_minutos': duracion,
-        'intervalo_minutos': duracion,
-        'fecha_min': rango_fechas_agendado()[0].isoformat(),
-        'fecha_max': rango_fechas_agendado()[1].isoformat(),
-    })
+@require_POST
+def api_cancelar_cita_portal(request):
+    """ API portal: cancela cita por folio y CURP (mínimo 7 días de anticipación). """
+    try:
+        body = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'error': 'Datos inválidos.'}, status=400)
+    ok, mensaje, datos = CitaNegocio.cancelar_desde_portal(body.get('folio'), body.get('curp'))
+    if not ok:
+        return JsonResponse({'ok': False, 'error': mensaje}, status=400)
+    return JsonResponse({'ok': True, 'message': mensaje, 'cita': datos})
 
 
 @require_POST
@@ -858,57 +461,11 @@ def api_crear_cita(request):
     except json.JSONDecodeError:
         return JsonResponse({'ok': False, 'error': 'Datos inválidos.'}, status=400)
 
-    tramite_id  = body.get('tramite_id')
-    nombre      = body.get('nombre', '').strip()
-    curp        = (body.get('curp', '') or '').strip().upper()
-    cp          = body.get('cp', '').strip()
-    direccion   = body.get('direccion', '').strip()
-    fecha       = body.get('fecha')
-    hora        = body.get('hora')
+    ok, resultado = CitaNegocio.crear_desde_portal(body)
+    if not ok:
+        return JsonResponse({'ok': False, 'error': resultado})
 
-    if not all([tramite_id, nombre, curp, cp, direccion, fecha, hora]):
-        return JsonResponse({'ok': False, 'error': 'Faltan datos requeridos.'})
-    try:
-        curp = validar_curp(curp)
-    except ValidationError as exc:
-        return JsonResponse({'ok': False, 'error': exc.messages[0]})
-    if not re.match(r'^[0-9]{5}$', cp):
-        return JsonResponse({'ok': False, 'error': 'Código postal inválido.'})
-
-    # Validar que el horario no esté bloqueado por el oficial (defensa adicional)
-    fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
-    ok_fecha, err_fecha = validar_fecha_agendado(fecha_obj)
-    if not ok_fecha:
-        return JsonResponse({'ok': False, 'error': err_fecha})
-    if HorarioBloqueado.objects.filter(fecha=fecha_obj, hora__isnull=True).exists():
-        return JsonResponse({'ok': False, 'error': 'Ese día no está disponible para citas.'})
-    if HorarioBloqueado.objects.filter(fecha=fecha_obj, hora=hora).exists():
-        return JsonResponse({'ok': False, 'error': 'Ese horario ya no está disponible.'})
-
-    try:
-        tramite = Tramite.objects.get(id=tramite_id, activo=True)
-    except Tramite.DoesNotExist:
-        return JsonResponse({'ok': False, 'error': 'Trámite no encontrado.'})
-
-    valido, error = validar_disponibilidad(fecha_obj, hora, tramite.duracion_minutos)
-    if not valido:
-        return JsonResponse({'ok': False, 'error': error})
-
-    try:
-        cita = Cita(
-            tramite=tramite,
-            nombre_ciudadano=nombre,
-            curp_ciudadano=curp,
-            codigo_postal=cp,
-            direccion=direccion,
-            fecha=fecha,
-            hora=hora,
-            estado='PENDIENTE',
-        )
-        cita.save()  # full_clean + genera QR automáticamente por el modelo
-    except Exception as e:
-        return JsonResponse({'ok': False, 'error': str(e)})
-
+    cita = resultado
     qr_url = request.build_absolute_uri(cita.codigo_qr.url) if cita.codigo_qr else ''
     pdf_url = request.build_absolute_uri(f'/citas/comprobante/{cita.id}/pdf/')
 
@@ -937,48 +494,24 @@ def descargar_comprobante_pdf(request, cita_id):
 @login_required
 @user_passes_test(puede_ver_panel_citas)
 def api_citas_estado(request):
-    """ API JSON para actualización en tiempo real de citas """
-    hoy = timezone.now().date()
-    estado_filtro = request.GET.get('estado')
-    qs = Cita.objects.select_related('tramite', 'tramite__seccion')
-    if estado_filtro:
-        estados = [e.strip() for e in estado_filtro.split(',')]
-        qs = qs.filter(estado__in=estados)
+    fecha = None
+    fecha_str = request.GET.get('fecha')
+    if fecha_str:
+        try:
+            fecha = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+        except ValueError:
+            pass
+    if request.GET.get('incluir_futuras') in ('1', 'true', 'yes'):
+        citas = CitaNegocio.serializar_agenda_operaciones(fecha)
     else:
-        qs = qs.filter(fecha=hoy)
-    citas = []
-    for c in qs.order_by('fecha', 'hora')[:100]:
-        citas.append({
-            'id': c.id,
-            'hora': c.hora.strftime('%H:%M'),
-            'fecha': c.fecha.isoformat(),
-            'nombre': c.nombre_ciudadano,
-            'curp': c.curp_ciudadano,
-            'tramite': c.tramite.nombre,
-            'seccion': c.tramite.seccion.nombre if c.tramite.seccion else '',
-            'estado': c.estado,
-            'puede_cancelar': c.puede_cancelarse(),
-            'costo': float(c.tramite.costo),
-        })
+        citas = CitaNegocio.serializar_para_api(request.GET.get('estado'), fecha=fecha)
     return JsonResponse({'citas': citas, 'timestamp': timezone.now().isoformat()})
 
 
 @login_required
 @user_passes_test(puede_ver_panel_citas)
 def api_resumen_dashboard(request):
-    """ Contadores en tiempo real para dashboards """
-    hoy = timezone.now().date()
-    return JsonResponse({
-        'total_citas_hoy': Cita.objects.filter(fecha=hoy).count(),
-        'citas_pendientes': Cita.objects.filter(fecha=hoy, estado='PENDIENTE').count(),
-        'citas_en_caja': Cita.objects.filter(fecha=hoy, estado='ASISTIDA').count(),
-        'citas_pagadas': Cita.objects.filter(fecha=hoy, estado='PAGADA').count(),
-        'citas_finalizadas': Cita.objects.filter(fecha=hoy, estado='FINALIZADA').count(),
-        'ingresos_hoy': float(
-            pagos_para_ingresos().filter(fecha_pago__date=hoy)
-            .aggregate(Sum('monto_cobrado'))['monto_cobrado__sum'] or 0
-        ),
-    })
+    return JsonResponse(CitaNegocio.resumen_dashboard())
 
 
 # ==========================================
@@ -989,14 +522,11 @@ def api_resumen_dashboard(request):
 @user_passes_test(es_capturista_o_superior)
 def dashboard_capturista(request):
     hoy = timezone.now().date()
-    citas = Cita.objects.filter(
-        fecha=hoy,
-        estado__in=['PENDIENTE', 'ASISTIDA'],
-    ).select_related('tramite__seccion').order_by('hora')
     return render(request, 'citas/dashboard_capturista.html', {
-        'citas': citas,
+        'citas_hoy': CitaNegocio.listar_del_dia(hoy, estados=['PENDIENTE', 'ASISTIDA']),
+        'citas_agenda': CitaNegocio.listar_agenda_operaciones(hoy),
         'hoy': hoy,
-        'citas_pendientes': Cita.objects.filter(fecha=hoy, estado='PENDIENTE').count(),
+        'citas_pendientes': CitaNegocio.resumen_dashboard(hoy)['citas_pendientes'],
         'oficina': OFICINA_REGISTRO_CIVIL,
     })
 
@@ -1005,19 +535,10 @@ def dashboard_capturista(request):
 @user_passes_test(es_oficial_o_admin)
 def dashboard_oficial(request):
     hoy = timezone.now().date()
-    contexto = {
+    return render(request, 'citas/dashboard_oficial.html', {
         'hoy': hoy,
-        'total_citas_hoy': Cita.objects.filter(fecha=hoy).count(),
-        'citas_pendientes': Cita.objects.filter(fecha=hoy, estado='PENDIENTE').count(),
-        'citas_en_caja': Cita.objects.filter(fecha=hoy, estado='ASISTIDA').count(),
-        'citas_pagadas': Cita.objects.filter(fecha=hoy, estado='PAGADA').count(),
-        'citas_finalizadas': Cita.objects.filter(fecha=hoy, estado='FINALIZADA').count(),
-        'ingresos_hoy': pagos_para_ingresos().filter(
-            fecha_pago__date=hoy
-        ).aggregate(Sum('monto_cobrado'))['monto_cobrado__sum'] or 0,
-        'citas_hoy': Cita.objects.filter(fecha=hoy).select_related('tramite').order_by('hora'),
-    }
-    return render(request, 'citas/dashboard_oficial.html', contexto)
+        **CitaNegocio.resumen_dashboard(hoy),
+    })
 
 
 # ==========================================
@@ -1027,63 +548,31 @@ def dashboard_oficial(request):
 @login_required
 @user_passes_test(es_oficial_o_admin)
 def gestionar_horarios(request):
-    """ Permite al Oficial bloquear días completos o horarios específicos """
     if request.method == 'POST':
-        fecha = request.POST.get('fecha')
-        tipo = request.POST.get('tipo')
-        motivo = request.POST.get('motivo', '').strip()
-
-        if not fecha or not tipo:
-            messages.error(request, "Debes seleccionar una fecha y el tipo de bloqueo.")
-            return redirect('gestionar_horarios')
-
-        if tipo == 'dia_completo':
-            obj, creado = HorarioBloqueado.objects.get_or_create(
-                fecha=fecha, hora=None,
-                defaults={'motivo': motivo, 'creado_por': request.user}
-            )
-            if creado:
-                messages.success(request, f"📅 Día {fecha} bloqueado completamente.")
-                registrar_log(request, 'INFO', f"Día {fecha} bloqueado completamente. Motivo: {motivo or 'Sin motivo'}.")
-            else:
-                messages.warning(request, "Ese día ya estaba bloqueado.")
-
-        elif tipo == 'horario_especifico':
-            horas = request.POST.getlist('hora')  # getlist en lugar de get
-            if not horas:
-               messages.error(request, "Debes seleccionar al menos una hora.")
-               return redirect('gestionar_horarios')
-    
-            creados = 0
-            for hora in horas:
-                obj, creado = HorarioBloqueado.objects.get_or_create(
-                    fecha=fecha, hora=hora,
-                    defaults={'motivo': motivo, 'creado_por': request.user}
-                )
-                if creado:
-                    creados += 1
-    
-            if creados > 0:
-                messages.success(request, f"⏰ {creados} horario(s) bloqueados para el {fecha}.")
-                registrar_log(request, 'INFO', f"{creados} horario(s) bloqueados para {fecha}. Motivo: {motivo or 'Sin motivo'}.")
-            else:
-                messages.warning(request, "Esos horarios ya estaban bloqueados.")
-
+        ok, msg, _ = Calendario.crear_bloqueo(
+            request.POST.get('fecha'),
+            request.POST.get('tipo'),
+            request.POST.get('motivo', ''),
+            request.user,
+            horas=request.POST.getlist('hora'),
+        )
+        if ok:
+            messages.success(request, msg)
+            registrar_log(request, 'INFO', f"{msg} Motivo: {request.POST.get('motivo', '').strip() or 'Sin motivo'}.")
+        elif msg.startswith('Debes'):
+            messages.error(request, msg)
+        else:
+            messages.warning(request, msg)
         return redirect('gestionar_horarios')
 
-    bloqueos = HorarioBloqueado.objects.filter(
-        fecha__gte=timezone.now().date()
-    ).order_by('fecha', 'hora')
-
-    
-
-    return render(request, 'citas/gestionar_horarios.html', {'bloqueos': bloqueos})
+    return render(request, 'citas/gestionar_horarios.html', {
+        'bloqueos': Calendario.listar_bloqueos_futuros(),
+    })
 
 @login_required
 @user_passes_test(es_oficial_o_admin)
 def eliminar_bloqueos_dia(request, fecha):
-    cantidad = HorarioBloqueado.objects.filter(fecha=fecha).count()
-    HorarioBloqueado.objects.filter(fecha=fecha).delete()
+    cantidad = Calendario.eliminar_bloqueos_dia(fecha)
     registrar_log(request, 'INFO', f"Eliminados {cantidad} bloqueo(s) del día {fecha}.")
     messages.success(request, f"Todos los bloqueos del {fecha} eliminados.")
     return redirect('gestionar_horarios')
@@ -1091,9 +580,7 @@ def eliminar_bloqueos_dia(request, fecha):
 @login_required
 @user_passes_test(es_oficial_o_admin)
 def eliminar_bloqueo(request, bloqueo_id):
-    bloqueo = get_object_or_404(HorarioBloqueado, id=bloqueo_id)
-    desc = str(bloqueo)
-    bloqueo.delete()
+    desc = Calendario.eliminar_bloqueo(bloqueo_id)
     registrar_log(request, 'INFO', f"Bloqueo eliminado: {desc}")
     messages.success(request, "Bloqueo eliminado correctamente.")
     return redirect('gestionar_horarios')
@@ -1105,11 +592,5 @@ def eliminar_bloqueo(request, bloqueo_id):
 
 @login_required
 def redirigir_por_rol(request):
-    if request.user.is_superuser or es_administrador(request.user):
-        return redirect('/admin/citas/dashboard/')
-    elif request.user.groups.filter(name='oficial').exists():
-        return redirect('/citas/oficial/')
-    elif request.user.groups.filter(name='Capturista').exists():
-        return redirect('/citas/capturista/')
-    else:
-        return redirect('/admin/login/')
+    from autenticacion.servicios import Login
+    return redirect(Login.url_panel_para_usuario(request.user))

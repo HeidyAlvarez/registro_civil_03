@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+{% load static %}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -33,6 +34,8 @@
   html { scroll-behavior: smooth; }
   body {
     font-family: 'Roboto', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
     background: var(--gris-piedra);
     color: var(--tinta);
     -webkit-font-smoothing: antialiased;
@@ -44,7 +47,7 @@
   .top-strip {
     background: var(--verde-dark);
     color: rgba(255,255,255,.82);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: .3px;
     padding: 6px 32px;
     display: flex;
@@ -66,11 +69,11 @@
     width: 42px; height: 42px; border-radius: 4px;
     background: var(--verde); color: #fff;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px;
     letter-spacing: .5px;
   }
-  .navbar-brand .name { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: .2px; }
-  .navbar-brand .sub  { font-size: 11.5px; color: var(--tinta-muted); margin-top: 1px; }
+  .navbar-brand .name { font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: .2px; }
+  .navbar-brand .sub  { font-size: 12.5px; color: var(--tinta-muted); margin-top: 1px; }
 
   /* HERO */
   .hero {
@@ -81,13 +84,13 @@
     content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
     background: linear-gradient(90deg, var(--oro) 0%, var(--verde) 45%, var(--verde) 55%, var(--oro) 100%);
   }
-  .hero-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--oro-claro); margin-bottom: 14px; }
+  .hero-eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--oro-claro); margin-bottom: 14px; }
   .hero h1 { font-size: clamp(24px,3.6vw,36px); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
   .hero p  { font-size: 14.5px; color: rgba(255,255,255,.78); max-width: 480px; margin: 0 auto; line-height: 1.65; }
 
   /* MENU CARDS — agrupadas por función (acción / consulta / contacto) */
   .menu-section { padding: 44px 24px 60px; max-width: 900px; margin: 0 auto; }
-  .menu-kicker { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--tinta-muted); text-align: center; margin-bottom: 22px; }
+  .menu-kicker { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--tinta-muted); text-align: center; margin-bottom: 22px; }
   .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 
   .menu-card {
@@ -117,11 +120,11 @@
   .card-icon svg { width: 20px; height: 20px; }
 
   .menu-card h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 7px; color: var(--tinta); }
-  .menu-card p  { font-size: 12.5px; color: var(--tinta-muted); line-height: 1.55; margin-bottom: 18px; flex: 1; }
+  .menu-card p  { font-size: 13.5px; color: var(--tinta-muted); line-height: 1.55; margin-bottom: 18px; flex: 1; }
 
   .card-btn {
     padding: 8px 16px; border-radius: 4px;
-    font-size: 12.5px; font-weight: 700; border: 1.5px solid; cursor: pointer;
+    font-size: 13.5px; font-weight: 700; border: 1.5px solid; cursor: pointer;
     font-family: 'Roboto', inherit; transition: all .15s; background: transparent;
   }
   .blue .card-btn, .green .card-btn { border-color: var(--verde); color: var(--verde); }
@@ -141,82 +144,80 @@
   .sec-back {
     background: var(--superficie); border: 1.5px solid var(--borde);
     border-radius: 4px; padding: 8px 14px;
-    font-size: 12.5px; font-weight: 700; cursor: pointer;
+    font-size: 13.5px; font-weight: 700; cursor: pointer;
     color: var(--tinta-muted); transition: all .15s;
     font-family: 'Roboto', inherit;
   }
   .sec-back:hover { background: var(--gris-piedra); border-color: var(--verde); color: var(--verde); }
-  .sec-header h2 { font-size: 20px; font-weight: 800; color: var(--tinta); display: flex; align-items: center; gap: 10px; }
+  .sec-header h2 { font-size: 21px; font-weight: 800; color: var(--tinta); display: flex; align-items: center; gap: 10px; }
   .sec-header h2 svg { width: 22px; height: 22px; color: var(--verde); }
 
   /* GUÍA */
   .pasos-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
   .paso-card { background: var(--superficie); border: 1px solid var(--borde); border-radius: 6px; padding: 18px; display: flex; gap: 15px; align-items: flex-start; }
   .paso-num { width: 32px; height: 32px; border-radius: 4px; background: var(--verde); color: #fff; display: flex; align-items: center; justify-content: center; font-family:'Montserrat',sans-serif; font-size: 14px; font-weight: 800; flex-shrink: 0; }
-  .paso-card h3 { font-size: 13.5px; font-weight: 700; margin-bottom: 4px; }
-  .paso-card p  { font-size: 12.5px; color: var(--tinta-muted); line-height: 1.55; }
+  .paso-card h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 4px; }
+  .paso-card p  { font-size: 13.5px; color: var(--tinta-muted); line-height: 1.55; }
 
   /* TRAMITES */
   .spinner { width: 26px; height: 26px; border: 3px solid var(--borde); border-top-color: var(--verde); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 10px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .seccion-bloque { margin-bottom: 22px; }
-  .seccion-nombre { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--verde); padding-bottom: 8px; border-bottom: 2px solid var(--verde-claro); margin-bottom: 10px; }
+  .seccion-nombre { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--verde); padding-bottom: 8px; border-bottom: 2px solid var(--verde-claro); margin-bottom: 10px; }
   .tgrid-vitrina { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
   .tramite-vitrina { border: 1px solid var(--borde); border-radius: 4px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; background: var(--superficie); }
-  .tramite-vitrina span:first-child { font-size: 12.5px; font-weight: 500; }
-  .tramite-vitrina span:last-child  { font-size: 12.5px; font-weight: 700; color: var(--verde); margin-left: 8px; white-space: nowrap; }
+  .tramite-vitrina span:first-child { font-size: 13.5px; font-weight: 500; }
+  .tramite-vitrina span:last-child  { font-size: 13.5px; font-weight: 700; color: var(--verde); margin-left: 8px; white-space: nowrap; }
 
   /* UBICACIÓN */
   .ubi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .mapa { background: var(--slate-claro); border-radius: 6px; overflow: hidden; border: 1px solid var(--borde); display: flex; flex-direction: column; }
   .mapa iframe { width: 100%; height: 220px; border: 0; display: block; }
   .mapa-body { padding: 14px 16px 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  .mapa p { font-size: 12.5px; color: var(--slate); font-weight: 600; text-align: center; margin: 0; line-height: 1.45; }
-  .mapa a { background: var(--slate); color: white; padding: 9px 18px; border-radius: 4px; text-decoration: none; font-size: 12.5px; font-weight: 700; }
+  .mapa p { font-size: 13.5px; color: var(--slate); font-weight: 600; text-align: center; margin: 0; line-height: 1.45; }
+  .mapa a { background: var(--slate); color: white; padding: 9px 18px; border-radius: 4px; text-decoration: none; font-size: 13.5px; font-weight: 700; }
   .info-card { background: var(--superficie); border-radius: 6px; padding: 20px; border: 1px solid var(--borde); }
   .info-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--borde); align-items: flex-start; }
   .info-row:last-child { border-bottom: none; }
   .info-ico { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; color: var(--verde); }
-  .info-label { font-size: 10px; font-weight: 700; color: var(--tinta-muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 3px; }
-  .info-val   { font-size: 13px; font-weight: 600; color: var(--tinta); line-height: 1.4; }
+  .info-label { font-size: 11px; font-weight: 700; color: var(--tinta-muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 3px; }
+  .info-val   { font-size: 14px; font-weight: 600; color: var(--tinta); line-height: 1.4; }
 
   /* FORMULARIO */
   .stepper { display: flex; align-items: center; margin-bottom: 24px; }
   .step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
   .step:not(:last-child)::after { content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 2px; background: var(--borde); z-index: 0; }
   .step.done:not(:last-child)::after { background: var(--verde); }
-  .step-circle { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family:'Montserrat',sans-serif; font-size: 12.5px; font-weight: 700; border: 2px solid var(--borde); background: var(--superficie); color: var(--tinta-muted); position: relative; z-index: 1; transition: all .3s; }
+  .step-circle { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family:'Montserrat',sans-serif; font-size: 13.5px; font-weight: 700; border: 2px solid var(--borde); background: var(--superficie); color: var(--tinta-muted); position: relative; z-index: 1; transition: all .3s; }
   .step.active .step-circle { border-color: var(--verde); background: var(--verde); color: white; }
   .step.done   .step-circle { border-color: var(--verde); background: var(--verde); color: white; }
-  .step-label { font-size: 10.5px; color: var(--tinta-muted); margin-top: 5px; text-align: center; }
+  .step-label { font-size: 11.5px; color: var(--tinta-muted); margin-top: 5px; text-align: center; }
   .step.active .step-label { color: var(--verde); font-weight: 700; }
 
   .fcard { background: var(--superficie); border: 1px solid var(--borde); border-radius: 6px; overflow: visible; display: none; max-width: 600px; margin: 0 auto; }
   .fcard.active { display: block; }
   .fcard-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--borde); }
   .fcard-header h3 { font-size: 14.5px; font-weight: 700; }
-  .fcard-header p  { font-size: 12.5px; color: var(--tinta-muted); margin-top: 3px; }
+  .fcard-header p  { font-size: 13.5px; color: var(--tinta-muted); margin-top: 3px; }
   .fcard-body   { padding: 22px; }
   .fcard-footer { padding: 14px 22px; border-top: 1px solid var(--borde); display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; background: var(--superficie); }
   #p4.active .fcard-footer { position: sticky; bottom: 0; z-index: 5; box-shadow: 0 -8px 24px rgba(27,33,30,.08); }
-  .confirmar-inline { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
-  .confirmar-inline .btn { flex: 1 1 180px; }
 
   .fg { margin-bottom: 16px; }
-  .fg label { display: block; font-size: 11px; font-weight: 700; color: var(--tinta-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
+  .fg label { display: block; font-size: 12px; font-weight: 700; color: var(--tinta-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
   .fg input, .fg textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--borde); border-radius: 4px; font-size: 14px; color: var(--tinta); background: var(--superficie); transition: border .2s; font-family: inherit; }
   .fg input:focus, .fg textarea:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(15,92,60,.12); }
   .fg input.err { border-color: var(--rojo); }
-  .ferr { font-size: 11px; color: var(--rojo); margin-top: 4px; display: none; }
+  .ferr { font-size: 12px; color: var(--rojo); margin-top: 4px; display: none; }
   .ferr.show { display: block; }
-  .fhint { font-size: 11px; color: var(--tinta-tenue); margin-top: 4px; line-height: 1.4; }
-  .curp-progreso { font-size: 11px; color: var(--verde); margin-top: 4px; font-weight: 600; }
+  .fhint { font-size: 12px; color: var(--tinta-tenue); margin-top: 4px; line-height: 1.4; }
+  .curp-progreso { font-size: 12px; color: var(--verde); margin-top: 4px; font-weight: 600; }
   .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .frow-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-  .sec-form { font-size: 12px; font-weight: 700; color: var(--verde); text-transform: uppercase; letter-spacing: .4px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--borde); }
+  .sec-form { font-size: 13px; font-weight: 700; color: var(--verde); text-transform: uppercase; letter-spacing: .4px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--borde); }
   .sec-form:first-child { margin-top: 0; }
 
-  .sec-title-f { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--tinta-muted); padding: 8px 0 6px; border-bottom: 1px solid var(--borde); margin-bottom: 8px; }
+  .sec-title-f { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--tinta-muted); padding: 8px 0 6px; border-bottom: 1px solid var(--borde); margin-bottom: 8px; }
   .tgrid-f { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
   .titem { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border: 1.5px solid var(--borde); border-radius: 4px; cursor: pointer; transition: all .15s; }
   .titem:hover { background: var(--gris-piedra); }
@@ -224,19 +225,37 @@
   .tradio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--borde); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .titem.sel .tradio { border-color: var(--verde); background: var(--verde); }
   .titem.sel .tradio::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: white; display: block; }
-  .tnombre { flex: 1; font-size: 13px; font-weight: 500; }
-  .tcosto  { font-size: 13px; font-weight: 700; color: var(--verde); }
+  .tnombre { flex: 1; font-size: 14px; font-weight: 500; }
+  .tcosto  { font-size: 14px; font-weight: 700; color: var(--verde); }
 
   .costo-box { background: var(--verde-claro); border: 1px solid #BFDFCD; border-radius: 6px; padding: 12px 16px; display: none; margin-top: 12px; justify-content: space-between; align-items: center; }
   .costo-box.show { display: flex; }
 
+  .panel-tramite-extra { display: none; margin-top: 20px; }
+  .panel-tramite-extra.show { display: block; }
+  .subpanel-rn { background: var(--gris-piedra); border: 1px solid var(--borde); border-radius: 6px; padding: 18px 20px; }
+  .subpanel-rn h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 4px; }
+  .subpanel-rn .subdesc { font-size: 13px; color: var(--tinta-muted); margin-bottom: 16px; line-height: 1.5; }
+  .tipo-registro-box { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 14px; border-radius: 6px; margin-bottom: 18px; border: 1px solid var(--borde); background: var(--superficie); }
+  .tipo-registro-box.oportuno { border-color: #BFDFCD; background: var(--verde-claro); }
+  .tipo-registro-box.extemporaneo { border-color: #e8d9a8; background: var(--oro-claro); }
+  .pill-tipo { font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: .2px; }
+  .pill-tipo.oportuno { background: var(--verde); color: #fff; }
+  .pill-tipo.extemporaneo { background: var(--oro); color: #fff; }
+  .pill-tipo.pendiente { background: #EAEAE7; color: var(--tinta-muted); }
+  .aviso-rn { font-size: 13px; line-height: 1.55; color: var(--tinta-muted); margin-top: 6px; padding: 12px 14px; border-radius: 6px; background: var(--superficie); border: 1px solid var(--borde); }
+  .fg select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--borde); border-radius: 4px; font-size: 14px; color: var(--tinta); background: var(--superficie); font-family: inherit; }
+  .fg select:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(15,92,60,.12); }
+  .resumen-bloque { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--borde); }
+  .resumen-bloque h4 { font-size: 13px; font-weight: 700; color: var(--verde); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+
   .hgrid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
-  .hbtn { padding: 9px 6px; border: 1.5px solid var(--borde); border-radius: 4px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--tinta); transition: all .15s; background: var(--superficie); user-select: none; }
+  .hbtn { padding: 9px 6px; border: 1.5px solid var(--borde); border-radius: 4px; text-align: center; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--tinta); transition: all .15s; background: var(--superficie); user-select: none; }
   .hbtn:hover { background: var(--gris-piedra); }
   .hbtn.sel  { background: var(--verde); color: white; border-color: var(--verde); }
   .hbtn.busy { background: var(--gris-piedra); color: var(--tinta-tenue); cursor: not-allowed; text-decoration: line-through; }
 
-  .ritem { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--borde); font-size: 13px; }
+  .ritem { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--borde); font-size: 14px; }
   .ritem:last-child { border-bottom: none; }
   .rkey { color: var(--tinta-muted); font-weight: 500; }
   .rval { font-weight: 600; text-align: right; }
@@ -247,17 +266,36 @@
   .check-icon svg { width: 26px; height: 26px; }
   .qr-box { background: white; border: 2px solid var(--borde); border-radius: 6px; padding: 16px; display: inline-block; margin: 12px 0; }
   .qr-box img { width: 180px; height: 180px; display: block; }
-  .folio-badge { background: var(--verde-claro); color: var(--verde); padding: 5px 16px; border-radius: 3px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 14px; letter-spacing: .3px; }
+  .folio-badge { background: var(--verde-claro); color: var(--verde); padding: 5px 16px; border-radius: 3px; font-size: 13px; font-weight: 700; display: inline-block; margin-bottom: 14px; letter-spacing: .3px; }
+  .aviso-portal {
+    background: var(--oro-claro); border: 1px solid #dcc99a; border-radius: 6px;
+    padding: 14px 16px; font-size: 12.5px; color: var(--tinta); line-height: 1.55; margin-bottom: 16px;
+  }
+  .aviso-portal a { color: var(--verde); font-weight: 600; }
+  .resultado-cita {
+    margin-top: 18px; background: var(--gris-piedra); border: 1px solid var(--borde);
+    border-radius: 6px; padding: 18px;
+  }
+  .resultado-cita .ritem { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--borde); font-size: 13px; }
+  .resultado-cita .ritem:last-child { border-bottom: none; }
+  .resultado-cita .rkey { color: var(--tinta-muted); font-weight: 600; }
+  .resultado-cita .rval { text-align: right; font-weight: 600; }
+  .estado-chip {
+    display: inline-block; padding: 4px 10px; border-radius: 3px; font-size: 11px; font-weight: 700;
+    background: var(--verde-claro); color: var(--verde);
+  }
+  .estado-chip.cancelada { background: var(--rojo-claro); color: var(--rojo); }
+  .estado-chip.finalizada { background: #e8edf0; color: var(--slate); }
   .detalle-box { background: var(--gris-piedra); border-radius: 6px; padding: 14px; text-align: left; margin: 0 auto 16px; max-width: 420px; }
   .qr-seccion { margin-top: 8px; }
-  .qr-seccion-titulo { font-size: 12px; font-weight: 700; color: var(--tinta-muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
-  .drow { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid var(--borde); }
+  .qr-seccion-titulo { font-size: 13px; font-weight: 700; color: var(--tinta-muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
+  .drow { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--borde); }
   .drow:last-child { border-bottom: none; }
   .drow span:first-child { color: var(--tinta-muted); }
   .drow span:last-child  { font-weight: 600; }
 
   /* Jerarquía de botones GOB.MX v3: primario / secundario / alerta */
-  .btn { padding: 10px 20px; border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--borde); transition: all .15s; font-family: 'Roboto', inherit; }
+  .btn { padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--borde); transition: all .15s; font-family: 'Roboto', inherit; }
   .btn-sec  { background: var(--superficie); color: var(--tinta); }
   .btn-sec:hover  { background: var(--gris-piedra); }
   .btn-prim { background: var(--verde); color: white; border-color: var(--verde); }
@@ -265,12 +303,12 @@
   .btn-grn  { background: var(--verde); color: white; border-color: var(--verde); }
   .btn-grn:hover  { background: var(--verde-dark); }
 
-  .err-banner { background: var(--rojo-claro); border: 1px solid #E4B6B1; border-radius: 4px; padding: 11px 14px; font-size: 13px; color: var(--rojo); display: none; margin-bottom: 14px; }
+  .err-banner { background: var(--rojo-claro); border: 1px solid #E4B6B1; border-radius: 4px; padding: 11px 14px; font-size: 14px; color: var(--rojo); display: none; margin-bottom: 14px; }
   .err-banner.show { display: block; }
   .loading { display: none; text-align: center; padding: 24px; }
 
   /* FOOTER */
-  .footer { background: var(--verde-dark); color: rgba(255,255,255,.72); text-align: center; padding: 26px; font-size: 12px; line-height: 1.8; }
+  .footer { background: var(--verde-dark); color: rgba(255,255,255,.72); text-align: center; padding: 26px; font-size: 13px; line-height: 1.8; }
   .footer strong { color: white; font-family: 'Montserrat', sans-serif; }
 
   @media (max-width: 720px) {
@@ -282,6 +320,7 @@
     .frow, .frow-3 { grid-template-columns: 1fr; }
   }
 </style>
+{% include 'citas/includes/tipografia_rc.html' %}
 </head>
 <body>
 
@@ -320,6 +359,20 @@
         <h3>Agendar cita</h3>
         <p>Solicita una cita para tu trámite y recibe tu comprobante con código QR al instante.</p>
         <button class="card-btn">Agendar ahora</button>
+      </a>
+
+      <a class="menu-card green" href="#" onclick="mostrarSeccion('consultar');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <h3>Consultar cita</h3>
+        <p>Revisa el estatus de tu cita con el folio que recibiste al agendar y tu CURP.</p>
+        <button class="card-btn">Consultar</button>
+      </a>
+
+      <a class="menu-card red" href="#" onclick="mostrarSeccion('cancelar');return false;">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+        <h3>Cancelar cita</h3>
+        <p>Cancela tu cita en línea con folio y CURP. Disponible con al menos {{ dias_cancelacion_portal }} días de anticipación.</p>
+        <button class="card-btn">Cancelar cita</button>
       </a>
 
       <a class="menu-card green" href="#" onclick="mostrarSeccion('tramites');return false;">
@@ -382,6 +435,12 @@
     <div class="fcard active" id="p1">
       <div class="fcard-header"><h3>Datos del solicitante</h3><p>Captura tu CURP, nombre completo y domicilio de forma manual.</p></div>
       <div class="fcard-body">
+        <div class="aviso-portal">
+          <strong>Reglas del portal:</strong> Solo se permite una cita activa por CURP.
+          Si ya tienes una cita, usa <a href="#" onclick="mostrarSeccion('consultar');return false;">Consultar cita</a>
+          o <a href="#" onclick="mostrarSeccion('cancelar');return false;">Cancelar cita</a>
+          (con al menos {{ dias_cancelacion_portal }} días de anticipación).
+        </div>
         <div class="err-banner" id="e1"></div>
         <div class="sec-form">Identificación</div>
         <div class="fg"><label>CURP *</label><input type="text" id="f-curp" placeholder="Ej: LOPE800101HDFRNN09" maxlength="18" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false"><div class="fhint">Formato oficial: 4 letras, 6 números (fecha), H o M, 5 letras y 2 caracteres finales.</div><div class="curp-progreso" id="curp-progreso">0 / 18 caracteres</div><div class="ferr" id="fe-curp">La CURP no tiene un formato válido. Ejemplo: LOPE800101HDFRNN09.</div></div>
@@ -418,6 +477,62 @@
         <div class="costo-box" id="costo-box">
           <div><div style="font-size:12px;font-weight:700;color:var(--verde);">Costo del trámite</div><div style="font-size:11px;color:var(--tinta-muted);">A pagar en ventanilla</div></div>
           <div style="font-size:20px;font-weight:800;color:var(--verde);" id="costo-val">$0.00</div>
+        </div>
+
+        <div class="panel-tramite-extra" id="panel-recien-nacido">
+          <div class="subpanel-rn">
+            <h4>Datos del recién nacido</h4>
+            <p class="subdesc">Completa esta sección solo para <strong>Registro de nacimiento</strong>. El sistema clasifica el trámite como oportuno o extemporáneo según la fecha de nacimiento.</p>
+
+            <div class="tipo-registro-box oportuno" id="tipo-registro-box">
+              <span style="font-size:11px;font-weight:700;color:var(--tinta-muted);text-transform:uppercase;letter-spacing:.3px;">Tipo de registro</span>
+              <span class="pill-tipo pendiente" id="pill-tipo-registro">Pendiente</span>
+              <span id="hint-tipo-registro" style="font-size:12px;color:var(--tinta-muted);">Ingresa la fecha de nacimiento del menor.</span>
+            </div>
+
+            <div class="sec-form">Identidad del menor</div>
+            <div class="frow">
+              <div class="fg"><label>Nombre(s) *</label><input type="text" id="rn-nombre" placeholder="Ej: Santiago" autocomplete="off"><div class="ferr" id="fe-rn-nombre">Ingresa el nombre del recién nacido.</div></div>
+              <div class="fg"><label>Sexo *</label>
+                <select id="rn-sexo">
+                  <option value="">Seleccionar</option>
+                  <option value="H">Hombre</option>
+                  <option value="M">Mujer</option>
+                </select>
+                <div class="ferr" id="fe-rn-sexo">Selecciona el sexo.</div>
+              </div>
+            </div>
+            <div class="frow">
+              <div class="fg"><label>Apellido paterno *</label><input type="text" id="rn-ap-pat" placeholder="Ej: García" autocomplete="off"><div class="ferr" id="fe-rn-ap-pat">Ingresa el apellido paterno.</div></div>
+              <div class="fg"><label>Apellido materno *</label><input type="text" id="rn-ap-mat" placeholder="Ej: López" autocomplete="off"><div class="ferr" id="fe-rn-ap-mat">Ingresa el apellido materno.</div></div>
+            </div>
+
+            <div class="sec-form">Nacimiento</div>
+            <div class="frow">
+              <div class="fg"><label>Fecha de nacimiento *</label><input type="date" id="rn-fecha"><div class="fhint">Antes de 2 meses: oportuno · desde 2 meses: extemporáneo</div><div class="ferr" id="fe-rn-fecha">Ingresa una fecha válida.</div></div>
+              <div class="fg"><label>Hora de nacimiento</label><input type="time" id="rn-hora"><div class="fhint">Opcional, si consta en el certificado médico.</div></div>
+            </div>
+
+            <div class="sec-form">Lugar del parto</div>
+            <div class="frow">
+              <div class="fg"><label>Tipo de lugar *</label>
+                <select id="rn-lugar-tipo">
+                  <option value="">Seleccionar</option>
+                  <option value="hospital">Hospital</option>
+                  <option value="clinica">Clínica</option>
+                  <option value="domicilio">Domicilio</option>
+                  <option value="otro">Otra localidad del municipio</option>
+                </select>
+                <div class="ferr" id="fe-rn-lugar-tipo">Selecciona el tipo de lugar.</div>
+              </div>
+              <div class="fg"><label>Hospital, clínica o localidad *</label><input type="text" id="rn-lugar-nombre" placeholder="Ej: Hospital General"><div class="ferr" id="fe-rn-lugar-nombre">Indica el lugar del nacimiento.</div></div>
+            </div>
+            <div class="fg"><label>Municipio de nacimiento *</label><input type="text" id="rn-municipio" placeholder="Ej: Toluca"><div class="ferr" id="fe-rn-municipio">Ingresa el municipio de nacimiento.</div></div>
+
+            <div class="aviso-rn" id="aviso-rn-docs">
+              <strong>Documentos sugeridos:</strong> certificado de nacimiento del hospital o clínica, identificación de ambos padres y acta de matrimonio o documento que acredite el parentesco.
+            </div>
+          </div>
         </div>
       </div>
       <div class="fcard-footer">
@@ -470,13 +585,64 @@
           </div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
             <button type="button" id="btn-dl-pdf" class="btn btn-grn">Descargar comprobante PDF</button>
-            <a id="btn-dl" download="comprobante_qr.png" style="background:var(--superficie);color:var(--tinta);padding:10px 20px;border-radius:4px;text-decoration:none;font-size:13px;font-weight:700;border:1.5px solid var(--borde);">Descargar solo QR</a>
             <button onclick="nuevaCita()" class="btn btn-sec">+ Agendar otra cita</button>
           </div>
         </div>
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: CONSULTAR CITA -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="consultar">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg> Consultar cita</h2>
+    </div>
+    <div class="fcard active" style="max-width:560px;margin:0 auto;">
+      <div class="fcard-header"><h3>Buscar por folio y CURP</h3><p>Ingresa el folio de tu comprobante y la CURP con la que agendaste.</p></div>
+      <div class="fcard-body">
+        <div class="err-banner" id="e-consultar"></div>
+        <div class="fg"><label>Folio de la cita *</label><input type="number" id="c-folio" placeholder="Ej: 42" min="1" inputmode="numeric"></div>
+        <div class="fg"><label>CURP *</label><input type="text" id="c-curp" placeholder="Ej: LOPE800101HDFRNN09" maxlength="18" autocapitalize="characters"></div>
+        <div id="resultado-consulta"></div>
+      </div>
+      <div class="fcard-footer">
+        <button class="btn btn-prim" id="btn-consultar" onclick="consultarCitaPortal()">Consultar cita</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓN: CANCELAR CITA -->
+<!-- ══════════════════════════════════════════ -->
+<div class="seccion" id="cancelar">
+  <div class="container">
+    <div class="sec-header">
+      <button class="sec-back" onclick="mostrarInicio()">← Inicio</button>
+      <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg> Cancelar cita</h2>
+    </div>
+    <div class="fcard active" style="max-width:560px;margin:0 auto;">
+      <div class="fcard-header"><h3>Cancelación en línea</h3><p>Solo citas en estado Pendiente, con al menos {{ dias_cancelacion_portal }} días antes de la fecha programada.</p></div>
+      <div class="fcard-body">
+        <div class="aviso-portal">
+          <strong>Aviso:</strong> Si faltan menos de {{ dias_cancelacion_portal }} días para tu cita,
+          la cancelación en línea no estará disponible. En ese caso, acude a {{ oficina.nombre }} en horario de atención.
+        </div>
+        <div class="err-banner" id="e-cancelar"></div>
+        <div class="fg"><label>Folio de la cita *</label><input type="number" id="x-folio" placeholder="Ej: 42" min="1" inputmode="numeric"></div>
+        <div class="fg"><label>CURP *</label><input type="text" id="x-curp" placeholder="Ej: LOPE800101HDFRNN09" maxlength="18" autocapitalize="characters"></div>
+        <div id="resultado-cancelar"></div>
+      </div>
+      <div class="fcard-footer" id="footer-cancelar">
+        <button class="btn btn-prim" id="btn-buscar-cancelar" onclick="buscarCitaParaCancelar()">Buscar cita</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -577,6 +743,8 @@
           <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Preséntate 10 minutos antes de tu horario asignado</span></li>
           <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>El pago se realiza en efectivo en ventanilla de caja</span></li>
           <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Cada trámite puede requerir documentos adicionales</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>Solo una cita activa por CURP; usa Consultar o Cancelar cita con tu folio</span></li>
+          <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>La cancelación en línea requiere al menos {{ dias_cancelacion_portal }} días de anticipación</span></li>
           <li style="font-size:12.5px;display:flex;gap:8px;align-items:flex-start;"><span>—</span><span>No se permiten acompañantes salvo menores de edad</span></li>
         </ul>
       </div>
@@ -603,7 +771,15 @@
       </details>
       <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
         <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Qué pasa si no puedo asistir a mi cita?</summary>
-        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">Por el momento puedes agendar una nueva cita. Próximamente se habilitará la opción de cancelación en línea.</p>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">Puedes cancelar tu cita en línea desde <strong>Cancelar cita</strong>, usando tu folio y CURP. La cancelación solo está disponible si tu cita sigue en estado Pendiente y faltan al menos <strong>{{ dias_cancelacion_portal }} días</strong> para la fecha programada. Si ya pasó ese plazo, acude a la oficina en horario de atención.</p>
+      </details>
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Cómo consulto el estatus de mi cita?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">En <strong>Consultar cita</strong> ingresa el folio de tu comprobante y tu CURP. Verás fecha, hora, trámite y estatus actual.</p>
+      </details>
+      <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
+        <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Puedo agendar si ya tengo una cita?</summary>
+        <p style="font-size:12.5px;color:var(--tinta-muted);margin-top:10px;line-height:1.6;">No. El sistema permite una sola cita activa por CURP. Si intentas agendar con una CURP que ya tiene cita, verás el mensaje: <em>«Ya existe una cita programada para estos datos»</em>. Cancela la cita anterior (si aplica) o consulta tu folio.</p>
       </details>
       <details style="background:var(--superficie);border:1px solid var(--borde);border-radius:6px;padding:16px;cursor:pointer;">
         <summary style="font-size:13.5px;font-weight:600;list-style:none;">¿Dónde presento mi código QR?</summary>
@@ -634,6 +810,7 @@
     curp:null, cp:null,
     calle:null, numExt:null, numInt:null, colonia:null, municipio:null, estado:null, dir:null,
     tramiteId:null, tramiteNombre:null, tramiteCosto:null, tramiteDocumentos:null, tramiteDuracion:null,
+    requiereRecienNacido:false, recienNacido:null,
     fecha:null, hora:null
   };
   const RE_CURP = /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/;
@@ -668,6 +845,147 @@
 
   function nombreCompleto(apPat, apMat, nombre) {
     return [apPat, apMat, nombre].map(v => (v || '').trim()).filter(Boolean).join(' ');
+  }
+
+  function esTramiteRegistroNacimiento(nombre) {
+    const n = String(nombre || '').toLowerCase();
+    return n.includes('registro de nacimiento') || n.startsWith('acta de nacimiento')
+      || n.includes('nacimiento oportuno') || n.includes('nacimiento extempor');
+  }
+
+  function sumarMesesFecha(fecha, meses) {
+    const limite = new Date(fecha.getTime());
+    const dia = limite.getDate();
+    limite.setMonth(limite.getMonth() + meses);
+    if (limite.getDate() < dia) limite.setDate(0);
+    return limite;
+  }
+
+  function actualizarTipoRegistroNacimiento() {
+    const fechaInput = E('rn-fecha');
+    const box = E('tipo-registro-box');
+    const pill = E('pill-tipo-registro');
+    const hint = E('hint-tipo-registro');
+    const aviso = E('aviso-rn-docs');
+    if (!fechaInput || !box || !pill || !hint || !aviso) return;
+
+    const valor = fechaInput.value;
+    if (!valor) {
+      box.className = 'tipo-registro-box oportuno';
+      pill.className = 'pill-tipo pendiente';
+      pill.textContent = 'Pendiente';
+      hint.textContent = 'Ingresa la fecha de nacimiento del menor.';
+      aviso.innerHTML = '<strong>Documentos sugeridos:</strong> certificado de nacimiento del hospital o clínica, identificación de ambos padres y acta de matrimonio o documento que acredite el parentesco.';
+      return;
+    }
+
+    const nacimiento = new Date(valor + 'T12:00:00');
+    const hoy = new Date();
+    hoy.setHours(12, 0, 0, 0);
+    const limite = sumarMesesFecha(nacimiento, 2);
+    const esOportuno = hoy < limite;
+
+    if (esOportuno) {
+      box.className = 'tipo-registro-box oportuno';
+      pill.className = 'pill-tipo oportuno';
+      pill.textContent = 'Oportuno';
+      hint.textContent = 'El nacimiento ocurrió hace menos de 2 meses.';
+      aviso.innerHTML = '<strong>Registro oportuno.</strong> Lleva certificado del hospital o clínica, identificación de ambos padres y acta de matrimonio o documento de parentesco.';
+    } else {
+      box.className = 'tipo-registro-box extemporaneo';
+      pill.className = 'pill-tipo extemporaneo';
+      pill.textContent = 'Extemporáneo';
+      hint.textContent = 'Han transcurrido 2 meses o más desde el nacimiento.';
+      aviso.innerHTML = '<strong>Registro extemporáneo.</strong> Además de lo anterior, podrían solicitarte constancia médica o testimonial, CURP de los padres y, en algunos casos, comparecencia de testigos.';
+    }
+  }
+
+  function togglePanelRecienNacido(nombreTramite) {
+    const panel = E('panel-recien-nacido');
+    const card = E('p2');
+    if (!panel) return;
+    st.requiereRecienNacido = esTramiteRegistroNacimiento(nombreTramite);
+    panel.classList.toggle('show', st.requiereRecienNacido);
+    if (card) card.style.maxWidth = st.requiereRecienNacido ? '680px' : '600px';
+    if (!st.requiereRecienNacido) {
+      st.recienNacido = null;
+      limpiarCamposRecienNacido();
+    } else {
+      actualizarTipoRegistroNacimiento();
+    }
+  }
+
+  function limpiarCamposRecienNacido() {
+    ['rn-nombre','rn-ap-pat','rn-ap-mat','rn-fecha','rn-hora','rn-lugar-nombre','rn-municipio'].forEach(id => {
+      const el = E(id); if (el) el.value = '';
+    });
+    const sexo = E('rn-sexo'); if (sexo) sexo.value = '';
+    const lugar = E('rn-lugar-tipo'); if (lugar) lugar.value = '';
+    ['fe-rn-nombre','fe-rn-ap-pat','fe-rn-ap-mat','fe-rn-sexo','fe-rn-fecha','fe-rn-lugar-tipo','fe-rn-lugar-nombre','fe-rn-municipio']
+      .forEach(id => hideFerr(id, id.replace('fe-','')));
+    actualizarTipoRegistroNacimiento();
+  }
+
+  function leerRecienNacido() {
+    return {
+      nombre: E('rn-nombre').value.trim(),
+      apellido_paterno: E('rn-ap-pat').value.trim(),
+      apellido_materno: E('rn-ap-mat').value.trim(),
+      sexo: E('rn-sexo').value,
+      fecha_nacimiento: E('rn-fecha').value,
+      hora_nacimiento: E('rn-hora').value,
+      lugar_tipo: E('rn-lugar-tipo').value,
+      lugar_nombre: E('rn-lugar-nombre').value.trim(),
+      municipio_nacimiento: E('rn-municipio').value.trim(),
+    };
+  }
+
+  function validarRecienNacido() {
+    const d = leerRecienNacido();
+    let ok = true;
+    const checks = [
+      ['fe-rn-nombre','rn-nombre', d.nombre],
+      ['fe-rn-ap-pat','rn-ap-pat', d.apellido_paterno],
+      ['fe-rn-ap-mat','rn-ap-mat', d.apellido_materno],
+      ['fe-rn-fecha','rn-fecha', d.fecha_nacimiento],
+      ['fe-rn-lugar-nombre','rn-lugar-nombre', d.lugar_nombre],
+      ['fe-rn-municipio','rn-municipio', d.municipio_nacimiento],
+    ];
+    checks.forEach(([fid, iid, val]) => {
+      if (!val) { showFerr(fid, iid); ok = false; } else hideFerr(fid, iid);
+    });
+    if (!d.sexo) { showFerr('fe-rn-sexo','rn-sexo'); ok = false; } else hideFerr('fe-rn-sexo','rn-sexo');
+    if (!d.lugar_tipo) { showFerr('fe-rn-lugar-tipo','rn-lugar-tipo'); ok = false; } else hideFerr('fe-rn-lugar-tipo','rn-lugar-tipo');
+    if (d.fecha_nacimiento && d.fecha_nacimiento > new Date().toISOString().slice(0, 10)) {
+      showFerr('fe-rn-fecha','rn-fecha'); ok = false;
+    }
+    if (!ok) return false;
+
+    const nacimiento = new Date(d.fecha_nacimiento + 'T12:00:00');
+    const hoy = new Date(); hoy.setHours(12, 0, 0, 0);
+    const tipo = hoy < sumarMesesFecha(nacimiento, 2) ? 'OPORTUNO' : 'EXTEMPORANEO';
+    const lugares = { hospital:'Hospital', clinica:'Clínica', domicilio:'Domicilio', otro:'Otra localidad del municipio' };
+
+    st.recienNacido = {
+      ...d,
+      tipo_registro: tipo,
+      tipo_registro_etiqueta: tipo === 'OPORTUNO' ? 'Oportuno' : 'Extemporáneo',
+      nombre_completo: nombreCompleto(d.apellido_paterno, d.apellido_materno, d.nombre),
+      lugar_tipo_etiqueta: lugares[d.lugar_tipo] || d.lugar_tipo,
+    };
+    return true;
+  }
+
+  function htmlResumenRecienNacido() {
+    if (!st.recienNacido) return '';
+    const rn = st.recienNacido;
+    return '<div class="resumen-bloque">' +
+      '<h4>Recién nacido · ' + rn.tipo_registro_etiqueta + '</h4>' +
+      '<div class="ritem"><span class="rkey">Nombre</span><span class="rval">' + rn.nombre_completo + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Sexo</span><span class="rval">' + (rn.sexo === 'H' ? 'Hombre' : 'Mujer') + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Fecha de nacimiento</span><span class="rval">' + fechaLegible(rn.fecha_nacimiento) + (rn.hora_nacimiento ? ' · ' + rn.hora_nacimiento : '') + '</span></div>' +
+      '<div class="ritem"><span class="rkey">Lugar</span><span class="rval" style="max-width:58%;text-align:right;line-height:1.4;">' + rn.lugar_tipo_etiqueta + ' — ' + rn.lugar_nombre + ', ' + rn.municipio_nacimiento + '</span></div>' +
+      '</div>';
   }
 
   function construirDireccion(d) {
@@ -808,6 +1126,7 @@
             E('costo-val').textContent='$'+parseFloat(t.costo).toFixed(2);
             E('costo-box').classList.add('show');
             E('e2').classList.remove('show');
+            togglePanelRecienNacido(t.nombre);
             if (E('f-fecha').value) cargarHorarios();
           };
           grid.appendChild(item);
@@ -862,8 +1181,166 @@
     if (!ok) return;
 
     guardarDatosEnEstado(d);
-    if (!catalogoCargado) cargarCatalogo();
-    goStep(2);
+    const btn = E('p1')?.querySelector('.btn-prim');
+    if (btn) { btn.disabled = true; btn.textContent = 'Verificando CURP...'; }
+
+    fetch('/citas/api/validar-curp/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify({ curp: d.curp }),
+    })
+      .then(r => r.json().then(data => ({ status: r.status, data })))
+      .then(({ data }) => {
+        if (!data.ok) {
+          E('e1').textContent = data.message || 'Ya existe una cita programada para estos datos.';
+          E('e1').classList.add('show');
+          return;
+        }
+        if (!catalogoCargado) cargarCatalogo();
+        goStep(2);
+      })
+      .catch(() => {
+        E('e1').textContent = 'No se pudo verificar la CURP. Intenta de nuevo.';
+        E('e1').classList.add('show');
+      })
+      .finally(() => {
+        if (btn) { btn.disabled = false; btn.textContent = 'Continuar →'; }
+      });
+  }
+
+  function htmlResultadoCita(cita, opts) {
+    opts = opts || {};
+    const chipClass = cita.estado === 'CANCELADA' ? 'cancelada' : (cita.estado === 'FINALIZADA' ? 'finalizada' : '');
+    let html = '<div class="resultado-cita">';
+    html += '<div class="folio-badge">Folio #' + cita.folio + '</div>';
+    html += '<div class="ritem"><span class="rkey">Estatus</span><span class="rval"><span class="estado-chip ' + chipClass + '">' + cita.estado_etiqueta + '</span></span></div>';
+    html += '<div class="ritem"><span class="rkey">Nombre</span><span class="rval">' + cita.nombre + '</span></div>';
+    html += '<div class="ritem"><span class="rkey">Trámite</span><span class="rval">' + cita.tramite + '</span></div>';
+    html += '<div class="ritem"><span class="rkey">Fecha y hora</span><span class="rval">' + fechaLegible(cita.fecha) + ' · ' + cita.hora + '</span></div>';
+    html += '<div class="ritem"><span class="rkey">Días restantes</span><span class="rval">' + Math.max(cita.dias_restantes, 0) + '</span></div>';
+    if (cita.motivo_no_cancelar && opts.mostrarAvisoCancelacion) {
+      html += '<div class="aviso-portal" style="margin-top:12px;"><strong>Aviso:</strong> ' + cita.motivo_no_cancelar + '</div>';
+    }
+    if (opts.mostrarBotonCancelar && cita.puede_cancelar) {
+      html += '<div style="margin-top:14px;text-align:center;"><button type="button" class="btn btn-prim" onclick="confirmarCancelacionPortal()">Confirmar cancelación</button></div>';
+    }
+    if (cita.pdf_url && cita.estado === 'PENDIENTE') {
+      html += '<div style="margin-top:12px;text-align:center;"><a href="' + cita.pdf_url + '" class="btn btn-sec" target="_blank" rel="noopener">Descargar comprobante PDF</a></div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  let citaCancelarPendiente = null;
+
+  function consultarCitaPortal() {
+    const folio = (E('c-folio').value || '').trim();
+    const curp = sanitizarCurp(E('c-curp').value);
+    E('c-curp').value = curp;
+    E('e-consultar').classList.remove('show');
+    E('resultado-consulta').innerHTML = '';
+    if (!folio || !esCurpValida(curp)) {
+      E('e-consultar').textContent = 'Ingresa un folio válido y una CURP de 18 caracteres.';
+      E('e-consultar').classList.add('show');
+      return;
+    }
+    const btn = E('btn-consultar');
+    btn.disabled = true;
+    btn.textContent = 'Consultando...';
+    fetch('/citas/api/consultar-cita/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify({ folio, curp }),
+    })
+      .then(r => r.json().then(data => ({ ok: r.ok, data })))
+      .then(({ ok, data }) => {
+        if (!ok || !data.ok) {
+          E('e-consultar').textContent = data.error || 'No se encontró la cita.';
+          E('e-consultar').classList.add('show');
+          return;
+        }
+        E('resultado-consulta').innerHTML = htmlResultadoCita(data.cita, { mostrarAvisoCancelacion: true });
+      })
+      .catch(() => {
+        E('e-consultar').textContent = 'Error de conexión. Intenta de nuevo.';
+        E('e-consultar').classList.add('show');
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Consultar cita';
+      });
+  }
+
+  function buscarCitaParaCancelar() {
+    const folio = (E('x-folio').value || '').trim();
+    const curp = sanitizarCurp(E('x-curp').value);
+    E('x-curp').value = curp;
+    E('e-cancelar').classList.remove('show');
+    E('resultado-cancelar').innerHTML = '';
+    citaCancelarPendiente = null;
+    if (!folio || !esCurpValida(curp)) {
+      E('e-cancelar').textContent = 'Ingresa un folio válido y una CURP de 18 caracteres.';
+      E('e-cancelar').classList.add('show');
+      return;
+    }
+    const btn = E('btn-buscar-cancelar');
+    btn.disabled = true;
+    btn.textContent = 'Buscando...';
+    fetch('/citas/api/consultar-cita/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify({ folio, curp }),
+    })
+      .then(r => r.json().then(data => ({ ok: r.ok, data })))
+      .then(({ ok, data }) => {
+        if (!ok || !data.ok) {
+          E('e-cancelar').textContent = data.error || 'No se encontró la cita.';
+          E('e-cancelar').classList.add('show');
+          return;
+        }
+        citaCancelarPendiente = { folio, curp };
+        E('resultado-cancelar').innerHTML = htmlResultadoCita(data.cita, {
+          mostrarAvisoCancelacion: true,
+          mostrarBotonCancelar: true,
+        });
+      })
+      .catch(() => {
+        E('e-cancelar').textContent = 'Error de conexión. Intenta de nuevo.';
+        E('e-cancelar').classList.add('show');
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Buscar cita';
+      });
+  }
+
+  function confirmarCancelacionPortal() {
+    if (!citaCancelarPendiente) return;
+    if (!confirm('¿Confirmas que deseas cancelar esta cita? Esta acción no se puede deshacer.')) return;
+    fetch('/citas/api/cancelar-cita/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify(citaCancelarPendiente),
+    })
+      .then(r => r.json().then(data => ({ ok: r.ok, data })))
+      .then(({ ok, data }) => {
+        if (!ok || !data.ok) {
+          E('e-cancelar').textContent = data.error || 'No se pudo cancelar la cita.';
+          E('e-cancelar').classList.add('show');
+          return;
+        }
+        E('e-cancelar').classList.remove('show');
+        E('resultado-cancelar').innerHTML =
+          '<div class="resultado-cita"><div class="check-icon" style="margin:0 auto 12px;width:48px;height:48px;border-radius:50%;background:var(--verde-claro);color:var(--verde);display:flex;align-items:center;justify-content:center;">✓</div>' +
+          '<p style="text-align:center;font-weight:700;color:var(--verde);margin-bottom:10px;">' + data.message + '</p>' +
+          htmlResultadoCita(data.cita) + '</div>';
+        E('footer-cancelar').style.display = 'none';
+        citaCancelarPendiente = null;
+      })
+      .catch(() => {
+        E('e-cancelar').textContent = 'Error de conexión al cancelar.';
+        E('e-cancelar').classList.add('show');
+      });
   }
 
   function fechaIsoLocal(d) {
@@ -898,6 +1375,12 @@
   function goPaso2(){
     if (!st.apellidoPaterno) { E('e1').textContent='Completa tus datos personales primero.'; E('e1').classList.add('show'); goStep(1); return; }
     if (!st.tramiteId) { E('e2').classList.add('show'); return; }
+    if (st.requiereRecienNacido && !validarRecienNacido()) {
+      E('e2').textContent = 'Completa los datos del recién nacido.';
+      E('e2').classList.add('show');
+      E('panel-recien-nacido').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
     E('e2').classList.remove('show');
     aplicarRangoFechaAgenda();
     goStep(3);
@@ -928,15 +1411,13 @@
       '<div class="ritem"><span class="rkey">Domicilio</span><span class="rval" style="max-width:58%;text-align:right;line-height:1.4;">' + st.dir + '</span></div>' +
       '<div class="ritem"><span class="rkey">Fecha</span><span class="rval">' + fl + '</span></div>' +
       '<div class="ritem"><span class="rkey">Hora</span><span class="rval">' + st.hora + '</span></div>' +
+      htmlResumenRecienNacido() +
       htmlRequisitos(st.tramiteDocumentos) +
-      '<div class="rtotal"><span style="font-size:13px;font-weight:700;color:var(--verde)">Total a pagar en ventanilla</span><span style="font-size:20px;font-weight:800;color:var(--verde)">$' + parseFloat(st.tramiteCosto).toFixed(2) + '</span></div>' +
-      '<div class="confirmar-inline" id="confirmar-inline">' +
-        '<button type="button" class="btn btn-grn" onclick="confirmarCita()">Confirmar y agendar</button>' +
-      '</div>';
+      '<div class="rtotal"><span style="font-size:13px;font-weight:700;color:var(--verde)">Total a pagar en ventanilla</span><span style="font-size:20px;font-weight:800;color:var(--verde)">$' + parseFloat(st.tramiteCosto).toFixed(2) + '</span></div>';
     resetConfirmacionUI();
     goStep(4);
     setTimeout(() => {
-      const target = E('footer4') || E('confirmar-inline');
+      const target = E('footer4');
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 150);
   }
@@ -1018,14 +1499,15 @@
 
   function confirmarCita(){
     E('footer4').style.display='none';
-    const inline = E('confirmar-inline');
-    if (inline) inline.style.display='none';
     E('lconfirmar').style.display='block';
     E('e4').classList.remove('show');
     fetch('/citas/agendar/',{
       method:'POST',
       headers:{'Content-Type':'application/json','X-CSRFToken':getCookie('csrftoken')},
-      body:JSON.stringify({tramite_id:st.tramiteId,nombre:st.nombre,curp:st.curp,cp:st.cp,direccion:st.dir,fecha:st.fecha,hora:st.hora})
+      body:JSON.stringify({
+        tramite_id:st.tramiteId,nombre:st.nombre,curp:st.curp,cp:st.cp,direccion:st.dir,fecha:st.fecha,hora:st.hora,
+        datos_recien_nacido: st.requiereRecienNacido ? st.recienNacido : null
+      })
     })
     .then(async r => {
       let data = {};
@@ -1038,16 +1520,12 @@
       E('lconfirmar').style.display='none';
       if (ok && data.ok) { mostrarComprobante(data); return; }
       resetConfirmacionUI();
-      const inline = E('confirmar-inline');
-      if (inline) inline.style.display='flex';
       E('e4').textContent = data.error || 'Error al agendar.';
       E('e4').classList.add('show');
     })
     .catch(err => {
       E('lconfirmar').style.display='none';
       resetConfirmacionUI();
-      const inline = E('confirmar-inline');
-      if (inline) inline.style.display='flex';
       E('e4').textContent = err.message || 'Error de conexión.';
       E('e4').classList.add('show');
     });
@@ -1057,7 +1535,6 @@
     comprobantePdfUrl = data.pdf_url || null;
     E('folio-badge').textContent='Folio #'+data.folio;
     E('qr-img').src=data.qr_url;
-    E('btn-dl').href=data.qr_url;
     const btnPdf = E('btn-dl-pdf');
     if (btnPdf) {
       btnPdf.onclick = descargarComprobantePdf;
@@ -1072,6 +1549,7 @@
       '<div class="drow"><span>Domicilio</span><span style="max-width:62%;text-align:right;line-height:1.4;">' + st.dir + '</span></div>' +
       '<div class="drow"><span>Fecha</span><span>' + fechaLegible(st.fecha) + '</span></div>' +
       '<div class="drow"><span>Hora</span><span>' + st.hora + '</span></div>' +
+      (st.recienNacido ? '<div class="drow"><span>Recién nacido</span><span>' + st.recienNacido.nombre_completo + ' · ' + st.recienNacido.tipo_registro_etiqueta + '</span></div>' : '') +
       '<div class="drow"><span>Costo a pagar</span><span>$' + parseFloat(st.tramiteCosto).toFixed(2) + '</span></div>';
     [1,2,3,4,5].forEach(i=>{ const c=E('p'+i); if(c) c.className='fcard'+(i===5?' active':''); });
   }
@@ -1080,11 +1558,13 @@
     st.apellidoPaterno=null; st.apellidoMaterno=null; st.nombrePila=null; st.nombre=null;
     st.curp=null; st.cp=null; st.calle=null; st.numExt=null; st.numInt=null; st.colonia=null; st.municipio=null; st.estado=null; st.dir=null;
     st.tramiteId=null; st.tramiteNombre=null; st.tramiteCosto=null; st.tramiteDocumentos=null; st.tramiteDuracion=null;
+    st.requiereRecienNacido=false; st.recienNacido=null;
     st.fecha=null; st.hora=null;
     comprobantePdfUrl=null;
     goStep(1);
     document.querySelectorAll('.titem').forEach(i=>i.classList.remove('sel'));
     E('costo-box').classList.remove('show');
+    togglePanelRecienNacido('');
     ['f-ap-pat','f-ap-mat','f-nombre','f-curp','f-calle','f-num-ext','f-num-int','f-colonia','f-municipio','f-cp','f-fecha'].forEach(id=>{ const el=E(id); if(el) el.value=''; });
     if (E('f-estado')) E('f-estado').value = 'Estado de México';
     E('hgroup').style.display='none';
@@ -1131,6 +1611,13 @@
     if (fechaInput) {
       fechaInput.addEventListener('change', cargarHorarios);
       fechaInput.addEventListener('input', cargarHorarios);
+    }
+
+    const rnFecha = E('rn-fecha');
+    if (rnFecha) {
+      rnFecha.max = new Date().toISOString().slice(0, 10);
+      rnFecha.addEventListener('change', actualizarTipoRegistroNacimiento);
+      rnFecha.addEventListener('input', actualizarTipoRegistroNacimiento);
     }
 
     const cpInput = E('f-cp');

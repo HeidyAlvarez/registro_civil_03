@@ -8,38 +8,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=7">
+{% include 'citas/includes/tipografia_rc.html' %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="gobmx-bootstrap">
+<body class="gobmx-bootstrap panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{{ panel_inicio_url }}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Administración de catálogo</span>
-    </span>
-  </a>
-</header>
-
-{% include 'citas/includes/barra_usuario.html' %}
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Administración de catálogo' %}
 
 <main class="page">
 
 <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="gobmx-titulo" style="font-size:1.35rem;">Administración de Catálogo de Trámites</h2>
-            <a href="{% url 'reporte_caja' %}" class="btn btn-secondary btn-sm">Volver al Panel</a>
         </div>
 
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-success shadow-sm">{{ message }}</div>
+                <div class="alert {% if 'error' in message.tags %}alert-danger{% elif 'warning' in message.tags %}alert-warning{% elif 'info' in message.tags %}alert-info{% else %}alert-success{% endif %} shadow-sm">{{ message }}</div>
             {% endfor %}
         {% endif %}
 

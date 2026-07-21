@@ -94,7 +94,15 @@
     ]).then(function (results) {
       actualizarContadores(results[0]);
       if (opts.modo === 'admin') {
-        renderFilasAdmin(results[1].citas || [], document.getElementById(opts.listId));
+        if (opts.tbodyId) {
+          renderTablaOficial(
+            results[1].citas || [],
+            document.getElementById(opts.tbodyId),
+            document.getElementById(opts.emptyId)
+          );
+        } else {
+          renderFilasAdmin(results[1].citas || [], document.getElementById(opts.listId));
+        }
       } else if (opts.modo === 'oficial') {
         renderTablaOficial(
           results[1].citas || [],

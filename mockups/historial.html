@@ -3,45 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Historial</title>
+  <title>Historial de Citas Finalizadas — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
+  <style>
+    .hf-main { max-width: 960px; margin: 28px auto; padding: 0 20px 60px; }
+    .hf-header { margin-bottom: 22px; }
+    .hf-header h2 { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .hf-header p { font-size: 13px; color: var(--tinta-muted); margin: 0; line-height: 1.5; }
+    .hf-nav { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; font-size: 12px; font-weight: 700; }
+    .hf-nav a { color: var(--verde); text-decoration: none; }
+    .hf-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 22px; }
+    .hf-stat { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 16px 18px; }
+    .hf-stat-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--tinta-muted); margin-bottom: 6px; }
+    .hf-stat-val { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 800; color: var(--tinta); }
+    .hf-stat-val.verde { color: var(--verde); }
+    .hf-panel { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; overflow: hidden; }
+    .hf-panel-head { padding: 14px 18px; border-bottom: 1px solid var(--borde); }
+    .hf-panel-head h3 { font-size: 14px; font-weight: 700; margin: 0; }
+    .hf-mes-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 16px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--borde); font-size: 13px; }
+    .hf-mes-row:last-child { border-bottom: none; }
+    .hf-mes-nombre { font-weight: 700; }
+    .hf-mes-meta { color: var(--tinta-muted); font-size: 12.5px; text-align: right; }
+    .hf-mes-ingresos { font-family: 'Montserrat', sans-serif; font-weight: 800; color: var(--verde); text-align: right; min-width: 90px; }
+    .hf-mes-link a { font-size: 12px; font-weight: 700; color: var(--verde); text-decoration: none; white-space: nowrap; }
+  </style>
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Historial de trámites finalizados</span></span></a>
-  </header>
-  <div class="gobmx-barra-usuario">
-    <span class="gobmx-usuario">María Admin</span>
-    <span class="barra-spacer"></span>
-    <a class="btn-inicio" href="sitio-administrador.html">Inicio</a>
+<body class="panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="sitio-administrador.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Historial de trámites finalizados</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      admin_01
+    </span>
+    <a href="sitio-administrador.html" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
   </div>
-  <main class="page">
-    <div class="main" style="max-width:960px">
-      <h2 class="page-title">Historial de citas finalizadas</h2>
-      <p class="page-sub">Resumen mensual de trámites concluidos. Selecciona un mes para ver el detalle.</p>
-      <div style="display:flex;gap:14px;margin-bottom:18px;font-size:12px;font-weight:700">
-        <a href="#" style="color:var(--verde)">Historial canceladas</a>
-        <a href="citas-pagadas.html" style="color:var(--verde)">Citas pagadas (pendientes)</a>
-        <a href="reporte-caja.html" style="color:var(--verde)">Reporte financiero</a>
-      </div>
-      <div class="stats" style="grid-template-columns:1fr 1fr">
-        <div class="stat-card"><div class="stat-label">Trámites finalizados (año)</div><div class="stat-val">156</div></div>
-        <div class="stat-card"><div class="stat-label">Ingresos del año</div><div class="stat-val" style="color:var(--verde)">$81,240</div></div>
-      </div>
-      <div class="table-wrap">
-        <div class="table-header">Resumen por mes</div>
-        <table>
-          <thead><tr><th>Mes</th><th>Citas</th><th>Ingresos</th><th></th></tr></thead>
-          <tbody>
-            <tr><td><strong>Julio 2026</strong></td><td>12</td><td style="color:var(--verde);font-weight:800">$6,240.00</td><td><a href="#" style="color:var(--verde);font-size:12px;font-weight:700">Ver detalle →</a></td></tr>
-            <tr><td><strong>Junio 2026</strong></td><td>18</td><td style="color:var(--verde);font-weight:800">$9,450.00</td><td><a href="#" style="color:var(--verde);font-size:12px;font-weight:700">Ver detalle →</a></td></tr>
-          </tbody>
-        </table>
-      </div>
+</header>
+
+<main class="page">
+<div class="hf-main">
+  <div class="hf-header">
+    <h2>Historial de citas finalizadas</h2>
+    <p>Resumen mensual de trámites concluidos. Selecciona un mes para ver el detalle.</p>
+  </div>
+  <div class="hf-nav">
+    <a href="historial-canceladas.html">Historial canceladas</a>
+    <a href="citas-pagadas.html">Citas pagadas (pendientes)</a>
+    <a href="reporte-caja.html">Reporte financiero</a>
+  </div>
+  <div class="hf-stats">
+    <div class="hf-stat">
+      <div class="hf-stat-label">Total histórico finalizado</div>
+      <div class="hf-stat-val">156</div>
     </div>
-  </main>
+    <div class="hf-stat">
+      <div class="hf-stat-label">Ingresos acumulados</div>
+      <div class="hf-stat-val verde">$81,240.00</div>
+    </div>
+  </div>
+  <div class="hf-panel">
+    <div class="hf-panel-head"><h3>Resumen por mes</h3></div>
+    <div class="hf-mes-row">
+      <div class="hf-mes-nombre">Julio 2026</div>
+      <div class="hf-mes-meta">12 trámites</div>
+      <div class="hf-mes-ingresos">$6,240.00</div>
+      <div class="hf-mes-link"><a href="#">Ver detalle →</a></div>
+    </div>
+    <div class="hf-mes-row">
+      <div class="hf-mes-nombre">Junio 2026</div>
+      <div class="hf-mes-meta">18 trámites</div>
+      <div class="hf-mes-ingresos">$9,450.00</div>
+      <div class="hf-mes-link"><a href="#">Ver detalle →</a></div>
+    </div>
+  </div>
+</div>
+</main>
 </body>
 </html>

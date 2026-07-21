@@ -1,0 +1,33 @@
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="{{ encabezado_url|default:panel_inicio_url }}" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">{{ encabezado_subtitulo|default:"Oficialía 03 · Panel interno" }}</span>
+    </span>
+  </a>
+  {% if request.user.is_authenticated and encabezado_mostrar_acciones != False %}
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      {{ request.user.get_full_name|default:request.user.username }}
+    </span>
+    {% if encabezado_nav_interno or request.resolver_match.url_name == 'dashboard_capturista' %}
+    <a href="#" id="enc-nav-anterior-interno" class="btn-panel-anterior btn-panel-anterior--navbar" hidden>Anterior</a>
+    <form action="{% url 'admin:logout' %}" method="post" class="barra-logout-form" id="enc-nav-logout">{% csrf_token %}
+      <button type="submit" class="gobmx-link-btn">Cerrar sesión</button>
+    </form>
+    {% elif not en_panel_inicio and encabezado_mostrar_anterior != False %}
+    <a href="{{ encabezado_anterior_url|default:panel_anterior_url }}" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
+    {% elif en_panel_inicio and encabezado_mostrar_logout != False %}
+    <form action="{% url 'admin:logout' %}" method="post" class="barra-logout-form">{% csrf_token %}
+      <button type="submit" class="gobmx-link-btn">Cerrar sesión</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
+</header>

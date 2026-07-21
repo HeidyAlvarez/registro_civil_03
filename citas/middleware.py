@@ -1,8 +1,7 @@
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from .utils import set_current_request
-from .auditoria import registrar_log, registrar_evento, rol_usuario, usuario_auditado
-
+from .servicios.bitacora import Bitacora
 
 class RequestAuditMiddleware:
     """Guarda el request actual para auditoría y renueva la sesión en cada petición."""
@@ -35,11 +34,11 @@ class SessionTimeoutMiddleware:
             ahora = timezone.now().timestamp()
             limite = getattr(settings, 'SESSION_COOKIE_AGE', 1800)
             if ultima and (ahora - ultima) > limite:
-                if usuario_auditado(request.user):
-                    registrar_evento(
+                if Bitacora.usuario_auditado(request.user):
+                    Bitacora.registrar(
                         request,
                         'INFO',
-                        f"[{rol_usuario(request.user)}] {request.user.username} — sesión cerrada por inactividad.",
+                        f"[{Bitacora.rol_usuario(request.user)}] {request.user.username} — sesión cerrada por inactividad.",
                     )
                 logout(request)
                 return redirect('/admin/login/?session_expired=1')

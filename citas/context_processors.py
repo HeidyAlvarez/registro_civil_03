@@ -22,5 +22,6 @@ def panel_inicio(request):
     home = url.rstrip('/')
     return {
         'panel_inicio_url': url,
+        'panel_anterior_url': url,
         'en_panel_inicio': path == home,
     }

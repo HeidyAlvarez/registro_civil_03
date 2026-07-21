@@ -1,0 +1,750 @@
+/* Portal ciudadano — estilos alineados a agendar.html */
+
+
+
+/* Navbar portal (fondo blanco, no institucional oscuro) */
+
+body.portal-page .navbar:not(.navbar--institucional) {
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 200;
+
+  background: var(--superficie);
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 32px;
+
+  height: 68px;
+
+  border-bottom: 3px solid var(--verde);
+
+  box-shadow: 0 2px 10px rgba(10, 63, 41, .08);
+
+}
+
+body.portal-page .navbar:not(.navbar--institucional) .navbar-brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  color: var(--tinta);
+
+  text-decoration: none;
+
+  flex: 1;
+
+}
+
+body.portal-page .navbar:not(.navbar--institucional) .crest {
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 4px;
+
+  background: var(--verde);
+
+  color: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-family: 'Montserrat', sans-serif;
+
+  font-weight: 800;
+
+  font-size: 16px;
+
+}
+
+body.portal-page .navbar:not(.navbar--institucional) .name {
+
+  font-family: 'Montserrat', sans-serif;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+}
+
+body.portal-page .navbar:not(.navbar--institucional) .sub {
+
+  font-size: 12.5px;
+
+  color: var(--tinta-muted);
+
+  margin-top: 1px;
+
+  display: block;
+
+}
+
+
+
+/* Hero */
+
+body.portal-page .hero {
+
+  background: var(--verde-dark);
+
+  color: #fff;
+
+  padding: 56px 32px 68px;
+
+  text-align: center;
+
+  position: relative;
+
+  overflow: hidden;
+
+}
+
+body.portal-page .hero::after {
+
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+
+  right: 0;
+
+  bottom: 0;
+
+  height: 5px;
+
+  background: linear-gradient(90deg, var(--oro) 0%, var(--verde) 45%, var(--verde) 55%, var(--oro) 100%);
+
+}
+
+body.portal-page .hero-eyebrow {
+
+  font-size: 12.5px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.4px;
+
+  text-transform: uppercase;
+
+  color: var(--oro-claro, #F6EFDC);
+
+  margin-bottom: 14px;
+
+}
+
+body.portal-page .hero h1 {
+
+  font-size: clamp(24px, 3.6vw, 36px);
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  margin-bottom: 12px;
+
+}
+
+body.portal-page .hero p {
+
+  font-size: 14.5px;
+
+  color: rgba(255, 255, 255, .78);
+
+  max-width: 480px;
+
+  margin: 0 auto;
+
+  line-height: 1.65;
+
+}
+
+
+
+/* Menú portal */
+
+body.portal-page .menu-section {
+
+  padding: 44px 24px 60px;
+
+  max-width: 900px;
+
+  margin: 0 auto;
+
+}
+
+body.portal-page .menu-kicker {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+
+  color: var(--tinta-muted);
+
+  text-align: center;
+
+  margin-bottom: 22px;
+
+}
+
+body.portal-page .menu-section .menu-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 14px;
+
+}
+
+body.portal-page .menu-section .menu-card {
+
+  background: var(--superficie);
+
+  border: 1px solid var(--borde);
+
+  border-radius: 6px;
+
+  padding: 24px 18px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  color: inherit;
+
+  transition: box-shadow .15s, border-color .15s;
+
+  position: relative;
+
+}
+
+body.portal-page .menu-section .menu-card::before {
+
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  bottom: 0;
+
+  width: 3px;
+
+}
+
+body.portal-page .menu-section .menu-card.blue::before,
+
+body.portal-page .menu-section .menu-card.green::before { background: var(--verde); }
+
+body.portal-page .menu-section .menu-card.amber::before,
+
+body.portal-page .menu-section .menu-card.red::before { background: var(--oro); }
+
+body.portal-page .menu-section .menu-card.teal::before { background: var(--slate); }
+
+body.portal-page .menu-section .menu-card:hover {
+
+  box-shadow: 0 6px 18px rgba(10, 63, 41, .1);
+
+  border-color: var(--tinta-tenue);
+
+}
+
+body.portal-page .card-icon {
+
+  width: 40px;
+
+  height: 40px;
+
+  border-radius: 6px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 16px;
+
+  color: #fff;
+
+}
+
+body.portal-page .blue .card-icon,
+
+body.portal-page .green .card-icon { background: var(--verde); }
+
+body.portal-page .amber .card-icon,
+
+body.portal-page .red .card-icon { background: var(--oro); }
+
+body.portal-page .teal .card-icon { background: var(--slate); }
+
+body.portal-page .card-icon svg { width: 20px; height: 20px; }
+
+body.portal-page .menu-section .menu-card h3 {
+
+  font-size: 14.5px;
+
+  font-weight: 700;
+
+  margin-bottom: 7px;
+
+}
+
+body.portal-page .menu-section .menu-card p {
+
+  font-size: 13.5px;
+
+  color: var(--tinta-muted);
+
+  line-height: 1.55;
+
+  margin-bottom: 18px;
+
+  flex: 1;
+
+}
+
+body.portal-page .card-btn {
+
+  padding: 8px 16px;
+
+  border-radius: 4px;
+
+  font-size: 13.5px;
+
+  font-weight: 700;
+
+  border: 1.5px solid;
+
+  cursor: pointer;
+
+  font-family: 'Roboto', inherit;
+
+  background: transparent;
+
+}
+
+body.portal-page .blue .card-btn,
+
+body.portal-page .green .card-btn { border-color: var(--verde); color: var(--verde); }
+
+body.portal-page .portal-footer {
+
+  background: var(--verde-dark);
+
+  color: rgba(255, 255, 255, .75);
+
+  text-align: center;
+
+  padding: 24px;
+
+  font-size: 12px;
+
+  margin-top: 40px;
+
+}
+
+body.portal-page .portal-footer strong {
+
+  color: #fff;
+
+  font-family: 'Montserrat', sans-serif;
+
+}
+
+
+
+/* Wizard agendar */
+
+.wizard-steps {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  justify-content: center;
+
+  padding: 18px 20px;
+
+  background: var(--superficie);
+
+  border-bottom: 1px solid var(--borde);
+
+}
+
+.wstep {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  padding: 6px 14px;
+
+  border-radius: 20px;
+
+  border: 1.5px solid var(--borde);
+
+  color: var(--tinta-muted);
+
+  background: var(--gris-piedra);
+
+}
+
+.wstep.active {
+
+  border-color: var(--verde);
+
+  color: var(--verde);
+
+  background: var(--verde-claro);
+
+}
+
+.wstep.done {
+
+  border-color: var(--verde);
+
+  color: #fff;
+
+  background: var(--verde);
+
+}
+
+
+
+/* Evitar conflicto: sistema.css oculta .form-panel sin .active */
+body.portal-page .form-panel,
+body.portal-page .portal-form-panel {
+  display: block;
+  max-width: 720px;
+  margin: 28px auto 60px;
+  padding: 28px 24px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(10, 63, 41, .06);
+}
+
+body.portal-page { background: var(--gris-piedra); }
+
+/* Wizard agendar — alineado a agendar.html */
+body.portal-page .portal-agendar { padding: 56px 24px 60px; }
+body.portal-page .portal-agendar .container { max-width: 860px; margin: 0 auto; }
+body.portal-page .sec-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 30px;
+  border-bottom: 1px solid var(--borde); padding-bottom: 16px;
+}
+body.portal-page .sec-back {
+  background: var(--superficie); border: 1.5px solid var(--borde); border-radius: 4px;
+  padding: 8px 14px; font-size: 13.5px; font-weight: 700; color: var(--tinta-muted);
+  text-decoration: none; font-family: 'Roboto', inherit;
+}
+body.portal-page .sec-header h2 {
+  font-size: 21px; font-weight: 800; color: var(--tinta);
+  display: flex; align-items: center; gap: 10px;
+}
+body.portal-page .sec-header h2 svg { width: 22px; height: 22px; color: var(--verde); }
+body.portal-page .stepper {
+  display: flex; align-items: center; margin: 0 auto 24px; max-width: 600px;
+}
+body.portal-page .step {
+  display: flex; flex-direction: column; align-items: center; flex: 1; position: relative;
+}
+body.portal-page .step:not(:last-child)::after {
+  content: ''; position: absolute; top: 15px; left: 50%; width: 100%; height: 2px;
+  background: var(--borde); z-index: 0;
+}
+body.portal-page .step.done:not(:last-child)::after { background: var(--verde); }
+body.portal-page .step-circle {
+  width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-family: 'Montserrat', sans-serif; font-size: 13.5px;
+  font-weight: 700; border: 2px solid var(--borde); background: var(--superficie);
+  color: var(--tinta-muted); position: relative; z-index: 1;
+}
+body.portal-page .step.active .step-circle,
+body.portal-page .step.done .step-circle {
+  border-color: var(--verde); background: var(--verde); color: #fff;
+}
+body.portal-page .step-label { font-size: 11.5px; color: var(--tinta-muted); margin-top: 5px; text-align: center; }
+body.portal-page .step.active .step-label { color: var(--verde); font-weight: 700; }
+body.portal-page .fcard {
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: 6px;
+  overflow: visible; display: none; max-width: 600px; margin: 0 auto;
+}
+body.portal-page .fcard.active { display: block; }
+body.portal-page .fcard-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--borde); }
+body.portal-page .fcard-header h3 { font-size: 14.5px; font-weight: 700; }
+body.portal-page .fcard-header p { font-size: 13.5px; color: var(--tinta-muted); margin-top: 3px; }
+body.portal-page .fcard-body { padding: 22px; }
+body.portal-page .fcard-footer {
+  padding: 14px 22px; border-top: 1px solid var(--borde); display: flex; gap: 10px;
+  justify-content: flex-end; flex-wrap: wrap; background: var(--superficie);
+}
+body.portal-page .fg { margin-bottom: 16px; }
+body.portal-page .fg label {
+  display: block; font-size: 12px; font-weight: 700; color: var(--tinta-muted);
+  margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px;
+}
+body.portal-page .fg input,
+body.portal-page .fg textarea,
+body.portal-page .fg select {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--borde); border-radius: 4px;
+  font-size: 14px; color: var(--tinta); background: var(--superficie); font-family: inherit;
+}
+body.portal-page .fg input:focus,
+body.portal-page .fg textarea:focus,
+body.portal-page .fg select:focus {
+  outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(15, 92, 60, .12);
+}
+body.portal-page .fhint { font-size: 12px; color: var(--tinta-tenue); margin-top: 4px; line-height: 1.4; }
+body.portal-page .curp-progreso { font-size: 12px; color: var(--verde); margin-top: 4px; font-weight: 600; }
+body.portal-page .sec-form {
+  font-size: 13px; font-weight: 700; color: var(--verde); text-transform: uppercase;
+  letter-spacing: .4px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--borde);
+}
+body.portal-page .sec-form:first-child { margin-top: 0; }
+body.portal-page .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+body.portal-page .frow-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+body.portal-page .aviso-portal {
+  background: var(--oro-claro, #F6EFDC); border: 1px solid #dcc99a; border-radius: 6px;
+  padding: 14px 16px; font-size: 12.5px; color: var(--tinta); line-height: 1.55; margin-bottom: 16px;
+}
+body.portal-page .aviso-portal a { color: var(--verde); font-weight: 600; }
+body.portal-page .btn {
+  padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid var(--borde); font-family: 'Roboto', inherit;
+}
+body.portal-page .btn-sec { background: var(--superficie); color: var(--tinta); text-decoration: none; display: inline-block; }
+body.portal-page .btn-prim { background: var(--verde); color: #fff; border-color: var(--verde); }
+body.portal-page .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+body.portal-page .form-grid .field.full { grid-column: 1 / -1; }
+body.portal-page .form-grid .field label {
+  display: block; font-size: 12px; font-weight: 700; color: var(--tinta-muted);
+  margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px;
+}
+
+
+
+/* Comprobante */
+
+.comprobante-wrap {
+
+  max-width: 520px;
+
+  margin: 28px auto 60px;
+
+  padding: 0 20px;
+
+}
+
+.comprobante-card {
+
+  background: var(--superficie);
+
+  border: 1px solid var(--borde);
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 18px rgba(10, 63, 41, .08);
+
+}
+
+.comprobante-head {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid var(--borde);
+
+  background: var(--gris-piedra);
+
+}
+
+.comprobante-ok {
+
+  text-align: center;
+
+  padding: 16px;
+
+  background: var(--verde-claro);
+
+  color: var(--verde);
+
+  font-weight: 700;
+
+  font-size: 14px;
+
+}
+
+.comprobante-folio {
+
+  text-align: center;
+
+  padding: 14px;
+
+  font-size: 13px;
+
+  color: var(--tinta-muted);
+
+}
+
+.comprobante-folio strong {
+
+  font-family: 'Montserrat', sans-serif;
+
+  font-size: 22px;
+
+  color: var(--tinta);
+
+}
+
+.comprobante-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px 16px;
+
+  padding: 0 20px 20px;
+
+  font-size: 13px;
+
+}
+
+.comprobante-grid .lbl {
+
+  display: block;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .4px;
+
+  color: var(--tinta-muted);
+
+  margin-bottom: 2px;
+
+}
+
+.comprobante-grid .val { font-weight: 600; }
+
+.comprobante-qr {
+
+  text-align: center;
+
+  padding: 20px;
+
+  border-top: 1px solid var(--borde);
+
+}
+
+.comprobante-qr .qr-box {
+
+  width: 140px;
+
+  height: 140px;
+
+  margin: 0 auto 12px;
+
+  border: 2px dashed var(--borde);
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 12px;
+
+  color: var(--tinta-muted);
+
+}
+
+.comprobante-qr p {
+
+  font-size: 12px;
+
+  color: var(--tinta-muted);
+
+}
+
+.comprobante-notas {
+
+  padding: 0 24px 20px 36px;
+
+  font-size: 12.5px;
+
+  color: var(--tinta-muted);
+
+  line-height: 1.6;
+
+}
+
+.comprobante-actions {
+
+  display: flex;
+
+  gap: 10px;
+
+  justify-content: center;
+
+  padding: 0 20px 24px;
+
+  flex-wrap: wrap;
+
+}
+
+
+
+@media (max-width: 768px) {
+  body.portal-page .menu-section .menu-grid { grid-template-columns: 1fr; }
+  body.portal-page .frow,
+  body.portal-page .frow-3 { grid-template-columns: 1fr; }
+  .comprobante-grid { grid-template-columns: 1fr; }
+}
+

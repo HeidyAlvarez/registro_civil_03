@@ -3,49 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Reporte de caja</title>
+  <title>Reporte de Caja — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
+  <style>
+    .rc-main { max-width: 1060px; margin: 28px auto; padding: 0 20px 60px; }
+    .rc-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .rc-header h2 { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .rc-header p { font-size: 13px; color: var(--tinta-muted); margin: 0; }
+    .rc-menu-btn { width: 36px; height: 36px; border: 1px solid var(--borde); border-radius: 6px; background: var(--superficie); color: var(--tinta-muted); font-size: 18px; cursor: pointer; }
+    .rc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+    .rc-stat { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 18px 20px; }
+    .rc-stat-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--tinta-muted); margin-bottom: 10px; }
+    .rc-stat-val { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800; color: var(--tinta); }
+    .rc-stat-val.verde { color: var(--verde); }
+    .rc-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+    .rc-chart-card { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 18px 20px; }
+    .rc-chart-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+    @media (max-width: 900px) { .rc-stats { grid-template-columns: repeat(2, 1fr); } .rc-charts { grid-template-columns: 1fr; } }
+  </style>
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Reporte de caja</span></span></a>
-  </header>
-  <div class="gobmx-barra-usuario">
-    <span class="gobmx-usuario">María Admin</span>
-    <span class="barra-spacer"></span>
-    <a class="btn-inicio" href="sitio-administrador.html">Inicio</a>
+<body class="panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="sitio-administrador.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Reporte de caja</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      admin_01
+    </span>
+    <a href="sitio-administrador.html" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
   </div>
-  <main class="page">
-    <div class="main" style="max-width:1060px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px">
-        <div><h2 class="page-title">Control de Ingresos Mensuales</h2><p class="page-sub" style="margin:0">Período: julio 2026</p></div>
-        <button class="btn btn-sm btn-ghost" type="button">⋮ Menú</button>
-      </div>
-      <div class="stats">
-        <div class="stat-card"><div class="stat-label">Ingresos totales</div><div class="stat-val" style="color:var(--verde)">$24,580</div></div>
-        <div class="stat-card"><div class="stat-label">Citas cobradas</div><div class="stat-val">47</div></div>
-        <div class="stat-card"><div class="stat-label">Promedio por cita</div><div class="stat-val">$523</div></div>
-        <div class="stat-card"><div class="stat-label">Corte del mes</div><div class="stat-val">Cerrado</div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px">
-        <div class="panel"><div class="panel-header">Ingresos por semana</div><div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--tinta-muted);font-size:13px">[ Gráfica de barras ]</div></div>
-        <div class="panel"><div class="panel-header">Distribución por trámite</div><div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--tinta-muted);font-size:13px">[ Gráfica circular ]</div></div>
-      </div>
-      <div class="table-wrap">
-        <div class="table-header">Detalle por trámite</div>
-        <table>
-          <thead><tr><th>Trámite</th><th>Citas</th><th>Ingresos</th></tr></thead>
-          <tbody>
-            <tr><td>Acta de nacimiento</td><td>18</td><td>$8,640.00</td></tr>
-            <tr><td>Matrimonio</td><td>12</td><td>$7,440.00</td></tr>
-            <tr><td>Aclaración actas</td><td>9</td><td>$4,365.00</td></tr>
-          </tbody>
-        </table>
-      </div>
+</header>
+
+<main class="page">
+<div class="rc-main">
+
+  <header class="rc-header">
+    <div>
+      <h2>Control de Ingresos Mensuales</h2>
+      <p>Período: julio 2026</p>
     </div>
-  </main>
+    <button type="button" class="rc-menu-btn" aria-label="Opciones">⋯</button>
+  </header>
+
+  <div class="rc-stats">
+    <div class="rc-stat">
+      <div class="rc-stat-label">Ingresos totales</div>
+      <div class="rc-stat-val verde">$24,580</div>
+    </div>
+    <div class="rc-stat">
+      <div class="rc-stat-label">Citas cobradas</div>
+      <div class="rc-stat-val">47</div>
+    </div>
+    <div class="rc-stat">
+      <div class="rc-stat-label">Promedio por cita</div>
+      <div class="rc-stat-val">$523</div>
+    </div>
+    <div class="rc-stat">
+      <div class="rc-stat-label">Corte del mes</div>
+      <div class="rc-stat-val" style="font-size:18px;">Cerrado</div>
+    </div>
+  </div>
+
+  <div class="rc-charts">
+    <div class="rc-chart-card">
+      <h3>Ingresos por semana</h3>
+      <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--tinta-muted);font-size:13px;">[ Gráfica de barras ]</div>
+    </div>
+    <div class="rc-chart-card">
+      <h3>Distribución por trámite</h3>
+      <div style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--tinta-muted);font-size:13px;">[ Gráfica circular ]</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header">Detalle por trámite</div>
+    <table>
+      <thead><tr><th>Trámite</th><th>Citas</th><th>Ingresos</th></tr></thead>
+      <tbody>
+        <tr><td>Acta de nacimiento</td><td>18</td><td style="color:var(--verde);font-weight:800;">$8,640.00</td></tr>
+        <tr><td>Matrimonio</td><td>12</td><td style="color:var(--verde);font-weight:800;">$7,440.00</td></tr>
+        <tr><td>Aclaración actas</td><td>9</td><td style="color:var(--verde);font-weight:800;">$4,365.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</main>
 </body>
 </html>

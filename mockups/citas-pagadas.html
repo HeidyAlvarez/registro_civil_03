@@ -3,41 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Citas pagadas</title>
+  <title>Citas Pagadas — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Citas pagadas</span></span></a>
-  </header>
-  <div class="gobmx-barra-usuario">
-    <span class="gobmx-usuario">Martín López Sandoval</span>
-    <span class="barra-spacer"></span>
-    <a class="btn-inicio" href="panel-oficial.html">Inicio</a>
+<body class="panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="panel-oficial.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Citas pagadas</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      Martín López Sandoval
+    </span>
+    <a href="panel-oficial.html" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
   </div>
-  <main class="page">
-    <div class="main">
-      <h2 class="page-title">Trámites pendientes de finalizar</h2>
-      <p class="page-sub">Citas ya cobradas que esperan confirmación de entrega.</p>
-      <div class="flujo">
-        <span class="flujo-step done">Pendiente</span><span class="flujo-arrow">→</span>
-        <span class="flujo-step done">Asistida</span><span class="flujo-arrow">→</span>
-        <span class="flujo-step active">Pagada</span><span class="flujo-arrow">→</span>
-        <span class="flujo-step">Finalizada</span>
-      </div>
-      <div class="panel">
-        <div class="panel-header"><strong>Citas con pago registrado</strong><p style="font-size:12px;color:var(--tinta-muted);font-weight:400;margin-top:2px">Marca como «Finalizada» cuando el documento haya sido entregado.</p></div>
-        <table>
-          <thead><tr><th>Folio</th><th>Ciudadano</th><th>Trámite</th><th>Monto</th><th>Estado</th><th></th></tr></thead>
-          <tbody>
-            <tr><td>#35</td><td><strong>Pérez Ana</strong></td><td>Matrimonio</td><td>$620.00</td><td><span class="pill pill-pagada">Pagada</span></td><td><button class="btn btn-sm">Finalizar</button> <button class="btn btn-sm btn-outline" style="color:var(--rojo);border-color:var(--rojo)">Cancelar</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+</header>
+
+<main class="page">
+<div class="main">
+
+  <header style="margin-bottom:20px;">
+    <h2 style="font-size:19px;font-weight:800;margin-bottom:4px;">Trámites pendientes de finalizar</h2>
+    <p style="font-size:13px;color:var(--tinta-muted);line-height:1.5;margin:0;">Citas ya cobradas que esperan confirmación de entrega.</p>
+  </header>
+
+  <div class="flujo" style="margin-bottom:22px;">
+    <span class="flujo-step fs-done">Pendiente</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-done">Asistida</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-active">Pagada</span>
+    <span class="flujo-arrow">→</span>
+    <span class="flujo-step fs-next">Finalizada</span>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header" style="flex-direction:column;align-items:flex-start;gap:2px;padding:14px 18px;">
+      <h3 style="font-size:14px;font-weight:700;margin:0;">Citas con pago registrado</h3>
+      <p style="font-size:12px;color:var(--tinta-muted);font-weight:400;margin:0;">Marca como «Finalizada» cuando el documento haya sido entregado al ciudadano.</p>
     </div>
-  </main>
+    <ul style="list-style:none;margin:0;padding:0;">
+      <li style="display:flex;align-items:center;gap:18px;padding:16px 18px;border-bottom:1px solid var(--borde);">
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:700;color:var(--tinta-muted);margin-bottom:3px;">#35</div>
+          <div style="font-size:14.5px;font-weight:700;">Pérez Ana</div>
+          <div style="font-size:12.5px;color:var(--tinta-muted);margin-top:3px;">Matrimonio</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="font-family:Montserrat,sans-serif;font-size:15px;font-weight:800;color:var(--verde);">$620.00</span>
+          <span style="background:var(--slate-claro);color:var(--slate);font-size:10.5px;font-weight:700;text-transform:uppercase;padding:4px 10px;border-radius:4px;">Pagada</span>
+          <button type="button" class="btn btn-sm" style="border:1px solid var(--rojo);background:var(--rojo-claro);color:var(--rojo);">Cancelar cita</button>
+          <button type="button" class="btn btn-sm">Finalizar</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+</main>
 </body>
 </html>

@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+{% load i18n l10n admin_urls static %}
+
+{% block extrahead %}
+  {{ block.super }}
+  {{ media }}
+  <script src="{% static 'admin/js/cancel.js' %}" async></script>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} delete-confirmation delete-selected-confirmation{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Inicio</a>
+  &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+  &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+  &rsaquo; Eliminar seleccionados
+</div>
+{% endblock %}
+
+{% block content %}
+{% if perms_lacking %}
+  <p>Al eliminar los {{ objects_name }} seleccionados también se borrarían registros relacionados, pero su cuenta no tiene permiso para eliminar estos tipos de objetos:</p>
+  <ul>{{ perms_lacking|unordered_list }}</ul>
+{% elif protected %}
+  <p>No se pueden eliminar los {{ objects_name }} seleccionados porque existen registros relacionados protegidos:</p>
+  <ul>{{ protected|unordered_list }}</ul>
+{% else %}
+  <p>¿Confirma que desea eliminar los {{ objects_name }} seleccionados? Se eliminarán los siguientes objetos y sus relaciones:</p>
+  {% include "admin/includes/object_delete_summary.html" %}
+  <h2>Objetos</h2>
+  {% for deletable_object in deletable_objects %}
+    <ul>{{ deletable_object|unordered_list }}</ul>
+  {% endfor %}
+  <form method="post">{% csrf_token %}
+    <div>
+      {% for obj in queryset %}
+      <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk|unlocalize }}">
+      {% endfor %}
+      <input type="hidden" name="action" value="delete_selected">
+      <input type="hidden" name="post" value="yes">
+      <input type="submit" value="Sí, eliminar">
+      <a role="button" href="#" class="button cancel-link">No, regresar</a>
+    </div>
+  </form>
+{% endif %}
+{% endblock %}

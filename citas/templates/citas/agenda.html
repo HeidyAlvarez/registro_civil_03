@@ -8,26 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=8">
+{% include 'citas/includes/tipografia_rc.html' %}
 
 </head>
-<body>
+<body class="panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{{ panel_inicio_url }}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Agenda del día</span>
-    </span>
-  </a>
-</header>
-
-{% include 'citas/includes/barra_usuario.html' %}
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Agenda del día' %}
 
 <main class="page">
 
@@ -36,8 +23,8 @@
 
   <div class="topbar">
     <div>
-      <h2>Citas de hoy</h2>
-      <div class="fecha">{{ hoy|date:"l, d \d\e F \d\e Y" }}</div>
+      <h2>Agenda</h2>
+      <div class="fecha">{{ hoy|date:"l, d \d\e F \d\e Y" }} · hoy y citas futuras (solo lectura)</div>
     </div>
     {% if citas %}
       <span class="badge">{{ citas|length }} cita{{ citas|length|pluralize }} pendiente{{ citas|length|pluralize }}</span>
@@ -49,7 +36,7 @@
   <!-- STATS -->
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Total del día</div>
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Total pendientes</div>
       <div class="stat-val" style="color:var(--blue);">{{ citas|length }}</div>
     </div>
     <div class="stat-card">
@@ -69,7 +56,7 @@
   <!-- TABLA -->
   <div class="table-wrap">
     <div class="table-header">
-      <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Lista de citas pendientes</h3>
+      <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Citas pendientes (hoy y futuras)</h3>
     </div>
 
     {% if citas %}
@@ -77,6 +64,7 @@
       <thead>
         <tr>
           <th>Folio</th>
+          <th>Fecha</th>
           <th>Hora</th>
           <th>Ciudadano</th>
           <th>Trámite</th>
@@ -86,8 +74,9 @@
       </thead>
       <tbody>
         {% for cita in citas %}
-        <tr>
+        <tr{% if cita.fecha > hoy %} class="fila-cita-futura"{% endif %}>
           <td><span class="folio">#{{ cita.id }}</span></td>
+          <td><span class="fecha-badge{% if cita.fecha > hoy %} fecha-badge--futura{% endif %}">{{ cita.fecha|date:"d/m/Y" }}</span></td>
           <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
           <td>
             <div class="nombre">{{ cita.nombre_ciudadano }}</div>
@@ -102,6 +91,7 @@
           <td>
             {% if cita.estado == 'PENDIENTE' %}
               <span class="pill pill-pend"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Pendiente</span>
+              {% if cita.fecha > hoy %}<span class="pill pill-futura">Futura</span>{% endif %}
             {% elif cita.estado == 'ASISTIDA' %}
               <span class="pill pill-asist"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Asistida</span>
             {% elif cita.estado == 'PAGADA' %}
@@ -111,8 +101,12 @@
             {% endif %}
           </td>
           <td>
-            {% if cita.estado == 'PENDIENTE' %}
+            {% if cita.estado == 'PENDIENTE' and cita.fecha == hoy %}
               <a href="/citas/escanear/{{ cita.id }}/" class="btn-escanear"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg> Escanear QR</a>
+            {% elif cita.estado == 'PENDIENTE' and cita.fecha > hoy %}
+              <span class="cita-solo-lectura" title="Solo consulta — escanear el día de la cita">Solo lectura</span>
+            {% elif cita.estado == 'PENDIENTE' %}
+              <span class="btn-escanear disabled" title="Solo se puede escanear el día de la cita">— —</span>
             {% elif cita.estado == 'ASISTIDA' and puede_revertir %}
               <form method="post" action="{% url 'revertir_asistencia' cita.id %}" style="display:inline;" onsubmit="return confirm('¿Revertir asistencia de esta cita?');">
                 {% csrf_token %}
@@ -131,7 +125,7 @@
     <div class="empty">
       <div class="empty-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/><circle cx="12" cy="12" r="10"/></svg></div>
       <h3>No hay citas pendientes</h3>
-      <p>No tienes citas pendientes para hoy ni días anteriores.</p>
+      <p>No hay citas pendientes para hoy ni fechas futuras.</p>
     </div>
     {% endif %}
 

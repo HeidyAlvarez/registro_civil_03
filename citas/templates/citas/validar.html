@@ -8,25 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=7">
+{% include 'citas/includes/tipografia_rc.html' %}
 </head>
-<body>
+<body class="panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{{ panel_inicio_url }}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Estado de la cita</span>
-    </span>
-  </a>
-</header>
-
-{% include 'citas/includes/barra_usuario.html' with show_logout=False %}
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Estado de la cita' encabezado_mostrar_acciones=False %}
 
 <main class="page">
   <div class="validar-page">

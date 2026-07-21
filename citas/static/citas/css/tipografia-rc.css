@@ -1,0 +1,251 @@
+/* Registro Civil — escala tipográfica global (Roboto + Montserrat) */
+
+:root {
+  --fs-body:   15px;
+  --fs-ui:     14px;
+  --fs-sm:     13px;
+  --fs-xs:     12px;
+  --fs-label:  12px;
+  --fs-micro:  11px;
+  --lh-body:   1.5;
+}
+
+html {
+  font-size: var(--fs-body);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-size: 1rem;
+  line-height: var(--lh-body);
+}
+
+/* ── Historial finalizadas / canceladas ── */
+.hf-header h2,
+.hc-header h2,
+.rc-header h2,
+.cp-page-header h2 {
+  font-size: 20px;
+}
+
+.hf-header p,
+.hc-header p,
+.rc-header p,
+.cp-page-header p,
+.hf-nav,
+.hc-nav,
+.hf-mes-row,
+.hc-panel-head,
+.hc-mes-row,
+.hc-item,
+.hc-empty,
+.hf-folio,
+.hf-nombre,
+.hf-tramite,
+.hf-fecha,
+.hf-mes-nombre,
+.hf-item,
+.hf-empty {
+  font-size: 14px;
+}
+
+.hf-stat-label,
+.hc-stat-label,
+.rc-stat-label {
+  font-size: 12px;
+}
+
+.hf-panel-head h3,
+.hc-panel-head h3,
+.cp-panel .panel-header h3,
+.rc-chart-card h3 {
+  font-size: 15px;
+}
+
+.hc-mes-meta,
+.hc-mes-link a,
+.hc-folio,
+.hf-mes-meta,
+.hf-mes-link a,
+.cp-tramite,
+.cp-badge-label,
+.rc-legend,
+.rc-menu-panel a,
+.rc-menu-panel button {
+  font-size: 13.5px;
+}
+
+.hc-nombre,
+.cp-nombre,
+.hf-nombre {
+  font-size: 15.5px;
+}
+
+.cp-folio,
+.cp-panel .panel-header p,
+.cp-flujo .flujo-step {
+  font-size: 13px;
+}
+
+.cp-badge-val {
+  font-size: 16px;
+}
+
+.cp-btn-finalizar,
+.btn-finalizar.cp-btn-finalizar {
+  font-size: 13.5px;
+}
+
+.cp-monto {
+  font-size: 16px;
+}
+
+.cp-pill {
+  font-size: 11.5px;
+}
+
+.btn-cancelar-pagada {
+  font-size: 13px;
+}
+
+.hf-stat-val,
+.hc-stat-val {
+  font-size: 27px;
+}
+
+.hf-folio,
+.hc-folio {
+  font-size: 12.5px;
+}
+
+.hf-tramite,
+.hc-tramite,
+.hf-fecha,
+.hc-fecha {
+  font-size: 13px;
+}
+
+.rc-stat-val {
+  font-size: 29px;
+}
+
+.rc-stat-val .rc-unit {
+  font-size: 17px;
+}
+
+/* ── Bitácora ── */
+.bitacora-title {
+  font-size: 24px;
+}
+
+.bitacora-subtitle {
+  font-size: 15px;
+}
+
+.bitacora-field label {
+  font-size: 13px;
+}
+
+.bitacora-field input,
+.bitacora-field select {
+  font-size: 15px;
+}
+
+.bitacora-filter-btn {
+  font-size: 14px;
+}
+
+.bitacora-table th {
+  font-size: 13px;
+}
+
+.bitacora-table td {
+  font-size: 15px;
+}
+
+.bitacora-table .pill {
+  font-size: 12px;
+}
+
+.bitacora-table td:nth-child(5) {
+  font-size: 14px;
+}
+
+.bitacora-note {
+  font-size: 14px;
+}
+
+.bitacora-empty {
+  font-size: 15px;
+}
+
+.bitacora-pagination {
+  font-size: 14px;
+}
+
+.rc-breadcrumbs {
+  font-size: 15px;
+}
+
+/* ── Login ── */
+.aside-brand .crest {
+  font-size: 15px;
+}
+
+.aside-brand h1 {
+  font-size: 24px;
+}
+
+.aside-brand p {
+  font-size: 14.5px;
+}
+
+.side-tab {
+  font-size: 13px;
+}
+
+.login-form-box h2 {
+  font-size: 22px;
+}
+
+.field-label {
+  font-size: 13px;
+}
+
+.field-row input {
+  font-size: 15px;
+}
+
+.btn-login {
+  font-size: 15px;
+}
+
+.login-footer-note {
+  font-size: 13.5px;
+}
+
+.errornote {
+  font-size: 14.5px;
+}
+
+/* ── Paneles operativos (capturista / oficial) ── */
+.sec-title {
+  font-size: 20px;
+}
+
+.sec-sub {
+  font-size: 15px;
+}
+
+.menu-card h3 {
+  font-size: 15px;
+}
+
+.menu-card p {
+  font-size: 14px;
+}
+
+.table-header {
+  font-size: 14px;
+}

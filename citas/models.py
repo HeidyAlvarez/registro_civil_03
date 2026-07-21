@@ -98,6 +98,12 @@ class Cita(models.Model):
     nombre_ciudadano = models.CharField(max_length=150, verbose_name="Nombre Completo")
     codigo_postal = models.CharField(max_length=5, validators=[validador_cp], verbose_name="Código Postal")
     direccion = models.TextField(verbose_name="Dirección Completa")
+    datos_adicionales = models.JSONField(
+        default=dict,
+        blank=True,
+        verbose_name="Datos adicionales del trámite",
+        help_text="Información específica según el trámite (ej. datos del recién nacido).",
+    )
     
     # Relaciones y Horarios
     tramite = models.ForeignKey(Tramite, on_delete=models.PROTECT, verbose_name="Trámite a Realizar")

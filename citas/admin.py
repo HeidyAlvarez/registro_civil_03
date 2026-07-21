@@ -1,5 +1,8 @@
 from django.contrib import admin, messages
 from django.urls import path
+from django.db.models.deletion import ProtectedError
+from django.core.exceptions import ValidationError
+from autenticacion.servicios import Login
 from .models import SeccionTramite, Tramite, Cita, PagoCaja, BitacoraAuditoria, CorteCajaDiario
 from .views import dashboard_personalizado
 from .auditoria import registrar_log, registrar_log_seguridad, rol_usuario
@@ -7,12 +10,35 @@ from django.contrib.auth.models import Group
 from django.contrib.admin import AdminSite
 from django.shortcuts import redirect
 
-# Grupos gestionados vía rol en autenticacion.admin — no registrar aquí
+# Grupos: ver autenticacion.admin.GrupoRegistroCivilAdmin
 
 
 class AuditoriaAdminMixin:
     def _log(self, request, accion, descripcion):
         registrar_log(request, accion, f"[{rol_usuario(request.user)}] {descripcion}")
+
+
+class SoloSuperusuarioAdminMixin:
+    """Pantallas técnicas de Django Admin: solo superusuario."""
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        if not request.user.is_superuser:
+            return False
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if not request.user.is_superuser:
+            return False
+        return super().has_delete_permission(request, obj)
 
 
 # ── Registros de modelos ──────────────────────────────────────────────
@@ -38,36 +64,31 @@ class SeccionTramiteAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
 @admin.register(Tramite)
 class TramiteAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
     list_display = ['seccion', 'nombre', 'costo', 'duracion_minutos', 'activo']
-    list_filter = ['seccion', 'activo']
     search_fields = ['nombre']
     fields = ['seccion', 'nombre', 'duracion_minutos', 'costo', 'documentos_requeridos', 'activo']
 
-    def has_delete_permission(self, request, obj=None):
-        if obj is not None and obj.tiene_citas_futuras():
-            return False
-        return super().has_delete_permission(request, obj)
-
-    def delete_model(self, request, obj):
-        if obj.tiene_citas_futuras():
+    def _intentar_eliminar_tramite(self, request, obj):
+        try:
+            nombre = obj.nombre
+            obj.delete()
+            self._log(request, 'INFO', f"Trámite eliminado: '{nombre}'.")
+            return True
+        except ValidationError as e:
+            messages.error(request, e.messages[0] if e.messages else str(e))
+        except ProtectedError:
             messages.error(
                 request,
-                f"No se puede eliminar '{obj.nombre}' porque tiene citas futuras programadas. "
-                "Desactívalo en su lugar."
+                f"No se puede eliminar '{obj.nombre}' porque tiene citas registradas en el historial. "
+                "Desactívalo con el campo «Activo» en su lugar.",
             )
-            return
-        super().delete_model(request, obj)
+        return False
+
+    def delete_model(self, request, obj):
+        self._intentar_eliminar_tramite(request, obj)
 
     def delete_queryset(self, request, queryset):
         for obj in queryset:
-            if obj.tiene_citas_futuras():
-                messages.error(
-                    request,
-                    f"No se eliminó '{obj.nombre}': tiene citas futuras programadas."
-                )
-            else:
-                nombre = obj.nombre
-                obj.delete()
-                self._log(request, 'INFO', f"Trámite eliminado: '{nombre}'.")
+            self._intentar_eliminar_tramite(request, obj)
 
     def save_model(self, request, obj, form, change):
         if change:
@@ -89,8 +110,11 @@ class TramiteAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
 @admin.register(Cita)
 class CitaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
     list_display = ['id', 'fecha', 'hora', 'nombre_ciudadano', 'tramite', 'estado']
-    list_filter = ['estado', 'tramite', 'fecha']
     search_fields = ['curp_ciudadano', 'nombre_ciudadano']
+
+    def has_add_permission(self, request):
+        """Las citas nuevas se agendan solo por el portal ciudadano."""
+        return False
 
     def save_model(self, request, obj, form, change):
         prev = None
@@ -109,11 +133,6 @@ class CitaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
                     request, 'MODIFICACION_CITA',
                     f"Cita #{obj.id} ({obj.nombre_ciudadano}): {prev.estado} → {obj.estado} (admin).",
                 )
-        elif not change:
-            self._log(
-                request, 'MODIFICACION_CITA',
-                f"Cita #{obj.id} creada para {obj.nombre_ciudadano} (admin).",
-            )
 
     def delete_model(self, request, obj):
         desc = f"Cita #{obj.id} ({obj.nombre_ciudadano}) eliminada desde admin."
@@ -122,9 +141,8 @@ class CitaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(PagoCaja)
-class PagoCajaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
+class PagoCajaAdmin(SoloSuperusuarioAdminMixin, AuditoriaAdminMixin, admin.ModelAdmin):
     list_display = ('id', 'cita', 'monto_cobrado', 'fecha_pago', 'cajero', 'corte_cierre_listo')
-    list_filter = ('corte_cierre_listo', 'fecha_pago', 'cajero')
     search_fields = ('cita__nombre_ciudadano', 'id')
     actions = ['cerrar_corte_masivo']
 
@@ -146,7 +164,7 @@ class PagoCajaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(CorteCajaDiario)
-class CorteCajaDiarioAdmin(admin.ModelAdmin):
+class CorteCajaDiarioAdmin(SoloSuperusuarioAdminMixin, admin.ModelAdmin):
     list_display = ('fecha', 'total_recaudado', 'cantidad_pagos', 'cerrado_por', 'cerrado_el')
     readonly_fields = ('fecha', 'total_recaudado', 'desglose_tramites', 'cantidad_pagos', 'cerrado_por', 'cerrado_el')
     ordering = ('-fecha',)
@@ -164,7 +182,6 @@ class CorteCajaDiarioAdmin(admin.ModelAdmin):
 @admin.register(BitacoraAuditoria)
 class BitacoraAuditoriaAdmin(admin.ModelAdmin):
     list_display = ('fecha_hora', 'usuario', 'accion', 'descripcion', 'ip_direccion')
-    list_filter = ('accion', 'fecha_hora', 'usuario')
     search_fields = ('descripcion', 'usuario__username', 'ip_direccion')
     readonly_fields = ('usuario', 'accion', 'descripcion', 'fecha_hora', 'ip_direccion')
 
@@ -200,6 +217,19 @@ def _custom_get_urls(self):
 admin.AdminSite.get_urls = _custom_get_urls
 
 
+_original_index = admin.AdminSite.index
+
+def _custom_index(self, request, extra_context=None):
+    if request.user.is_authenticated and (
+        request.user.is_superuser
+        or request.user.groups.filter(name='Administrador').exists()
+    ):
+        return redirect('citas_dashboard')
+    return _original_index(self, request, extra_context)
+
+admin.AdminSite.index = _custom_index
+
+
 # ── Personalización visual ────────────────────────────────────────────
 admin.site.site_header = "Registro Civil"
 admin.site.site_title = "Registro Civil"
@@ -215,17 +245,12 @@ def custom_login(self, request, extra_context=None):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.is_superuser or user.groups.filter(name='Administrador').exists():
-                return redirect('/admin/citas/dashboard/')
-            elif user.groups.filter(name='oficial').exists():
-                return redirect('/citas/oficial/')
-            elif user.groups.filter(name='Capturista').exists():
-                return redirect('/citas/capturista/')
+            return redirect(Login.url_panel_para_usuario(user))
         elif username:
             registrar_log_seguridad(
                 request,
                 'ACCESO_DENEGADO',
-                f"Intento fallido de inicio de sesión ({username}). Contraseña incorrecta o cuenta inactiva.",
+                Login.mensaje_intento_fallido(username),
                 username=username,
             )
     return original_login(self, request, extra_context)

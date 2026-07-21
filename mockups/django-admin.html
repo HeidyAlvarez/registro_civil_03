@@ -3,53 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Panel de Administración (Django)</title>
+  <title>Panel de Administración — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body class="admin-mock">
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="admin-header">
-    <div class="admin-brand">RC Registro Civil<small>Oficialía 03 · Panel interno</small></div>
-    <div style="font-size:12px;opacity:.85">Bienvenido, María · <a href="#" style="color:#fff">Cerrar sesión</a></div>
-  </header>
-  <div class="admin-breadcrumbs">Inicio › Panel de Administración</div>
-  <div class="admin-body">
-    <div class="admin-main">
-      <h1>Panel de Administración</h1>
-      <div class="admin-module">
-        <h2>Autenticación y autorización</h2>
-        <table>
-          <tbody>
-            <tr><td><strong>Usuarios</strong></td><td style="text-align:right"><a href="#">Agregar</a> · <a href="#">Modificar</a></td></tr>
-            <tr><td><strong>Grupos</strong></td><td style="text-align:right"><a href="#">Agregar</a> · <a href="#">Modificar</a></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="admin-module">
-        <h2>Citas</h2>
-        <table>
-          <tbody>
-            <tr><td>Bitácora de Auditoría (Logs)</td><td style="text-align:right"><a href="#">Ver</a></td></tr>
-            <tr><td>Caja Simultánea (Ingresos)</td><td style="text-align:right"><a href="#">Agregar</a> · <a href="#">Modificar</a></td></tr>
-            <tr><td>Catálogo de Trámites</td><td style="text-align:right"><a href="#">Agregar</a> · <a href="#">Modificar</a></td></tr>
-            <tr><td>Libreta de Citas (Agenda)</td><td style="text-align:right"><a href="#">Agregar</a> · <a href="#">Modificar</a></td></tr>
-            <tr><td>Secciones del Catálogo</td><td style="text-align:right"><a href="#">Agregar</a> · <a href="#">Modificar</a></td></tr>
-          </tbody>
-        </table>
-      </div>
+<body class="django-admin-mock dashboard">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="rc-gov-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+
+<div id="header">
+  <div id="rc-brand">
+    <div class="rc-crest" aria-hidden="true">RC</div>
+    <div id="site-name">
+      <a href="sitio-administrador.html">Registro Civil</a>
+      <span class="rc-subtitle">Oficialía 03 · Panel interno</span>
     </div>
-    <aside class="admin-side">
-      <h2>Acciones recientes</h2>
-      <p style="padding:0 16px 8px;font-size:12px;font-weight:700;color:var(--tinta-muted)">Mis acciones</p>
-      <ul>
-        <li>✏️ Folio #36 — Libreta de Citas</li>
-        <li>✏️ Capturista — Usuario</li>
-        <li>✏️ oficial — Grupo</li>
-        <li>❌ Folio #35 — Libreta de Citas</li>
-      </ul>
-    </aside>
   </div>
+  <div class="rc-admin-nav">
+    <a href="sitio-administrador.html" class="rc-btn-nav rc-btn-anterior">Anterior</a>
+  </div>
+</div>
+
+<div class="breadcrumbs">
+  <a href="sitio-administrador.html">Inicio</a> › Panel de Administración
+</div>
+
+<div id="content" class="colMS dashboard">
+  <div id="content-main">
+    <h1>Panel de Administración</h1>
+
+    <div class="app-autenticacion module">
+      <table>
+        <caption><a href="#" class="section">Autenticación y autorización</a></caption>
+        <tbody>
+          <tr class="model-usuarioregistrocivil">
+            <th scope="row"><a href="#">Usuarios Registro Civil</a></th>
+            <td><a href="#" class="addlink">Agregar</a></td>
+            <td><a href="#" class="changelink">Modificar</a></td>
+          </tr>
+          <tr class="model-group" id="grupos">
+            <th scope="row"><a href="#">Grupos</a></th>
+            <td><a href="#" class="addlink">Agregar</a></td>
+            <td><a href="#" class="changelink">Modificar</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="app-citas module">
+      <table>
+        <caption><a href="#" class="section">Citas</a></caption>
+        <tbody>
+          <tr><th scope="row"><a href="bitacora.html">Bitácora de Auditoría (Logs)</a></th><td></td><td><a href="bitacora.html" class="viewlink">Ver</a></td></tr>
+          <tr><th scope="row"><a href="#">Libreta de Citas (Agenda)</a></th><td><a href="#" class="addlink">Agregar</a></td><td><a href="#" class="changelink">Modificar</a></td></tr>
+          <tr><th scope="row"><a href="catalogo.html">Catálogo de Trámites</a></th><td><a href="#" class="addlink">Agregar</a></td><td><a href="catalogo.html" class="changelink">Modificar</a></td></tr>
+          <tr><th scope="row"><a href="#">Secciones del Catálogo</a></th><td><a href="#" class="addlink">Agregar</a></td><td><a href="#" class="changelink">Modificar</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="content-related">
+    <div class="module" id="recent-actions-module">
+      <h2>Acciones recientes</h2>
+      <h3>Mis acciones</h3>
+      <ul class="actionlist">
+        <li class="changelink">Folio #39 — Libreta de Citas</li>
+        <li class="changelink">cap_01 — Usuario</li>
+        <li class="changelink">capturista — Grupo</li>
+        <li class="deletelink">Folio #35 — Libreta de Citas</li>
+      </ul>
+    </div>
+  </div>
+</div>
 </body>
 </html>

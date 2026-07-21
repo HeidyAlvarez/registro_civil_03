@@ -13,6 +13,6 @@ OFICINA_REGISTRO_CIVIL = {
     "telefono": "(726) 251 5238",
     "telefono_enlace": "+527262515238",
     "correo": "rc_villavictoria03@edomex.gob.mx",
-    "horario_semana": "Lunes a Viernes: 8:00 AM – 5:00 PM ,Sábados 9:00 AM – 1:00 PM",
+    "horario_semana": "Lunes a Viernes: 8:00 AM – 5:00 PM , Sábados 9:00 AM – 1:00 PM",
     "horario_fin": "Domingos: Cerrado",
 }

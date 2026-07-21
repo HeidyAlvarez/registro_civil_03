@@ -10,6 +10,8 @@ ROL_A_GRUPO = {
     UsuarioRegistroCivil.CAPTURISTA: 'Capturista',
 }
 
+GRUPOS_SISTEMA = frozenset(ROL_A_GRUPO.values())
+
 
 def sincronizar_rol_y_grupos(usuario):
     """ HU-6: Sincroniza el rol del modelo con los grupos de Django. """
@@ -31,14 +33,36 @@ class UsuarioRegistroCivilAdmin(UserAdmin):
         ('Información de Roles (XP)', {'fields': ('rol',)}),
     )
     list_display = ['username', 'email', 'rol', 'is_staff']
+    list_filter = ()
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         sincronizar_rol_y_grupos(obj)
 
 
-# Grupos gestionados automáticamente por rol — no mostrar sección duplicada
 try:
     admin.site.unregister(Group)
 except admin.sites.NotRegistered:
     pass
+
+
+@admin.register(Group)
+class GrupoRegistroCivilAdmin(admin.ModelAdmin):
+    """Grupos de permisos del sistema (Administrador, oficial, Capturista, etc.)."""
+    search_fields = ('name',)
+    filter_horizontal = ('permissions',)
+    list_display = ('name', 'usuarios_count', 'permisos_count')
+    ordering = ('name',)
+
+    @admin.display(description='Usuarios')
+    def usuarios_count(self, obj):
+        return obj.user_set.count()
+
+    @admin.display(description='Permisos')
+    def permisos_count(self, obj):
+        return obj.permissions.count()
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.name in GRUPOS_SISTEMA:
+            return False
+        return super().has_delete_permission(request, obj)

@@ -3,40 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Panel Capturista</title>
+  <title>Panel Capturista — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Panel de Capturista</span></span></a>
-    <div style="display:flex;align-items:center;gap:14px">
-      <span class="gobmx-usuario">Laura Capturista</span>
-      <button class="btn-link" type="button">Cerrar sesión</button>
-    </div>
-  </header>
-  <main class="page">
-    <div class="main">
-      <div class="section-label" style="margin-top:0">Panel de operaciones</div>
-      <h2 class="page-title" style="margin-bottom:20px">Bienvenida, Laura Capturista</h2>
-      <div class="menu-grid">
-        <div class="menu-card"><div><h3 style="font-size:14px;margin-bottom:4px">Agenda del día</h3><p style="font-size:12px;color:var(--tinta-muted)">4 citas pendientes</p></div></div>
-        <div class="menu-card"><div><h3 style="font-size:14px;margin-bottom:4px">Escanear QR</h3><p style="font-size:12px;color:var(--tinta-muted)">Validar asistencia</p></div></div>
-        <div class="menu-card" style="border-color:var(--oro)"><div><h3 style="font-size:14px;margin-bottom:4px">Trámites</h3><p style="font-size:12px;color:var(--tinta-muted)">Requisitos y costos</p></div></div>
+<body class="panel-capturista panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="panel-capturista.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Panel de Capturista</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      cap_01
+    </span>
+    <button type="button" class="gobmx-link-btn">Cerrar sesión</button>
+  </div>
+</header>
+
+<main class="page">
+<div class="main">
+  <div class="capturista-inicio">
+    <div class="capturista-inicio-head">
+      <div>
+        <div class="sec-tag">Panel de operaciones</div>
+        <div class="sec-title">Bienvenida, cap_01</div>
+        <div class="sec-sub capturista-fecha">Jueves, 16 de julio de 2026</div>
       </div>
-      <div class="table-wrap" style="margin-top:8px">
-        <div class="table-header">Agenda del día — 06/07/2026</div>
-        <table>
-          <thead><tr><th>#</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th><th>QR</th></tr></thead>
-          <tbody>
-            <tr><td>36</td><td><span class="hora-badge">09:00</span></td><td><strong>García Juan</strong><div class="curp">GALJ900101HDFRRN09</div></td><td>Acta nacimiento</td><td><span class="pill pill-pend">Pendiente</span></td><td><button class="btn btn-sm">📷 Escanear</button></td></tr>
-            <tr><td>37</td><td><span class="hora-badge">13:10</span></td><td><strong>Álvarez MERARI</strong><div class="curp">AAHH060815MMCLRDA4</div></td><td>Aclaración actas</td><td><span class="pill pill-asist">Asistida</span></td><td><button class="btn btn-sm btn-ghost btn-off" disabled>— —</button></td></tr>
-          </tbody>
-        </table>
-      </div>
     </div>
-  </main>
+
+    <div class="menu-grid capturista-menu">
+      <div class="menu-card compact"><h3>Agenda</h3><p>24 citas pendientes</p></div>
+      <div class="menu-card compact"><h3>Escanear QR</h3><p>Validar asistencia</p></div>
+      <div class="menu-card compact mc-amber"><h3>Trámites</h3><p>Requisitos y costos</p></div>
+    </div>
+
+    <div class="table-wrap capturista-agenda-inicio">
+      <div class="table-header">Citas de hoy</div>
+      <table>
+        <thead>
+          <tr><th>Folio</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="folio">#39</span></td>
+            <td><span class="hora-badge">12:00</span></td>
+            <td><div class="nombre">García López Juan</div><div class="curp">GALJ900101HDFRRN09</div></td>
+            <td>Tramitación</td>
+            <td><span class="pill pill-pend">⏳ Pendiente</span></td>
+          </tr>
+          <tr>
+            <td><span class="folio">#38</span></td>
+            <td><span class="hora-badge">12:30</span></td>
+            <td><div class="nombre">Álvarez MERARI</div><div class="curp">AAHH060815MMCLRDA4</div></td>
+            <td>Matrimonio</td>
+            <td><span class="pill pill-pend">⏳ Pendiente</span></td>
+          </tr>
+          <tr>
+            <td><span class="folio">#25</span></td>
+            <td><span class="hora-badge">14:15</span></td>
+            <td><div class="nombre">Pérez Ana</div><div class="curp">PEXA850101MMCRNN02</div></td>
+            <td>Anotación marginal</td>
+            <td><span class="pill pill-asist">✅ Asistida</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer"><strong>Registro Civil 03 — Villa Victoria</strong></footer>
 </body>
 </html>

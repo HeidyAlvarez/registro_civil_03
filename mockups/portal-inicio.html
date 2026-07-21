@@ -3,41 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Portal ciudadano (inicio)</title>
+  <title>Registro Civil 03 — Portal Ciudadano</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <nav class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil 03</span><span class="brand-sub">Portal ciudadano</span></span></a>
-  </nav>
-  <section class="hero">
-    <p style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--oro-claro);margin-bottom:12px">Oficialía 03 · Estado de México</p>
-    <h1>Agenda tu cita en línea</h1>
-    <p>Trámites del registro civil de forma rápida y segura. Selecciona tu trámite, elige horario y recibe tu comprobante con código QR.</p>
-  </section>
-  <section class="portal-menu">
-    <p class="section-label" style="text-align:center;margin-bottom:20px">¿Qué deseas hacer?</p>
-    <div class="menu-grid">
-      <a class="portal-card" href="portal-agendar.html">
-        <h3>📅 Agendar cita</h3>
-        <p>Reserva un horario para tu trámite en la oficialía.</p>
-      </a>
-      <a class="portal-card" href="#">
-        <h3>📋 Consultar trámites</h3>
-        <p>Requisitos, costos y tiempos de atención.</p>
-      </a>
-      <a class="portal-card" href="#">
-        <h3>📍 Ubicación y horarios</h3>
-        <p>Dirección, mapa y horario de atención al público.</p>
-      </a>
+<body class="portal-page">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span><b>gob.mx</b> · Registro Civil 03, Villa Victoria</span>
+</div>
+
+<nav class="navbar">
+  <a href="portal-inicio.html" class="navbar-brand">
+    <div class="crest">RC</div>
+    <div>
+      <div class="name">Registro Civil 03</div>
+      <div class="sub">Villa Victoria · Portal ciudadano</div>
     </div>
-  </section>
-  <footer style="background:var(--verde-dark);color:rgba(255,255,255,.75);text-align:center;padding:24px;font-size:12px;margin-top:40px">
-    <strong style="color:#fff;font-family:Montserrat,sans-serif">Registro Civil — Oficialía 03</strong><br>
-    Gobierno del Estado de México
-  </footer>
+  </a>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Servicio en línea · Sin necesidad de cuenta</div>
+  <h1>Agenda tu cita en el<br>Registro Civil desde casa</h1>
+  <p>Consulta trámites, elige fecha y hora disponible, y recibe tu comprobante con código QR al instante.</p>
+</section>
+
+<div class="menu-section">
+  <div class="menu-kicker">Servicios disponibles</div>
+  <div class="menu-grid">
+    <a class="menu-card blue" href="portal-agendar.html">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+      <h3>Agendar cita</h3>
+      <p>Solicita una cita para tu trámite y recibe tu comprobante con código QR al instante.</p>
+      <button class="card-btn" type="button">Agendar ahora</button>
+    </a>
+    <a class="menu-card green" href="#">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+      <h3>Consultar cita</h3>
+      <p>Revisa el estatus de tu cita con el folio que recibiste al agendar y tu CURP.</p>
+      <button class="card-btn" type="button">Consultar</button>
+    </a>
+    <a class="menu-card red" href="#">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+      <h3>Cancelar cita</h3>
+      <p>Cancela tu cita en línea con folio y CURP. Disponible con al menos 2 días de anticipación.</p>
+      <button class="card-btn" type="button">Cancelar cita</button>
+    </a>
+    <a class="menu-card green" href="#">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div>
+      <h3>Trámites disponibles</h3>
+      <p>Consulta todos los servicios que ofrece el Registro Civil y sus costos oficiales.</p>
+      <button class="card-btn" type="button">Ver catálogo</button>
+    </a>
+    <a class="menu-card amber" href="#">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+      <h3>Guía paso a paso</h3>
+      <p>Aprende cómo funciona el proceso de agendado y qué documentos necesitas llevar.</p>
+      <button class="card-btn" type="button">Ver guía</button>
+    </a>
+    <a class="menu-card teal" href="#">
+      <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <h3>Ubicación</h3>
+      <p>Encuentra la dirección, horarios de atención y datos de contacto de nuestra oficina.</p>
+      <button class="card-btn" type="button">Ver ubicación</button>
+    </a>
+  </div>
+</div>
+
+<footer class="portal-footer">
+  <strong>Registro Civil — Oficialía 03</strong><br>
+  Gobierno del Estado de México
+</footer>
 </body>
 </html>

@@ -3,66 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Sitio del Administrador</title>
+  <title>Sitio del Administrador — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="layout-sidebar">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">Sitio del Administrador</div>
-        <div class="sidebar-sub">Registro Civil · Oficialía 03</div>
+<body class="panel-admin-layout panel-interno mock-preview-menu admin-menu-open">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="sitio-administrador.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Panel interno</span>
+    </span>
+  </a>
+</header>
+
+<div class="admin-toolbar">
+  <button type="button" class="admin-menu-btn" id="admin-menu-btn" aria-label="Abrir panel de administración" aria-expanded="true" aria-controls="admin-drawer">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    <span class="admin-menu-btn__label">Panel de Administración</span>
+  </button>
+  <button type="button" class="admin-logout-btn">Cerrar sesión</button>
+</div>
+
+<div class="admin-shell">
+  <div class="admin-backdrop" id="admin-backdrop" aria-hidden="true"></div>
+  <aside class="admin-drawer" id="admin-drawer" aria-label="Panel de Administración" aria-hidden="false">
+    <div class="admin-drawer-inner">
+      <div class="sidebar-header sidebar-header--drawer">
+        <span class="sidebar-header-title">Menú</span>
+        <button type="button" class="admin-drawer-close" id="admin-drawer-close" aria-label="Cerrar menú">×</button>
       </div>
-      <nav class="sidebar-nav">
-        <a class="nav-item active" href="#">Inicio</a>
-        <a class="nav-item" href="django-admin.html">Panel Django Admin</a>
+      <nav class="nav" aria-label="Menú del administrador">
+        <div class="nav-section">Operación</div>
+        <a href="django-admin.html" class="nav-item">Consultar citas</a>
+        <div class="nav-section">Historial y reportes</div>
+        <a href="historial.html" class="nav-item">Historial finalizadas</a>
+        <a href="historial-canceladas.html" class="nav-item">Historial canceladas</a>
+        <a href="reporte-caja.html" class="nav-item">Reporte financiero</a>
+        <a href="bitacora.html" class="nav-item">Bitácora</a>
+        <div class="nav-section">Catálogo y horarios</div>
+        <a href="catalogo.html" class="nav-item">Catálogo de trámites</a>
+        <a href="horarios.html" class="nav-item">Gestionar horarios</a>
+        <div class="nav-section">Sistema</div>
+        <a href="django-admin.html" class="nav-item">Gestionar usuarios</a>
+        <a href="django-admin.html#grupos" class="nav-item">Grupos y permisos</a>
+        <a href="django-admin.html" class="nav-item">Registrar usuario</a>
+        <a href="django-admin.html" class="nav-item">Secciones del catálogo</a>
+        <a href="django-admin.html" class="nav-item">Trámites (avanzado)</a>
       </nav>
-      <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.7)">
-        <strong style="color:#fff">María Admin</strong><br>
-        <span style="font-size:11px">Cerrar sesión</span>
+    </div>
+  </aside>
+
+  <div class="admin-content admin-inicio-main">
+    <div class="welcome welcome--top">
+      <div class="welcome-tag">Administrador</div>
+      <h1>Bienvenido, admin_01</h1>
+      <p>Jueves, 16 de julio de 2026</p>
+    </div>
+
+    <div class="section-label">Acceso rápido</div>
+    <div class="quick-grid quick-grid--operacion">
+      <a href="django-admin.html" class="qbtn">
+        <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
+        <div><div class="qbtn-name">Consultar citas</div><div class="qbtn-desc">Listado y edición</div></div>
+      </a>
+      <a href="agenda.html" class="qbtn">
+        <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div>
+      </a>
+      <a href="escanear-qr.html" class="qbtn">
+        <div class="qbtn-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+        <div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar ciudadano</div></div>
+      </a>
+      <a href="fila-caja.html" class="qbtn">
+        <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+        <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
+      </a>
+      <a href="citas-pagadas.html" class="qbtn">
+        <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega</div></div>
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">Pendientes</div>
+        <div class="stat-val" style="color:var(--amber);">24</div>
+        <div class="stat-sub">sin validar QR</div>
       </div>
-    </aside>
-    <div class="sidebar-main">
-      <div class="topbar-row">
-        <div>
-          <h1>Sitio del Administrador</h1>
-          <div class="topbar-date">lunes, 6 de julio de 2026</div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-label">Asistidas</div>
+        <div class="stat-val" style="color:var(--blue);">2</div>
+        <div class="stat-sub">por cobrar</div>
       </div>
-      <div class="cards">
-        <div class="card"><div class="card-label">Pendientes</div><div class="card-value" style="color:var(--oro)">3</div><div class="card-sub">sin validar QR</div></div>
-        <div class="card"><div class="card-label">Asistidas</div><div class="card-value" style="color:var(--verde)">2</div><div class="card-sub">asistieron, por cobrar</div></div>
-        <div class="card"><div class="card-label">Pagadas</div><div class="card-value" style="color:var(--slate)">5</div><div class="card-sub">cobro registrado</div></div>
-        <div class="card"><div class="card-label">Finalizadas</div><div class="card-value">12</div><div class="card-sub">trámite entregado</div></div>
+      <div class="stat-card">
+        <div class="stat-label">Pagadas</div>
+        <div class="stat-val" style="color:var(--slate);">5</div>
+        <div class="stat-sub">cobro registrado</div>
       </div>
-      <div class="section-label">Acceso rápido</div>
-      <div class="quick-grid">
-        <a class="qbtn" href="#"><div class="qbtn-icon">📋</div><div><div class="qbtn-name">Gestionar citas</div><div class="qbtn-desc">Ver y editar</div></div></a>
-        <a class="qbtn" href="agenda.html"><div class="qbtn-icon">📅</div><div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div></a>
-        <a class="qbtn" href="escanear-qr.html"><div class="qbtn-icon">📷</div><div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar asistencia</div></div></a>
-        <a class="qbtn" href="fila-caja.html"><div class="qbtn-icon">💰</div><div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div></a>
-        <a class="qbtn" href="citas-pagadas.html"><div class="qbtn-icon">💳</div><div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Por finalizar</div></div></a>
-        <a class="qbtn" href="historial.html"><div class="qbtn-icon">🏁</div><div><div class="qbtn-name">Historial</div><div class="qbtn-desc">Finalizadas</div></div></a>
-      </div>
-      <div class="bottom-grid">
-        <div class="panel">
-          <div class="panel-header">Citas de hoy</div>
-          <div style="padding:12px 18px">
-            <div class="cita-row"><span class="cita-hora">09:00</span><span class="cita-nombre">García López Juan</span><span class="cita-tramite">Acta de nacimiento</span><span class="pill pill-pend">Pendiente</span></div>
-            <div class="cita-row"><span class="cita-hora">10:30</span><span class="cita-nombre">Álvarez MERARI</span><span class="cita-tramite">Aclaración actas</span><span class="pill pill-asist">Asistida</span></div>
-            <div class="cita-row"><span class="cita-hora">11:00</span><span class="cita-nombre">Pérez Ana</span><span class="cita-tramite">Matrimonio</span><span class="pill pill-pagada">Pagada</span></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-header">Resumen rápido</div>
-          <div style="padding:18px;font-size:13px;color:var(--tinta-muted);line-height:1.7">
-            Maquetación del panel principal del administrador con sidebar fijo, tarjetas de estado y accesos directos.
-          </div>
-        </div>
+      <div class="stat-card">
+        <div class="stat-label">Finalizadas</div>
+        <div class="stat-val" style="color:var(--tinta-muted);">12</div>
+        <div class="stat-sub">trámite entregado</div>
       </div>
     </div>
+
+    <div class="section-label section-label--citas">Citas de hoy</div>
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Resumen del día</h3>
+        <a href="agenda.html">Ver agenda completa →</a>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Folio</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th><th>Acción</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="folio">#39</span></td>
+            <td><span class="hora-badge">12:00</span></td>
+            <td><div class="nombre">García López Juan</div><div class="curp">GALJ900101HDFRRN09</div></td>
+            <td>Tramitación</td>
+            <td><span class="pill pill-pend">Pendiente</span></td>
+            <td><button type="button" class="btn-cancelar-cita">Cancelar</button></td>
+          </tr>
+          <tr>
+            <td><span class="folio">#37</span></td>
+            <td><span class="hora-badge">13:10</span></td>
+            <td><div class="nombre">Álvarez MERARI</div><div class="curp">AAHH060815MMCLRDA4</div></td>
+            <td>Aclaración actas</td>
+            <td><span class="pill pill-asist">Asistida</span></td>
+            <td><span class="cita-sin-accion">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+</div>
+
+<script src="js/admin-menu.js"></script>
 </body>
 </html>

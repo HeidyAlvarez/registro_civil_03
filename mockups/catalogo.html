@@ -3,56 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Catálogo de trámites</title>
+  <title>Agregar al Catálogo — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Administración de catálogo</span></span></a>
-  </header>
-  <div class="gobmx-barra-usuario">
-    <span class="gobmx-usuario">María Admin</span>
-    <span class="barra-spacer"></span>
-    <a class="btn-inicio" href="sitio-administrador.html">Inicio</a>
+<body class="gobmx-bootstrap panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="sitio-administrador.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Administración de catálogo</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      admin_01
+    </span>
+    <a href="sitio-administrador.html" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
   </div>
-  <main class="page">
-    <div class="main">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
-        <h2 class="page-title" style="margin:0">Administración de Catálogo de Trámites</h2>
-        <a class="btn btn-sm btn-ghost" href="sitio-administrador.html">Volver al panel</a>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
-        <div class="form-panel" style="margin:0">
-          <h3 style="font-size:14px;margin-bottom:14px">Nueva sección</h3>
-          <div class="field" style="margin-bottom:12px"><label>Nombre de sección</label><input disabled placeholder="Ej. Actas del estado civil" style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-          <button class="btn btn-sm" disabled>Crear sección</button>
-        </div>
-        <div class="form-panel" style="margin:0">
-          <h3 style="font-size:14px;margin-bottom:14px">Nuevo trámite</h3>
-          <div class="field" style="margin-bottom:10px"><label>Sección</label><select disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"><option>Actas del estado civil</option></select></div>
-          <div class="field" style="margin-bottom:10px"><label>Nombre</label><input disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-          <div class="form-grid" style="margin-bottom:10px">
-            <div class="field"><label>Costo</label><input disabled placeholder="$0.00" style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-            <div class="field"><label>Duración (min)</label><input disabled value="15" style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
+</header>
+
+<main class="page">
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="gobmx-titulo" style="font-size:1.35rem;">Administración de Catálogo de Trámites</h2>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-5">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-header fw-bold py-3">Crear Nueva Sección General</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label text-muted small">Ejemplo: Matrimonio, Copias Certificadas, etc.</label>
+            <input type="text" class="form-control form-control-lg" placeholder="Nombre de la Sección" disabled>
           </div>
-          <button class="btn btn-sm" disabled>Agregar trámite</button>
+          <button type="button" class="btn btn-success w-100 py-2 fw-bold" disabled>Guardar Sección</button>
         </div>
-      </div>
-      <div class="table-wrap">
-        <div class="table-header">Catálogo actual</div>
-        <table>
-          <thead><tr><th>Sección</th><th>Trámite</th><th>Costo</th><th>Duración</th></tr></thead>
-          <tbody>
-            <tr><td>Actas del estado civil</td><td>Acta de nacimiento</td><td>$485.00</td><td>15 min</td></tr>
-            <tr><td>Actas del estado civil</td><td>Aclaración de actas</td><td>$485.00</td><td>20 min</td></tr>
-            <tr><td>Matrimonio</td><td>Celebración de matrimonio</td><td>$620.00</td><td>30 min</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
-  </main>
+    <div class="col-md-7">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-header fw-bold py-3">Agregar Opción / Trámite a una Sección</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold">1. Selecciona la Sección Destino:</label>
+            <select class="form-select" disabled>
+              <option>Actas del estado civil</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">2. Nombre del Trámite / Opción:</label>
+            <input type="text" class="form-control" placeholder="Ej: En oficina (Fuera de horario)" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">3. Costo del Trámite ($):</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number" class="form-control" placeholder="0.00" disabled>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">4. Duración (minutos):</label>
+            <input type="number" class="form-control" value="15" disabled>
+          </div>
+          <button type="button" class="btn btn-primary w-100 py-2 fw-bold" disabled>Guardar Trámite</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 mt-4">
+    <div class="card-header fw-bold py-3">Catálogo actual</div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr><th>Sección</th><th>Trámite</th><th>Costo</th><th>Duración</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Actas del estado civil</td><td>Acta de nacimiento</td><td>$485.00</td><td>15 min</td></tr>
+          <tr><td>Actas del estado civil</td><td>Aclaración de actas</td><td>$485.00</td><td>20 min</td></tr>
+          <tr><td>Matrimonio</td><td>Celebración de matrimonio</td><td>$620.00</td><td>30 min</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</main>
 </body>
 </html>

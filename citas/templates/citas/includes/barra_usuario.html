@@ -5,8 +5,12 @@
     {{ request.user.get_full_name|default:request.user.username }}
   </span>
   <span class="gobmx-barra-spacer" aria-hidden="true"></span>
-  {% if not en_panel_inicio and mostrar_inicio != False %}
-  <a href="{{ panel_inicio_url }}" class="btn-panel-inicio">Inicio</a>
+  {% if not en_panel_inicio %}
+  <div class="barra-nav-acciones">
+    {% if mostrar_anterior != False %}
+    <a href="{{ anterior_url|default:panel_anterior_url }}" class="btn-panel-anterior">Anterior</a>
+    {% endif %}
+  </div>
   {% endif %}
   {% if show_logout != False %}
   <form action="{% url 'admin:logout' %}" method="post" class="barra-logout-form">{% csrf_token %}

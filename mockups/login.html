@@ -3,33 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Login</title>
+  <title>Iniciar sesión — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/maqueta.css">
+  <link rel="stylesheet" href="../citas/static/citas/css/login.css">
+  <link rel="stylesheet" href="../citas/static/citas/css/tipografia-rc.css">
+  <style>
+    .mock-banner {
+      background: #1a3328;
+      color: #b8dcc8;
+      text-align: center;
+      padding: 6px 12px;
+      font-size: 11px;
+      letter-spacing: 0.3px;
+    }
+    .mock-banner strong { color: #fff; }
+    .mock-banner a { color: #b8dcc8; }
+  </style>
 </head>
 <body class="login-page">
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip">
-    <span>Gobierno del <b>Estado de México</b></span>
-    <span>gob.mx · Registro Civil 03</span>
-  </div>
-  <div class="login-wrap">
-    <div class="login-card">
-      <aside class="login-aside">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="login-top">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <aside class="login-aside">
+      <div class="geo-layer"></div>
+      <div class="aside-brand">
         <div class="crest">RC</div>
         <h1>Registro Civil</h1>
         <p>Oficialía 03 · Sistema interno de gestión de citas</p>
-      </aside>
-      <main class="login-main">
-        <div class="login-form">
-          <h2>Iniciar sesión</h2>
-          <div class="field"><label>Usuario</label><input type="text" placeholder="Usuario" disabled></div>
-          <div class="field"><label>Contraseña</label><input type="password" placeholder="Contraseña" disabled></div>
-          <button type="button" class="btn-login" disabled>Iniciar sesión</button>
-          <p style="text-align:center;margin-top:20px;font-size:11.5px;color:var(--tinta-tenue)">Acceso restringido al personal autorizado</p>
+      </div>
+      <div class="side-tabs">
+        <div class="side-tab active">Acceso</div>
+        <div class="side-tab">RC 03</div>
+      </div>
+    </aside>
+
+    <main class="login-main">
+      <div class="login-form-box">
+
+        <div class="login-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+          </svg>
         </div>
-      </main>
-    </div>
+        <h2>Iniciar sesión</h2>
+
+        <form action="#" method="post" id="login-form">
+          <div class="field">
+            <label class="field-label" for="id_username">Usuario</label>
+            <div class="field-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+              </svg>
+              <input type="text" name="username" id="id_username" placeholder="Usuario" autocomplete="username" disabled>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="id_password">Contraseña</label>
+            <div class="field-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="5" y="11" width="14" height="10" rx="2"/>
+                <path d="M8 11V8a4 4 0 118 0v3"/>
+              </svg>
+              <input type="password" name="password" id="id_password" placeholder="Contraseña" autocomplete="current-password" disabled>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <span></span>
+            <button type="button" class="btn-login" disabled>Iniciar sesión</button>
+          </div>
+        </form>
+
+        <p class="login-footer-note">Acceso restringido al personal autorizado</p>
+      </div>
+    </main>
+
   </div>
+</div>
+
 </body>
 </html>

@@ -8,26 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=7">
+{% include 'citas/includes/tipografia_rc.html' %}
 
 </head>
-<body>
+<body class="panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{{ panel_inicio_url }}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Caja Simultánea</span>
-    </span>
-  </a>
-</header>
-
-{% include 'citas/includes/barra_usuario.html' %}
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Caja simultánea' %}
 
 <main class="page">
 
@@ -56,7 +43,7 @@
   <!-- MENSAJES -->
   {% if messages %}
     {% for message in messages %}
-      <div class="msg msg-success">{{ message }}</div>
+      <div class="msg {% if 'error' in message.tags %}msg-error{% elif 'warning' in message.tags %}msg-warning{% elif 'info' in message.tags %}msg-info{% else %}msg-success{% endif %}">{{ message }}</div>
     {% endfor %}
   {% endif %}
 

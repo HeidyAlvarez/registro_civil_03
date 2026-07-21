@@ -1,0 +1,69 @@
+{% load static %}
+<aside class="admin-drawer" id="admin-drawer" aria-label="Panel de Administración" aria-hidden="true">
+  <div class="admin-drawer-inner">
+    <div class="sidebar-header sidebar-header--drawer">
+      <span class="sidebar-header-title">Menú</span>
+      <button type="button" class="admin-drawer-close" id="admin-drawer-close" aria-label="Cerrar menú">×</button>
+    </div>
+
+    <nav class="nav" aria-label="Menú del administrador">
+      <div class="nav-section">Operación</div>
+      <a href="/admin/citas/cita/" class="nav-item{% if admin_nav_activo == 'citas' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+        Consultar citas
+      </a>
+
+      <div class="nav-section">Historial y reportes</div>
+      <a href="{% url 'vista_historial_finalizadas' %}" class="nav-item{% if admin_nav_activo == 'hist_fin' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/></svg>
+        Historial finalizadas
+      </a>
+      <a href="{% url 'vista_historial_canceladas' %}" class="nav-item{% if admin_nav_activo == 'hist_can' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+        Historial canceladas
+      </a>
+      <a href="{% url 'reporte_caja' %}" class="nav-item{% if admin_nav_activo == 'reporte' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg>
+        Reporte financiero
+      </a>
+      <a href="{% url 'vista_bitacora' %}" class="nav-item{% if admin_nav_activo == 'bitacora' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        Bitácora
+      </a>
+
+      <div class="nav-section">Catálogo y horarios</div>
+      <a href="{% url 'agregar_elemento_catalogo' %}" class="nav-item{% if admin_nav_activo == 'catalogo' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Catálogo de trámites
+      </a>
+      <a href="{% url 'gestionar_horarios' %}" class="nav-item{% if admin_nav_activo == 'horarios' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Gestionar horarios
+      </a>
+
+      {% if mostrar_admin_sistema %}
+      <div class="nav-section">Sistema</div>
+      <a href="/admin/autenticacion/usuarioregistrocivil/" class="nav-item{% if admin_nav_activo == 'usuarios' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        Gestionar usuarios
+      </a>
+      <a href="/admin/auth/group/" class="nav-item{% if admin_nav_activo == 'grupos' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Grupos y permisos
+      </a>
+      <a href="{% url 'registrar' %}" class="nav-item{% if admin_nav_activo == 'registrar' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        Registrar usuario
+      </a>
+      <a href="/admin/citas/secciontramite/" class="nav-item{% if admin_nav_activo == 'secciones' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Secciones del catálogo
+      </a>
+      <a href="/admin/citas/tramite/" class="nav-item{% if admin_nav_activo == 'tramites' %} active{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        Trámites (avanzado)
+      </a>
+      {% endif %}
+    </nav>
+  </div>
+</aside>

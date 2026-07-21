@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Capturista — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/maqueta.css">
+</head>
+<body class="panel-capturista panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="panel-capturista.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Panel de Capturista</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      cap_01
+    </span>
+    <a href="panel-capturista.html" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
+  </div>
+</header>
+
+<main class="page">
+<div class="main">
+  <div class="sec-header">
+    <div>
+      <div class="sec-tag">Operaciones</div>
+      <div class="sec-title" style="font-size:16px;margin-bottom:0;">📅 Agenda — 16/07/2026</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header">Citas de hoy y próximas</div>
+    <table>
+      <thead>
+        <tr><th>Folio</th><th>Fecha</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="folio">#39</span></td>
+          <td><span class="fecha-badge">16/07/2026</span></td>
+          <td><span class="hora-badge">12:00</span></td>
+          <td><div class="nombre">García López Juan</div><div class="curp">GALJ900101HDFRRN09</div></td>
+          <td>Tramitación</td>
+          <td><span class="pill pill-pend">⏳ Pendiente</span></td>
+        </tr>
+        <tr>
+          <td><span class="folio">#25</span></td>
+          <td><span class="fecha-badge">16/07/2026</span></td>
+          <td><span class="hora-badge">14:15</span></td>
+          <td><div class="nombre">Pérez Ana</div><div class="curp">PEXA850101MMCRNN02</div></td>
+          <td>Anotación marginal</td>
+          <td><span class="pill pill-asist">✅ Asistida</span></td>
+        </tr>
+        <tr class="fila-cita-futura">
+          <td><span class="folio">#42</span></td>
+          <td><span class="fecha-badge fecha-badge--futura">22/07/2026</span></td>
+          <td><span class="hora-badge">10:00</span></td>
+          <td><div class="nombre">Ruiz Pedro</div><div class="curp">RUIP850101HDFRDR09</div></td>
+          <td>Matrimonio</td>
+          <td><span class="pill pill-pend">⏳ Pendiente</span> <span class="pill pill-futura">Futura</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer"><strong>Registro Civil 03 — Villa Victoria</strong></footer>
+</body>
+</html>

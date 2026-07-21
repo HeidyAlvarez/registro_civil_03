@@ -66,6 +66,8 @@ html[data-theme="light"],
     system-ui,
     Arial,
     sans-serif;
+
+  font-size: 15px;
 }
 
 html[data-theme="dark"] {
@@ -103,10 +105,10 @@ html[data-theme="dark"] {
 
 /* Franja superior gobierno */
 .rc-gov-strip {
-  background: var(--rc-verde-dark, #0A3F29);
+  background: #041f14;
   color: rgba(255, 255, 255, 0.82);
-  font-size: 11px;
-  padding: 6px 40px;
+  font-size: 12px;
+  padding: 5px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -135,7 +137,7 @@ html[data-theme="dark"] {
   justify-content: center;
   font-family: 'Montserrat', Arial, sans-serif;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 14px;
   color: #ffffff;
   flex-shrink: 0;
 }
@@ -166,25 +168,109 @@ html[data-theme="dark"] {
 
 .rc-subtitle {
   font-family: 'Roboto', Arial, sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.72);
   letter-spacing: 0.2px;
 }
 
-#header {
-  padding: 12px 40px;
-  box-shadow: 0 2px 12px rgba(10, 63, 41, 0.18);
-}
-
 #user-tools {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.88);
+  display: none !important;
 }
 
-#user-tools a,
-#logout-form button {
-  font-weight: 500;
+.theme-toggle,
+#toggle-nav-sidebar,
+#nav-sidebar {
+  display: none !important;
+}
+
+/* Panel lateral FILTRAR del changelist */
+#changelist-filter {
+  display: none !important;
+}
+
+#changelist.filtered #toolbar,
+#changelist.filtered .results,
+#changelist .results,
+.change-list .filtered {
+  margin-right: 0 !important;
+  max-width: 100% !important;
+}
+
+#changelist.filtered {
+  display: flex;
+  flex-direction: column;
+}
+
+#changelist.filtered #changelist-form {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.main.shifted,
+#container.shifted {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+.breadcrumbs {
+  display: none !important;
+}
+
+.rc-admin-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.rc-btn-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 20px;
+  padding: 6px 16px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.rc-btn-inicio {
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+}
+
+.rc-btn-inicio:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.rc-btn-anterior {
+  color: rgba(255, 255, 255, 0.88);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+}
+
+.rc-btn-anterior:hover {
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 40px;
+  background: #063220;
+  box-shadow: 0 2px 12px rgba(10, 63, 41, 0.18);
 }
 
 /* Contenido principal */
@@ -215,11 +301,6 @@ html[data-theme="dark"] #content h1 {
   color: #7ec9a3;
 }
 
-.breadcrumbs {
-  border-radius: 0;
-  font-size: 0.8125rem;
-}
-
 /* Módulos y tablas */
 .module h2,
 .module caption,
@@ -228,25 +309,6 @@ html[data-theme="dark"] #content h1 {
   font-family: 'Montserrat', Arial, sans-serif;
   font-weight: 700;
   letter-spacing: 0.3px;
-}
-
-#nav-sidebar .module th {
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-weight: 700;
-}
-
-#nav-sidebar .current-app .section:link,
-#nav-sidebar .current-app .section:visited {
-  color: var(--rc-verde, #0F5C3C);
-  font-weight: 700;
-}
-
-#nav-sidebar .current-model {
-  background: var(--rc-verde-claro, #E4F1EA);
-}
-
-html[data-theme="dark"] #nav-sidebar .current-model {
-  background: var(--selected-bg);
 }
 
 /* Botones */
@@ -258,7 +320,7 @@ a.button {
   border-radius: 20px;
   font-family: 'Montserrat', Arial, sans-serif;
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.4px;
   text-transform: uppercase;
   padding: 8px 18px;
@@ -319,7 +381,7 @@ input[type="submit"].default:hover {
 }
 
 .dashboard .module table td {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 }
 
 #content-related .module h2 {
@@ -366,7 +428,15 @@ ul.messagelist li.warning {
 }
 
 ul.messagelist li.error {
-  background-color: #f6e4e2;
+  background-color: var(--message-error-bg, #f6e4e2);
+  color: var(--rc-rojo, #A3281E);
+  border-left-color: var(--rc-rojo, #A3281E);
+  font-weight: 600;
+}
+
+html[data-theme="dark"] ul.messagelist li.error {
+  background-color: #3a2220;
+  color: #f0b8b2;
   border-left-color: var(--rc-rojo, #A3281E);
 }
 
@@ -416,13 +486,15 @@ html[data-theme="dark"] ul.messagelist li.success {
   }
 }
 
-/* ── Tablas estilo bitácora (solo tablas del panel admin) ── */
+/* ── Tablas RC — panel Django Admin ── */
 #changelist .results {
   border: 1px solid var(--hairline-color, #D8D8D2);
   border-radius: 8px;
+  border-top: 3px solid var(--rc-verde, #0F5C3C);
   overflow: hidden;
   background: #ffffff;
   margin-top: 4px;
+  box-shadow: 0 2px 10px rgba(10, 63, 41, 0.06);
 }
 
 .dashboard #content-main .module table,
@@ -430,8 +502,10 @@ html[data-theme="dark"] ul.messagelist li.success {
 .change-list #content-main .module table:not(#result_list) {
   border: 1px solid var(--hairline-color, #D8D8D2);
   border-radius: 8px;
+  border-top: 3px solid var(--rc-verde, #0F5C3C);
   overflow: hidden;
   background: #ffffff;
+  box-shadow: 0 2px 10px rgba(10, 63, 41, 0.06);
 }
 
 #changelist table#result_list,
@@ -447,24 +521,27 @@ html[data-theme="dark"] ul.messagelist li.success {
 #content-main .module table caption + tbody th,
 #content-related .module table thead th,
 #content-related .module table caption + tbody th {
-  font-size: 10px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  background: #f5f5f4 !important;
-  color: var(--body-quiet-color, #5B655E) !important;
-  padding: 11px 16px;
-  border-bottom: 1px solid var(--hairline-color, #D8D8D2);
+  letter-spacing: 0.55px;
+  background: var(--rc-verde-claro, #E4F1EA) !important;
+  color: var(--rc-verde-dark, #0A3F29) !important;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--rc-verde, #0F5C3C);
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 #changelist table#result_list thead th .text a,
 #changelist table#result_list thead th .text span {
-  font-size: 10px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: var(--body-quiet-color, #5B655E);
+  letter-spacing: 0.55px;
+  color: var(--rc-verde-dark, #0A3F29);
 }
 
 #changelist table#result_list thead th .text a:hover {
@@ -477,10 +554,21 @@ html[data-theme="dark"] ul.messagelist li.success {
 #content-main .module table tbody th,
 #content-related .module table tbody td,
 #content-related .module table tbody th {
-  font-size: 12.5px;
-  vertical-align: top;
-  padding: 13px 16px;
+  font-size: 14px;
+  line-height: 1.45;
+  vertical-align: middle;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--hairline-color, #D8D8D2);
+  color: var(--body-fg, #1B211E);
+}
+
+#changelist table#result_list tbody tr:nth-child(even) td,
+#changelist table#result_list tbody tr:nth-child(even) th,
+#content-main .module table tbody tr:nth-child(even) td,
+#content-main .module table tbody tr:nth-child(even) th,
+#content-related .module table tbody tr:nth-child(even) td,
+#content-related .module table tbody tr:nth-child(even) th {
+  background: rgba(228, 241, 234, 0.42);
 }
 
 #changelist table#result_list tbody tr:last-child td,
@@ -498,12 +586,12 @@ html[data-theme="dark"] ul.messagelist li.success {
 #content-main .module table tbody tr:hover th,
 #content-related .module table tbody tr:hover td,
 #content-related .module table tbody tr:hover th {
-  background: #fafafa;
+  background: var(--rc-verde-claro, #E4F1EA) !important;
 }
 
 #changelist table#result_list tbody tr.selected td,
 #changelist table#result_list tbody tr.selected th {
-  background: var(--rc-verde-claro, #E4F1EA);
+  background: #d6ebe0 !important;
 }
 
 html[data-theme="dark"] #changelist .results,

@@ -8,33 +8,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=11">
 <link rel="stylesheet" href="{% static 'citas/css/qr-scanner.css' %}?v=2">
+{% include 'citas/includes/tipografia_rc.html' %}
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script src="{% static 'citas/js/qr-scanner.js' %}?v=2"></script>
 <script src="{% static 'citas/js/qr-validar.js' %}?v=1"></script>
 </head>
-<body class="panel-capturista">
+<body class="panel-capturista panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{% url 'dashboard_capturista' %}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Panel de Capturista</span>
-    </span>
-  </a>
-  <div class="navbar-actions">
-    <span class="gobmx-usuario">{{ request.user.get_full_name|default:request.user.username }}</span>
-    <form action="{% url 'admin:logout' %}" method="post" style="display:inline;">{% csrf_token %}
-      <button type="submit" class="gobmx-link-btn">Cerrar sesión</button>
-    </form>
-  </div>
-</header>
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Panel de Capturista' encabezado_nav_interno=True %}
 
 <main class="page">
 
@@ -42,13 +25,18 @@
 <div class="main">
 
   <!-- INICIO: MENÚ -->
-  <div id="inicio">
-    <div class="sec-tag">Panel de operaciones</div>
-    <div class="sec-title">Bienvenida, {{ request.user.get_full_name|default:request.user.username }}</div>
+  <div id="inicio" class="capturista-inicio">
+    <div class="capturista-inicio-head">
+      <div>
+        <div class="sec-tag">Panel de operaciones</div>
+        <div class="sec-title">Bienvenida, {{ request.user.get_full_name|default:request.user.username }}</div>
+        <div class="sec-sub capturista-fecha">{{ hoy|date:"l, d \d\e F \d\e Y" }}</div>
+      </div>
+    </div>
 
-    <div class="menu-grid">
+    <div class="menu-grid capturista-menu">
       <div class="menu-card compact" onclick="mostrarSeccion('agenda')">
-        <h3>Agenda del día</h3>
+        <h3>Agenda</h3>
         <p id="menu-citas-pendientes">{{ citas_pendientes }} cita{{ citas_pendientes|pluralize }} pendiente{{ citas_pendientes|pluralize }}</p>
       </div>
 
@@ -62,22 +50,14 @@
         <p>Requisitos y costos</p>
       </div>
     </div>
-  </div>
 
-  <!-- SECCIÓN: AGENDA -->
-  <div class="seccion" id="agenda">
-    <div class="sec-header">
-      <button class="btn-back" onclick="mostrarInicio()">← Inicio</button>
-      <div>
-        <div class="sec-tag">Operaciones</div>
-        <div class="sec-title" style="font-size:16px;margin-bottom:0;">📅 Agenda del día — {{ hoy|date:"d/m/Y" }}</div>
+    <div class="table-wrap capturista-agenda-inicio">
+      <div class="table-header">
+        Citas de hoy
+        <span id="inicio-agenda-sync" class="table-header-meta"></span>
       </div>
-    </div>
-
-    <div class="table-wrap">
-      <div class="table-header">Citas pendientes y activas <span id="agenda-sync" style="font-size:11px;color:var(--text-muted);font-weight:400;margin-left:8px;"></span></div>
-      <div id="agenda-contenido">
-      {% if citas %}
+      <div id="inicio-agenda-contenido">
+      {% if citas_hoy %}
       <table>
         <thead>
           <tr>
@@ -86,11 +66,10 @@
             <th>Ciudadano</th>
             <th>Trámite</th>
             <th>Estado</th>
-            <th>Acción</th>
           </tr>
         </thead>
-        <tbody id="agenda-tbody">
-          {% for cita in citas %}
+        <tbody id="inicio-agenda-tbody">
+          {% for cita in citas_hoy %}
           <tr data-cita-id="{{ cita.id }}">
             <td><span class="folio">#{{ cita.id }}</span></td>
             <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
@@ -108,19 +87,12 @@
                 <span class="pill pill-fin">🏁 Finalizado</span>
               {% endif %}
             </td>
-            <td>
-              {% if cita.estado == 'PENDIENTE' %}
-                <button class="btn-qr" onclick="abrirQR()">📷 Escanear</button>
-              {% else %}
-                <button class="btn-qr off" disabled>— —</button>
-              {% endif %}
-            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
       {% else %}
-      <div class="empty" id="agenda-empty">
+      <div class="empty empty-compact" id="inicio-agenda-empty">
         <div class="empty-icon">🎉</div>
         <h3>Sin citas pendientes</h3>
         <p>No hay citas registradas para hoy.</p>
@@ -130,10 +102,69 @@
     </div>
   </div>
 
+  <!-- SECCIÓN: AGENDA -->
+  <div class="seccion" id="agenda">
+    <div class="sec-header">
+      <div>
+        <div class="sec-tag">Operaciones</div>
+        <div class="sec-title" style="font-size:16px;margin-bottom:0;">📅 Agenda — {{ hoy|date:"d/m/Y" }}</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">Citas de hoy y próximas <span id="agenda-sync" style="font-size:11px;color:var(--text-muted);font-weight:400;margin-left:8px;"></span></div>
+      <div id="agenda-contenido">
+      {% if citas_agenda %}
+      <table>
+        <thead>
+          <tr>
+            <th>Folio</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Ciudadano</th>
+            <th>Trámite</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="agenda-tbody">
+          {% for cita in citas_agenda %}
+          <tr data-cita-id="{{ cita.id }}"{% if cita.fecha > hoy %} class="fila-cita-futura"{% endif %}>
+            <td><span class="folio">#{{ cita.id }}</span></td>
+            <td><span class="fecha-badge{% if cita.fecha > hoy %} fecha-badge--futura{% endif %}">{{ cita.fecha|date:"d/m/Y" }}</span></td>
+            <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
+            <td>
+              <div class="nombre">{{ cita.nombre_ciudadano }}</div>
+              <div class="curp">{{ cita.curp_ciudadano }}</div>
+            </td>
+            <td>{{ cita.tramite.nombre }}</td>
+            <td>
+              {% if cita.estado == 'PENDIENTE' %}
+                <span class="pill pill-pend">⏳ Pendiente</span>
+                {% if cita.fecha > hoy %}<span class="pill pill-futura">Futura</span>{% endif %}
+              {% elif cita.estado == 'ASISTIDA' %}
+                <span class="pill pill-asist">✅ Asistida</span>
+              {% else %}
+                <span class="pill pill-fin">🏁 Finalizado</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty" id="agenda-empty">
+        <div class="empty-icon">🎉</div>
+        <h3>Sin citas programadas</h3>
+        <p>No hay citas de hoy ni futuras pendientes.</p>
+      </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+
   <!-- SECCIÓN: TRÁMITES -->
   <div class="seccion" id="tramites">
     <div class="sec-header">
-      <button class="btn-back" onclick="mostrarInicio()">← Inicio</button>
       <div>
         <div class="sec-tag">Catálogo</div>
         <div class="sec-title" style="font-size:16px;margin-bottom:0;">📋 Trámites, requisitos y costos</div>
@@ -159,7 +190,7 @@
       <button type="button" class="qr-header-close" onclick="cerrarQR()" aria-label="Cerrar">×</button>
     </div>
     <div class="qr-card-body">
-      <p class="qr-instruction">Acerca el código QR de la cita a la cámara.</p>
+      <p class="qr-instruction">Acerca el código QR de la cita a la cámara. Solo se validan citas del día de hoy.</p>
       <div class="qr-scanner-wrap" id="qr-scanner"></div>
       <div class="qr-resultado" id="qr-result">
         <div class="qr-resultado-icon" id="qr-icon">✓</div>
@@ -184,10 +215,19 @@
 <script>
   const E = id => document.getElementById(id);
 
+  function actualizarNavEncabezado(enSubseccion) {
+    const anterior = E('enc-nav-anterior-interno');
+    const logout = E('enc-nav-logout');
+    if (!anterior || !logout) return;
+    anterior.hidden = !enSubseccion;
+    logout.hidden = enSubseccion;
+  }
+
   // ── Navegación ──
   function mostrarInicio() {
     E('inicio').style.display = 'block';
     document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+    actualizarNavEncabezado(false);
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
@@ -195,10 +235,22 @@
     E('inicio').style.display = 'none';
     document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
     E(id).classList.add('visible');
+    actualizarNavEncabezado(true);
     window.scrollTo({top:0, behavior:'smooth'});
     if (id === 'tramites') cargarTramites();
     if (id === 'agenda') actualizarAgenda();
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnAnterior = E('enc-nav-anterior-interno');
+    if (btnAnterior) {
+      btnAnterior.addEventListener('click', e => {
+        e.preventDefault();
+        mostrarInicio();
+      });
+    }
+    actualizarNavEncabezado(false);
+  });
 
   // ── Catálogo de trámites ──
   let tramitesCargados = false;
@@ -284,46 +336,91 @@
     FINALIZADA: '<span class="pill pill-fin">🏁 Finalizada</span>',
   };
 
-  function actualizarAgenda() {
-    fetch('/citas/api/citas/?estado=PENDIENTE,ASISTIDA')
+  const HOY_ISO = '{{ hoy|date:"Y-m-d" }}';
+
+  function formatearFecha(iso) {
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  function estadoPillHtml(c) {
+    let html = ESTADO_PILL[c.estado] || c.estado;
+    if (c.estado === 'PENDIENTE' && c.fecha > HOY_ISO) {
+      html += ' <span class="pill pill-futura">Futura</span>';
+    }
+    return html;
+  }
+
+  function renderAgendaTabla(citas, mostrarFecha = false) {
+    if (!citas.length) {
+      const vacio = mostrarFecha
+        ? '<div class="empty empty-compact" id="agenda-empty"><div class="empty-icon">🎉</div><h3>Sin citas programadas</h3><p>No hay citas de hoy ni futuras pendientes.</p></div>'
+        : '<div class="empty empty-compact" id="agenda-empty"><div class="empty-icon">🎉</div><h3>Sin citas pendientes</h3><p>No hay citas registradas para hoy.</p></div>';
+      return vacio;
+    }
+    const filas = citas.map(c => `
+      <tr data-cita-id="${c.id}"${c.fecha > HOY_ISO ? ' class="fila-cita-futura"' : ''}>
+        <td><span class="folio">#${c.id}</span></td>
+        ${mostrarFecha ? `<td><span class="fecha-badge${c.fecha > HOY_ISO ? ' fecha-badge--futura' : ''}">${formatearFecha(c.fecha)}</span></td>` : ''}
+        <td><span class="hora-badge">${c.hora}</span></td>
+        <td><div class="nombre">${c.nombre}</div><div class="curp">${c.curp}</div></td>
+        <td>${c.tramite}</td>
+        <td>${estadoPillHtml(c)}</td>
+      </tr>`).join('');
+    const cols = mostrarFecha
+      ? '<th>Folio</th><th>Fecha</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th>'
+      : '<th>Folio</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th>';
+    return `<table><thead><tr>${cols}</tr></thead><tbody id="agenda-tbody">${filas}</tbody></table>`;
+  }
+
+  function actualizarAgendaInicio() {
+    return fetch('/citas/api/citas/?estado=PENDIENTE,ASISTIDA&fecha={{ hoy|date:"Y-m-d" }}')
       .then(r => r.json())
       .then(data => {
-        const cont = E('agenda-contenido');
-        if (!data.citas.length) {
-          cont.innerHTML = '<div class="empty" id="agenda-empty"><div class="empty-icon">🎉</div><h3>Sin citas pendientes</h3><p>No hay citas activas en este momento.</p></div>';
-          return;
-        }
-        cont.innerHTML = `<table><thead><tr><th>Folio</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="agenda-tbody">${data.citas.map(c => `
-          <tr data-cita-id="${c.id}">
-            <td><span class="folio">#${c.id}</span></td>
-            <td><span class="hora-badge">${c.hora}</span></td>
-            <td><div class="nombre">${c.nombre}</div><div class="curp">${c.curp}</div></td>
-            <td>${c.tramite}</td>
-            <td>${ESTADO_PILL[c.estado] || c.estado}</td>
-            <td>${c.estado === 'PENDIENTE' ? '<button class="btn-qr" onclick="abrirQR()">📷 Escanear</button>' : '<button class="btn-qr off" disabled>— —</button>'}</td>
-          </tr>`).join('')}</tbody></table>`;
+        const contInicio = E('inicio-agenda-contenido');
+        if (contInicio) contInicio.innerHTML = renderAgendaTabla(data.citas, false);
         const pendientes = data.citas.filter(c => c.estado === 'PENDIENTE').length;
         const menuPend = E('menu-citas-pendientes');
         if (menuPend) {
           menuPend.textContent = pendientes + (pendientes === 1 ? ' cita pendiente' : ' citas pendientes');
         }
-        const sync = E('agenda-sync');
-        if (sync) sync.textContent = '· actualizado ' + new Date().toLocaleTimeString('es-MX');
+        const hora = '· actualizado ' + new Date().toLocaleTimeString('es-MX');
+        const syncInicio = E('inicio-agenda-sync');
+        if (syncInicio) syncInicio.textContent = hora;
       })
       .catch(() => {});
   }
 
+  function actualizarAgendaCompleta() {
+    return fetch('/citas/api/citas/?incluir_futuras=1&fecha={{ hoy|date:"Y-m-d" }}')
+      .then(r => r.json())
+      .then(data => {
+        const contAgenda = E('agenda-contenido');
+        if (contAgenda) contAgenda.innerHTML = renderAgendaTabla(data.citas, true);
+        const hora = '· actualizado ' + new Date().toLocaleTimeString('es-MX');
+        const sync = E('agenda-sync');
+        if (sync) sync.textContent = hora;
+      })
+      .catch(() => {});
+  }
+
+  function actualizarAgenda() {
+    actualizarAgendaInicio();
+    actualizarAgendaCompleta();
+  }
+
   function actualizarFilaCita(citaId, nuevoEstado) {
-    const fila = document.querySelector(`tr[data-cita-id="${citaId}"]`);
-    if (!fila) { actualizarAgenda(); return; }
-    const celdaEstado = fila.cells[4];
-    const celdaAccion = fila.cells[5];
-    if (celdaEstado) celdaEstado.innerHTML = ESTADO_PILL[nuevoEstado] || nuevoEstado;
-    if (celdaAccion) celdaAccion.innerHTML = '<button class="btn-qr off" disabled>— —</button>';
+    document.querySelectorAll(`tr[data-cita-id="${citaId}"]`).forEach(fila => {
+      const celdaEstado = fila.cells[fila.cells.length - 1];
+      if (celdaEstado) celdaEstado.innerHTML = ESTADO_PILL[nuevoEstado] || nuevoEstado;
+    });
+    if (!document.querySelector(`tr[data-cita-id="${citaId}"]`)) actualizarAgenda();
   }
 
   setInterval(() => {
-    if (document.querySelector('#agenda.visible')) actualizarAgenda();
+    const enAgenda = document.querySelector('#agenda.visible');
+    const enInicio = E('inicio') && E('inicio').style.display !== 'none';
+    if (enAgenda || enInicio) actualizarAgenda();
   }, 8000);
 
   // Sesión: aviso antes de expirar (30 min)

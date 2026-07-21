@@ -3,119 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Panel del Oficial</title>
+  <title>Panel Oficial — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Panel del Oficial</span></span></a>
-  </header>
-  <div class="gobmx-barra-usuario">
-    <span class="gobmx-usuario">Martín López Sandoval</span>
-    <span class="barra-spacer"></span>
-    <button class="btn-link" type="button">Cerrar sesión</button>
+<body class="panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="panel-oficial.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Panel del Oficial</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      Martín López Sandoval
+    </span>
+    <button type="button" class="gobmx-link-btn">Cerrar sesión</button>
   </div>
-  <main class="page">
-    <div class="main">
-      <div style="margin-bottom:26px">
-        <span class="welcome-tag">Oficial Principal</span>
-        <h1 class="page-title">Bienvenido, Martín López Sandoval</h1>
-        <p class="page-sub" style="margin:0">lunes, 6 de julio de 2026</p>
-      </div>
+</header>
 
-      <div class="stats">
-        <div class="stat-card"><div class="stat-label">Pendientes</div><div class="stat-val" style="color:var(--oro)">2</div><div class="stat-sub">sin validar QR</div></div>
-        <div class="stat-card"><div class="stat-label">Asistidas</div><div class="stat-val" style="color:var(--verde)">1</div><div class="stat-sub">por cobrar</div></div>
-        <div class="stat-card"><div class="stat-label">Pagadas</div><div class="stat-val" style="color:var(--slate)">3</div><div class="stat-sub">cobro registrado</div></div>
-        <div class="stat-card"><div class="stat-label">Finalizadas</div><div class="stat-val">8</div><div class="stat-sub">trámite entregado</div></div>
-      </div>
+<main class="page">
+<div class="main">
 
-      <div class="section-label">Acceso rápido</div>
-      <div class="quick-grid">
-        <a class="qbtn" href="django-admin.html">
-          <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
-          <div><div class="qbtn-name">Gestionar citas</div><div class="qbtn-desc">Ver y editar</div></div>
-        </a>
-        <a class="qbtn" href="agenda.html">
-          <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-          <div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div>
-        </a>
-        <a class="qbtn" href="escanear-qr.html">
-          <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
-          <div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar ciudadano</div></div>
-        </a>
-        <a class="qbtn" href="fila-caja.html">
-          <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1110.34 18M7 6h1v4M16.71 13.88l.7.71-2.82 2.82"/></svg></div>
-          <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
-        </a>
-        <a class="qbtn" href="citas-pagadas.html">
-          <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega de documentos</div></div>
-        </a>
-        <a class="qbtn" href="historial.html">
-          <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/><path d="M8 12h8M8 16h5"/></svg></div>
-          <div><div class="qbtn-name">Historial finalizadas</div><div class="qbtn-desc">Resumen mensual</div></div>
-        </a>
-        <a class="qbtn" href="historial-canceladas.html">
-          <div class="qbtn-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
-          <div><div class="qbtn-name">Historial canceladas</div><div class="qbtn-desc">Resumen mensual</div></div>
-        </a>
-        <a class="qbtn" href="reporte-caja.html">
-          <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg></div>
-          <div><div class="qbtn-name">Reporte financiero</div><div class="qbtn-desc">Ingresos del mes</div></div>
-        </a>
-        <a class="qbtn" href="bitacora.html">
-          <div class="qbtn-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
-          <div><div class="qbtn-name">Bitácora</div><div class="qbtn-desc">Auditoría del sistema</div></div>
-        </a>
-      </div>
+  <div class="welcome">
+    <div class="welcome-tag">Oficial Principal</div>
+    <h1>Bienvenido, Martín López Sandoval</h1>
+    <p>Jueves, 16 de julio de 2026</p>
+  </div>
 
-      <a class="qbtn" href="horarios.html" style="margin-bottom:24px;max-width:320px">
-        <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-        <div><div class="qbtn-name">Gestionar horarios</div><div class="qbtn-desc">Bloquear disponibilidad</div></div>
-      </a>
-
-      <div class="section-label" style="margin-bottom:12px">Citas de hoy</div>
-      <div class="panel">
-        <div class="panel-header-flex">
-          <h3>Resumen del día</h3>
-          <a href="agenda.html">Ver agenda completa →</a>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Folio</th>
-              <th>Hora</th>
-              <th>Ciudadano</th>
-              <th>Trámite</th>
-              <th>Estado</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="folio">#36</span></td>
-              <td><span class="hora-badge">09:00</span></td>
-              <td><strong>García López Juan</strong><div class="curp">GALJ900101HDFRRN09</div></td>
-              <td>Acta de nacimiento</td>
-              <td><span class="pill pill-pend">Pendiente</span></td>
-              <td><button class="btn btn-sm">Cancelar</button></td>
-            </tr>
-            <tr>
-              <td><span class="folio">#37</span></td>
-              <td><span class="hora-badge">13:10</span></td>
-              <td><strong>Álvarez MERARI</strong><div class="curp">AAHH060815MMCLRDA4</div></td>
-              <td>Aclaración actas</td>
-              <td><span class="pill pill-asist">Asistida</span></td>
-              <td><button class="btn btn-sm btn-ghost btn-off" disabled>— —</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Pendientes</div>
+      <div class="stat-val" style="color:var(--amber);">2</div>
+      <div class="stat-sub">sin validar QR</div>
     </div>
-  </main>
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Asistidas</div>
+      <div class="stat-val" style="color:var(--blue);">1</div>
+      <div class="stat-sub">por cobrar</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Pagadas</div>
+      <div class="stat-val" style="color:var(--slate);">3</div>
+      <div class="stat-sub">cobro registrado</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/></svg> Finalizadas</div>
+      <div class="stat-val" style="color:var(--tinta-muted);">8</div>
+      <div class="stat-sub">trámite entregado</div>
+    </div>
+  </div>
+
+  <div class="section-label">Acceso rápido</div>
+  <div class="quick-grid">
+    <a href="portal-inicio.html" class="qbtn" target="_blank" rel="noopener">
+      <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M12 11v6M9 14h6"/></svg></div>
+      <div><div class="qbtn-name">Agendar cita</div><div class="qbtn-desc">Portal ciudadano</div></div>
+    </a>
+    <a href="django-admin.html" class="qbtn">
+      <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
+      <div><div class="qbtn-name">Consultar citas</div><div class="qbtn-desc">Listado y edición</div></div>
+    </a>
+    <a href="agenda.html" class="qbtn">
+      <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+      <div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div>
+    </a>
+    <a href="escanear-qr.html" class="qbtn">
+      <div class="qbtn-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+      <div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar ciudadano</div></div>
+    </a>
+    <a href="fila-caja.html" class="qbtn">
+      <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1110.34 18M7 6h1v4M16.71 13.88l.7.71-2.82 2.82"/></svg></div>
+      <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
+    </a>
+    <a href="citas-pagadas.html" class="qbtn">
+      <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+      <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega de documentos</div></div>
+    </a>
+    <a href="historial.html" class="qbtn">
+      <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/><path d="M8 12h8M8 16h5"/></svg></div>
+      <div><div class="qbtn-name">Historial finalizadas</div><div class="qbtn-desc">Resumen mensual</div></div>
+    </a>
+    <a href="historial-canceladas.html" class="qbtn">
+      <div class="qbtn-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+      <div><div class="qbtn-name">Historial canceladas</div><div class="qbtn-desc">Resumen mensual</div></div>
+    </a>
+    <a href="reporte-caja.html" class="qbtn">
+      <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg></div>
+      <div><div class="qbtn-name">Reporte financiero</div><div class="qbtn-desc">Ingresos del mes</div></div>
+    </a>
+    <a href="bitacora.html" class="qbtn">
+      <div class="qbtn-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+      <div><div class="qbtn-name">Bitácora</div><div class="qbtn-desc">Auditoría del sistema</div></div>
+    </a>
+  </div>
+
+  <a href="horarios.html" class="qbtn">
+    <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+    <div><div class="qbtn-name">Gestionar horarios</div><div class="qbtn-desc">Bloquear disponibilidad</div></div>
+  </a>
+
+  <div class="section-label" style="margin-bottom:12px;">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+    Citas de hoy
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <h3>Resumen del día</h3>
+      <a href="agenda.html">Ver agenda completa →</a>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Folio</th><th>Hora</th><th>Ciudadano</th><th>Trámite</th><th>Estado</th><th>Acción</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="folio">#36</span></td>
+          <td><span class="hora-badge">09:00</span></td>
+          <td><div class="nombre">García López Juan</div><div class="curp">GALJ900101HDFRRN09</div></td>
+          <td>Acta de nacimiento</td>
+          <td><span class="pill pill-pend">Pendiente</span></td>
+          <td><button type="button" class="btn-cancelar-cita">Cancelar</button></td>
+        </tr>
+        <tr>
+          <td><span class="folio">#37</span></td>
+          <td><span class="hora-badge">13:10</span></td>
+          <td><div class="nombre">Álvarez MERARI</div><div class="curp">AAHH060815MMCLRDA4</div></td>
+          <td>Aclaración actas</td>
+          <td><span class="pill pill-asist">Asistida</span></td>
+          <td><span class="cita-sin-accion">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</main>
 </body>
 </html>

@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=12">
+{% include 'citas/includes/tipografia_rc.html' %}
 <link rel="stylesheet" href="{% static 'citas/css/qr-scanner.css' %}?v=2">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script src="{% static 'citas/js/qr-scanner.js' %}?v=2"></script>
@@ -16,203 +17,149 @@
 <script src="{% static 'citas/js/cita-estados.js' %}?v=1"></script>
 <script src="{% static 'citas/js/dashboard-citas.js' %}?v=2"></script>
 </head>
-<body class="gobmx-panel">
+<body class="panel-admin-layout panel-interno">
 
-<button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menú" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
-<div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Panel interno' encabezado_mostrar_acciones=False %}
 
-<aside class="sidebar" id="app-sidebar">
-  <div class="sidebar-header">
-    <div class="logo">Sitio del Administrador</div>
-    <div class="sub">Registro Civil · Oficialía 03</div>
-  </div>
+<div class="admin-toolbar">
+  <button type="button" class="admin-menu-btn" id="admin-menu-btn" aria-label="Abrir panel de administración" aria-expanded="false" aria-controls="admin-drawer">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    <span class="admin-menu-btn__label">Panel de Administración</span>
+  </button>
+  <form action="{% url 'admin:logout' %}" method="post" class="admin-toolbar-logout">
+    {% csrf_token %}
+    <button type="submit" class="admin-logout-btn">Cerrar sesión</button>
+  </form>
+</div>
 
-  <nav class="nav">
-    <a href="/admin/" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18M3 15h18M15 3v18"/></svg>
-      Panel de Administración
-    </a>
-  </nav>
+<div class="admin-shell">
+  <div class="admin-backdrop" id="admin-backdrop" aria-hidden="true"></div>
+  {% include 'citas/includes/sidebar_admin.html' with admin_nav_activo='inicio' %}
 
-  <div class="sidebar-footer">
-    <div class="avatar">{{ request.user.username|slice:":2"|upper }}</div>
-    <div>
-      <div class="sidebar-user-name">{{ request.user.get_full_name|default:request.user.username }}</div>
-      <form action="{% url 'admin:logout' %}" method="post" class="sidebar-logout-form">
-        {% csrf_token %}
-        <button type="submit" class="sidebar-logout-btn">Cerrar sesión</button>
-      </form>
+  <div class="admin-content admin-inicio-main" data-dashboard-citas data-dashboard-modo="admin" data-tbody-id="citas-hoy-tbody" data-empty-id="citas-hoy-empty">
+
+    <div class="welcome welcome--top">
+      <div class="welcome-tag">Administrador</div>
+      <h1>Bienvenido, {{ request.user.get_full_name|default:request.user.username }}</h1>
+      <p>{{ hoy|date:"l, d \d\e F \d\e Y" }}</p>
     </div>
-  </div>
-</aside>
 
-<!-- MAIN -->
-<main class="main" data-dashboard-citas data-dashboard-modo="admin" data-list-id="citas-hoy-list">
-  <div class="topbar">
-    <div>
-      <h1>Sitio del Administrador</h1>
-      <div class="date" id="fecha-actual"></div>
+    <div class="section-label">Acceso rápido</div>
+    <div class="quick-grid quick-grid--operacion">
+      <a href="/admin/citas/cita/" class="qbtn">
+        <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
+        <div><div class="qbtn-name">Consultar citas</div><div class="qbtn-desc">Listado y edición</div></div>
+      </a>
+      <a href="{% url 'vista_agenda' %}" class="qbtn">
+        <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div>
+      </a>
+      <button type="button" class="qbtn" onclick="abrirQR()">
+        <div class="qbtn-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+        <div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar ciudadano</div></div>
+      </button>
+      <a href="{% url 'fila_caja' %}" class="qbtn">
+        <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+        <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
+      </a>
+      <a href="{% url 'vista_citas_pagadas' %}" class="qbtn">
+        <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+        <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega</div></div>
+      </a>
     </div>
-  </div>
 
-  <!-- TARJETAS — 4 estados del día -->
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        Pendientes
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Pendientes</div>
+        <div class="stat-val" style="color:var(--amber);" id="stat-pendientes">{{ citas_pendientes }}</div>
+        <div class="stat-sub">sin validar QR</div>
       </div>
-      <div class="card-value" style="color:var(--oro);" id="stat-pendientes">{{ citas_pendientes }}</div>
-      <div class="card-sub">sin validar QR</div>
-    </div>
-    <div class="card">
-      <div class="card-label">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-        Asistidas
+      <div class="stat-card">
+        <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Asistidas</div>
+        <div class="stat-val" style="color:var(--blue);" id="stat-caja">{{ citas_en_caja }}</div>
+        <div class="stat-sub">por cobrar</div>
       </div>
-      <div class="card-value" style="color:var(--verde);" id="stat-caja">{{ citas_en_caja }}</div>
-      <div class="card-sub">asistieron, por cobrar</div>
-    </div>
-    <div class="card">
-      <div class="card-label">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-        Pagadas
+      <div class="stat-card">
+        <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Pagadas</div>
+        <div class="stat-val" style="color:var(--slate);" id="stat-pagadas">{{ citas_pagadas }}</div>
+        <div class="stat-sub">cobro registrado</div>
       </div>
-      <div class="card-value" style="color:var(--slate);" id="stat-pagadas">{{ citas_pagadas }}</div>
-      <div class="card-sub">cobro registrado</div>
-    </div>
-    <div class="card">
-      <div class="card-label">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/></svg>
-        Finalizadas
+      <div class="stat-card">
+        <div class="stat-label"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/></svg> Finalizadas</div>
+        <div class="stat-val" style="color:var(--tinta-muted);" id="stat-finalizadas">{{ citas_finalizadas }}</div>
+        <div class="stat-sub">trámite entregado</div>
       </div>
-      <div class="card-value" style="color:var(--tinta-muted);" id="stat-finalizadas">{{ citas_finalizadas }}</div>
-      <div class="card-sub">trámite entregado</div>
     </div>
-  </div>
 
-  <!-- GRID INFERIOR -->
-  <div class="bottom-grid">
-
-    <!-- ACCESO RÁPIDO -->
+    <div class="section-label section-label--citas">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+      Citas de hoy
+    </div>
     <div class="panel">
       <div class="panel-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Acceso rápido
+        <h3>Resumen del día</h3>
+        <a href="{% url 'vista_agenda' %}">Ver agenda completa →</a>
       </div>
-      <div class="quick-grid">
-
-        <a href="/admin/citas/cita/" class="qbtn">
-          <div class="qbtn-icon" style="background:#EAF3DE;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          </div>
-          <div><div class="qbtn-name">Gestionar citas</div><div class="qbtn-desc">Ver y editar</div></div>
-        </a>
-
-        <a href="/citas/agenda/" class="qbtn">
-          <div class="qbtn-icon" style="background:#E6F1FB;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
-          <div><div class="qbtn-name">Agenda del día</div><div class="qbtn-desc">Citas pendientes</div></div>
-        </a>
-
-        <button class="qbtn qr-btn" id="btn-qr">
-          <div class="qbtn-icon" style="background:#EEEDFE;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h.01M14 17h3M17 14h.01M20 17v3M20 20h-3"/></svg>
-          </div>
-          <div><div class="qbtn-name">Escanear QR</div><div class="qbtn-desc">Validar ciudadano</div></div>
-        </button>
-
-        <a href="/citas/caja/" class="qbtn">
-          <div class="qbtn-icon" style="background:#FAEEDA;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#BA7517" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-          </div>
-          <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
-        </a>
-
-        <a href="{% url 'vista_citas_pagadas' %}" class="qbtn">
-          <div class="qbtn-icon" style="background:#E4EDEF;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#34515A" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-          </div>
-          <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega</div></div>
-        </a>
-
-        <a href="{% url 'vista_historial_finalizadas' %}" class="qbtn">
-          <div class="qbtn-icon" style="background:#EAEAE7;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#5B655E" stroke-width="2"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/><path d="M8 12h8M8 16h5"/></svg>
-          </div>
-          <div><div class="qbtn-name">Historial finalizadas</div><div class="qbtn-desc">Resumen por mes</div></div>
-        </a>
-
-        <a href="{% url 'vista_historial_canceladas' %}" class="qbtn">
-          <div class="qbtn-icon" style="background:#F6E4E2;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#A3281E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
-          </div>
-          <div><div class="qbtn-name">Historial canceladas</div><div class="qbtn-desc">Resumen por mes</div></div>
-        </a>
-
-        <a href="/citas/caja/reporte/" class="qbtn">
-          <div class="qbtn-icon" style="background:#EAF3DE;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#3B6D11" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          <div><div class="qbtn-name">Reporte financiero</div><div class="qbtn-desc">Ingresos del mes</div></div>
-        </a>
-
-        <a href="{% url 'vista_bitacora' %}" class="qbtn">
-          <div class="qbtn-icon" style="background:#FCEBEB;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#A32D2D" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-          </div>
-          <div><div class="qbtn-name">Bitácora</div><div class="qbtn-desc">Auditoría</div></div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- ÚLTIMAS CITAS -->
-    <div class="panel">
-      <div class="panel-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        Citas de hoy
-      </div>
-      <div id="citas-hoy-list">
-      {% for cita in citas_hoy %}
-      <div class="cita-row" data-cita-id="{{ cita.id }}" data-estado="{{ cita.estado }}">
-        <span class="cita-hora">{{ cita.hora|time:"H:i" }}</span>
-        <span class="cita-nombre">{{ cita.nombre_ciudadano }}</span>
-        <span class="cita-tramite">{{ cita.tramite.nombre }}</span>
-        <span class="pill-estado">
-          {% if cita.estado == 'PENDIENTE' %}
-            <span class="pill pill-pend">Pendiente</span>
-          {% elif cita.estado == 'ASISTIDA' %}
-            <span class="pill pill-asist">Asistida</span>
-          {% elif cita.estado == 'PAGADA' %}
-            <span class="pill pill-pagada">Pagada</span>
-          {% elif cita.estado == 'FINALIZADA' %}
-            <span class="pill pill-fin">Finalizada</span>
-          {% else %}
-            <span class="pill pill-cancel">Cancelada</span>
-          {% endif %}
-        </span>
-        {% if cita.puede_cancelarse %}
-        <button type="button" class="btn-cancelar-cita" data-cita-id="{{ cita.id }}" title="Cancelar cita">Cancelar</button>
-        {% endif %}
-      </div>
-      {% empty %}
-      <span class="pill-empty">No hay citas registradas para hoy.</span>
-      {% endfor %}
+      <table>
+        <thead>
+          <tr>
+            <th>Folio</th>
+            <th>Hora</th>
+            <th>Ciudadano</th>
+            <th>Trámite</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="citas-hoy-tbody">
+          {% for cita in citas_hoy %}
+          <tr data-cita-id="{{ cita.id }}" data-estado="{{ cita.estado }}">
+            <td><span class="folio">#{{ cita.id }}</span></td>
+            <td><span class="hora-badge">{{ cita.hora|time:"H:i" }}</span></td>
+            <td>
+              <div class="nombre">{{ cita.nombre_ciudadano }}</div>
+              <div class="curp">{{ cita.curp_ciudadano }}</div>
+            </td>
+            <td>{{ cita.tramite.nombre }}</td>
+            <td>
+              {% if cita.estado == 'PENDIENTE' %}
+                <span class="pill pill-pend">Pendiente</span>
+              {% elif cita.estado == 'ASISTIDA' %}
+                <span class="pill pill-asist">Asistida</span>
+              {% elif cita.estado == 'PAGADA' %}
+                <span class="pill pill-pagada">Pagada</span>
+              {% elif cita.estado == 'FINALIZADA' %}
+                <span class="pill pill-fin">Finalizada</span>
+              {% else %}
+                <span class="pill pill-cancel">Cancelada</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if cita.puede_cancelarse %}
+                <button type="button" class="btn-cancelar-cita" data-cita-id="{{ cita.id }}" title="Cancelar cita">Cancelar</button>
+              {% else %}
+                <span class="cita-sin-accion">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="empty" id="citas-hoy-empty"{% if citas_hoy %} style="display:none;"{% endif %}>
+        <div class="empty-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></div>
+        <p>No hay citas registradas para hoy.</p>
       </div>
     </div>
 
   </div>
-</main>
+</div>
 
-<!-- MODAL QR -->
 <div class="modal-overlay" id="qr-overlay">
   <div class="modal modal-qr">
     <div class="qr-card-header qr-card-header-modal">
       <svg class="qr-header-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
       <span class="qr-header-title">Validación de Cita por QR</span>
-      <button type="button" class="qr-header-close" id="close-qr" aria-label="Cerrar">×</button>
+      <button type="button" class="qr-header-close" onclick="cerrarQR()" aria-label="Cerrar">×</button>
     </div>
     <div class="qr-card-body">
       <p class="qr-instruction">Acerca el código QR de la cita a la cámara.</p>
@@ -220,58 +167,46 @@
       <div class="qr-resultado" id="qr-result">
         <div class="qr-resultado-icon" id="qr-icon">✓</div>
         <div class="qr-resultado-titulo" id="qr-name">¡Asistencia Registrada!</div>
-        <div class="qr-resultado-detalle" id="qr-tramite"></div>
+        <div class="qr-resultado-detalle" id="qr-sub"></div>
         <div class="qr-resultado-detalle" id="qr-msg"></div>
       </div>
       <div class="qr-actions" id="qr-actions">
-        <button type="button" class="btn-qr-sec" id="btn-reintentar" style="display:none;">Escanear otro</button>
-        <button type="button" class="btn-qr-sec" id="btn-cerrar-modal">Cerrar</button>
+        <button type="button" class="btn-qr-sec" id="btn-reintentar" onclick="reintentarQR()" style="display:none;">Escanear otro</button>
+        <button type="button" class="btn-qr-sec" onclick="cerrarQR()">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // Fecha actual
-  const d = new Date();
-  document.getElementById('fecha-actual').textContent = d.toLocaleDateString('es-MX', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-  });
+  const E = id => document.getElementById(id);
 
-  // QR Scanner
-  let scannerActivo = false;
-
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let cookie of cookies) {
-        cookie = cookie.trim();
-        if (cookie.startsWith(name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
+  function getCookie(n) {
+    for (const c of document.cookie.split(';')) {
+      const [k,v] = c.trim().split('=');
+      if (k===n) return decodeURIComponent(v);
     }
-    return cookieValue;
+    return null;
   }
 
-  function abrirModal() {
-    document.getElementById('qr-overlay').classList.add('open');
-    document.getElementById('qr-result').className = 'qr-resultado';
-    document.getElementById('qr-result').style.display = 'none';
-    document.getElementById('qr-actions').classList.remove('visible');
-    document.getElementById('btn-reintentar').style.display = 'none';
+  let scannerActivo = false;
+
+  function abrirQR() {
+    E('qr-overlay').classList.add('open');
+    E('qr-result').className = 'qr-resultado';
+    E('qr-result').style.display = 'none';
+    E('qr-actions').classList.remove('visible');
+    E('btn-reintentar').style.display = 'none';
     if (!scannerActivo) iniciarScanner();
   }
 
-  function cerrarModal() {
-    document.getElementById('qr-overlay').classList.remove('open');
+  function cerrarQR() {
+    E('qr-overlay').classList.remove('open');
     detenerScanner();
   }
 
   function iniciarScanner() {
-    RegistroQR.start(document.getElementById('qr-scanner'), onScanExitoso);
+    RegistroQR.start(E('qr-scanner'), onScanExitoso);
     scannerActivo = true;
   }
 
@@ -280,94 +215,87 @@
     scannerActivo = false;
   }
 
+  function reintentarQR() {
+    E('qr-result').className = 'qr-resultado';
+    E('qr-result').style.display = 'none';
+    E('qr-actions').classList.remove('visible');
+    E('btn-reintentar').style.display = 'none';
+    E('qr-scanner').innerHTML = '';
+    scannerActivo = false;
+    iniciarScanner();
+  }
+
   function onScanExitoso(decodedText) {
     detenerScanner();
     const parsed = parseQrCita(decodedText);
-    if (!parsed || !parsed.token) {
-      mostrarResultadoQR('error', 'QR inválido', '', '', 'Token de seguridad no encontrado.');
-      return;
-    }
-    mostrarResultadoQR('ok', 'Procesando…', '', '', '');
-
+    if (!parsed || !parsed.token) { mostrarResultado('error', 'QR inválido', '', '', 'Token de seguridad no encontrado.'); return; }
+    mostrarResultado('ok', 'Procesando…', '', '', '');
     enviarValidacionQr(parsed.citaId, parsed.token, getCookie('csrftoken'))
     .then(data => {
       if (data.status === 'success') {
-        mostrarResultadoQR('ok', '¡Asistencia Registrada!', data.ciudadano, data.tramite, '');
+        mostrarResultado('ok', '¡Asistencia Registrada!', data.ciudadano, data.tramite, '');
         if (data.cita_id) DashboardCitas.actualizarFilaEstado(data.cita_id, data.nuevo_estado || 'ASISTIDA');
-        DashboardCitas.refrescarDashboard({ modo: 'admin', listId: 'citas-hoy-list' });
-        actualizarResumenDashboard();
+        DashboardCitas.refrescarDashboard({ modo: 'admin', tbodyId: 'citas-hoy-tbody', emptyId: 'citas-hoy-empty' });
       } else {
-        mostrarResultadoQR('error', data.message || 'No se pudo validar', '', '', '');
+        mostrarResultado('error', data.message || 'No se pudo validar', '', '', '');
       }
     })
-    .catch(() => {
-      mostrarResultadoQR('error', 'Error de conexión', '', '', 'No se pudo conectar al servidor.');
-    });
+    .catch(() => mostrarResultado('error', 'Error de conexión', '', '', 'No se pudo conectar al servidor.'));
   }
 
-  function mostrarResultadoQR(tipo, titulo, ciudadano, tramite, msg) {
-    const result = document.getElementById('qr-result');
-    result.style.display = 'block';
-    result.className = 'qr-resultado visible' + (tipo === 'error' ? ' error' : '');
-    document.getElementById('qr-icon').textContent = tipo === 'error' ? '✕' : '✓';
-    document.getElementById('qr-name').textContent = titulo;
-    document.getElementById('qr-tramite').textContent = ciudadano ? 'Ciudadano: ' + ciudadano : '';
-    document.getElementById('qr-msg').textContent = tramite ? 'Trámite: ' + tramite : (msg || '');
+  function mostrarResultado(tipo, titulo, ciudadano, tramite, msg) {
+    const res = E('qr-result');
+    res.style.display = 'block';
+    res.className = 'qr-resultado visible' + (tipo === 'error' ? ' error' : '');
+    E('qr-icon').textContent = tipo === 'error' ? '✕' : '✓';
+    E('qr-name').textContent = titulo;
+    E('qr-sub').textContent = ciudadano ? 'Ciudadano: ' + ciudadano : '';
+    E('qr-msg').textContent = tramite ? 'Trámite: ' + tramite : (msg || '');
     if (tipo !== 'error' && titulo !== 'Procesando…') {
-      document.getElementById('btn-reintentar').style.display = 'inline-flex';
+      E('btn-reintentar').style.display = 'inline-flex';
     }
-    document.getElementById('qr-actions').classList.add('visible');
+    E('qr-actions').classList.add('visible');
   }
 
-  document.getElementById('btn-qr').onclick = abrirModal;
-  document.getElementById('close-qr').onclick = cerrarModal;
-  document.getElementById('btn-cerrar-modal').onclick = cerrarModal;
-  document.getElementById('btn-reintentar').onclick = () => {
-    document.getElementById('qr-result').className = 'qr-resultado';
-    document.getElementById('qr-result').style.display = 'none';
-    document.getElementById('qr-actions').classList.remove('visible');
-    document.getElementById('btn-reintentar').style.display = 'none';
-    document.getElementById('qr-scanner').innerHTML = '';
-    scannerActivo = false;
-    iniciarScanner();
-  };
-  document.getElementById('qr-overlay').onclick = (e) => {
-    if (e.target === document.getElementById('qr-overlay')) cerrarModal();
-  };
+  E('qr-overlay').onclick = e => { if (e.target === E('qr-overlay')) cerrarQR(); };
 
-  function actualizarResumenDashboard() {
-    fetch('/citas/api/dashboard/')
-      .then(r => r.json())
-      .then(d => {
-        DashboardCitas.refrescarDashboard({ modo: 'admin', listId: 'citas-hoy-list' });
-      })
-      .catch(() => {});
+  if (new URLSearchParams(window.location.search).get('qr') === '1') {
+    abrirQR();
+    history.replaceState(null, '', window.location.pathname);
   }
 
-  DashboardCitas.iniciarPolling({ modo: 'admin', listId: 'citas-hoy-list', intervalo: 8000 });
+  DashboardCitas.iniciarPolling({
+    modo: 'admin',
+    tbodyId: 'citas-hoy-tbody',
+    emptyId: 'citas-hoy-empty',
+    intervalo: 8000,
+  });
 
   (function () {
     const body = document.body;
-    const toggle = document.getElementById('sidebar-toggle');
-    const backdrop = document.getElementById('sidebar-backdrop');
-    const sidebar = document.getElementById('app-sidebar');
-    if (!toggle || !backdrop || !sidebar) return;
+    const menuBtn = E('admin-menu-btn');
+    const closeBtn = E('admin-drawer-close');
+    const backdrop = E('admin-backdrop');
+    const drawer = E('admin-drawer');
 
-    function setOpen(open) {
-      body.classList.toggle('sidebar-open', open);
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.textContent = open ? '✕' : '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>';
+    function setMenuOpen(open) {
+      body.classList.toggle('admin-menu-open', open);
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (drawer) drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
     }
 
-    toggle.addEventListener('click', () => setOpen(!body.classList.contains('sidebar-open')));
-    backdrop.addEventListener('click', () => setOpen(false));
-    sidebar.querySelectorAll('.nav-item').forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.matchMedia('(max-width: 991px)').matches) setOpen(false);
+    if (menuBtn) menuBtn.addEventListener('click', () => setMenuOpen(!body.classList.contains('admin-menu-open')));
+    if (closeBtn) closeBtn.addEventListener('click', () => setMenuOpen(false));
+    if (backdrop) backdrop.addEventListener('click', () => setMenuOpen(false));
+    if (drawer) {
+      drawer.querySelectorAll('.nav-item').forEach(link => {
+        link.addEventListener('click', () => setMenuOpen(false));
       });
-    });
+    }
     window.addEventListener('resize', () => {
-      if (window.innerWidth > 991) setOpen(false);
+      if (window.innerWidth >= 992 && body.classList.contains('admin-menu-open')) {
+        /* mantener abierto en desktop si el usuario lo dejó así */
+      }
     });
   })();
 </script>

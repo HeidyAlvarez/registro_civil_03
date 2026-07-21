@@ -8,8 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+<link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=8">
 <link rel="stylesheet" href="{% static 'citas/css/qr-scanner.css' %}?v=2">
+{% include 'citas/includes/tipografia_rc.html' %}
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script src="{% static 'citas/js/qr-scanner.js' %}?v=2"></script>
 <script src="{% static 'citas/js/qr-validar.js' %}?v=1"></script>
@@ -17,25 +18,11 @@
 <script src="{% static 'citas/js/dashboard-citas.js' %}?v=2"></script>
 
 </head>
-<body>
+<body class="panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{{ panel_inicio_url }}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Panel del Oficial</span>
-    </span>
-  </a>
-</header>
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Panel del Oficial' %}
 
 <main class="page">
-
-{% include 'citas/includes/barra_usuario.html' %}
 
 <!-- MAIN -->
 <div class="main" data-dashboard-citas data-dashboard-modo="oficial" data-tbody-id="citas-hoy-tbody" data-empty-id="citas-hoy-empty">
@@ -72,9 +59,14 @@
   <div class="section-label">Acceso rápido</div>
   <div class="quick-grid">
 
+    <a href="{% url 'portal_ciudadano' %}" class="qbtn" target="_blank" rel="noopener">
+      <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M12 11v6M9 14h6"/></svg></div>
+      <div><div class="qbtn-name">Agendar cita</div><div class="qbtn-desc">Portal ciudadano</div></div>
+    </a>
+
     <a href="/admin/citas/cita/" class="qbtn">
-      <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
-      <div><div class="qbtn-name">Gestionar citas</div><div class="qbtn-desc">Ver y editar</div></div>
+      <div class="qbtn-icon ic-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg></div>
+      <div><div class="qbtn-name">Consultar citas</div><div class="qbtn-desc">Listado y edición</div></div>
     </a>
 
     <a href="/citas/agenda/" class="qbtn">

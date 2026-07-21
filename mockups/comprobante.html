@@ -7,11 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
+<body class="portal-page">
+  <div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span><b>gob.mx</b> · Registro Civil 03, Villa Victoria</span></div>
   <nav class="navbar">
-    <a class="navbar-brand" href="portal-inicio.html"><span class="crest">RC</span><span><span class="brand-name">Registro Civil 03</span><span class="brand-sub">Comprobante de cita</span></span></a>
+    <a class="navbar-brand" href="portal-inicio.html">
+      <div class="crest">RC</div>
+      <div>
+        <div class="name">Registro Civil 03</div>
+        <div class="sub">Villa Victoria · Comprobante de cita</div>
+      </div>
+    </a>
   </nav>
 
   <div class="wizard-steps">
@@ -58,7 +64,6 @@
 
       <div class="comprobante-actions">
         <button class="btn btn-sm" type="button" disabled>Descargar comprobante PDF</button>
-        <button class="btn btn-sm btn-outline" type="button" disabled>Descargar solo QR</button>
         <a class="btn btn-sm btn-ghost" href="portal-inicio.html">Agendar otra cita</a>
       </div>
     </div>

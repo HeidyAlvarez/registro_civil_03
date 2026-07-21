@@ -1,5 +1,6 @@
 """Generación del comprobante de cita en PDF (datos primero, QR al final)."""
 import io
+from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
@@ -88,6 +89,27 @@ def generar_comprobante_pdf(cita):
 
     for etiqueta, valor in filas:
         y = _dibujar_fila(c, x_label, x_val, y, etiqueta, valor, ancho_val)
+
+    datos = cita.datos_adicionales or {}
+    if datos.get('tipo_tramite') == 'registro_nacimiento':
+        y -= 8
+        c.setFont('Helvetica-Bold', 11)
+        c.drawString(x_label, y, 'Datos del recién nacido')
+        y -= 16
+        c.setFont('Helvetica', 10)
+        filas_rn = [
+            ('Tipo de registro:', datos.get('tipo_registro_etiqueta', '—')),
+            ('Nombre:', datos.get('nombre_completo', '—')),
+            ('Sexo:', 'Hombre' if datos.get('sexo') == 'H' else 'Mujer'),
+            ('Fecha de nacimiento:', _fecha_legible(
+                datetime.strptime(datos['fecha_nacimiento'], '%Y-%m-%d').date()
+            ) if datos.get('fecha_nacimiento') else '—'),
+            ('Hora de nacimiento:', datos.get('hora_nacimiento') or '—'),
+            ('Lugar:', f'{datos.get("lugar_tipo_etiqueta", "")} — {datos.get("lugar_nombre", "")}'.strip(' —')),
+            ('Municipio:', datos.get('municipio_nacimiento', '—')),
+        ]
+        for etiqueta, valor in filas_rn:
+            y = _dibujar_fila(c, x_label, x_val, y, etiqueta, valor, ancho_val)
 
     docs = []
     if tramite.documentos_requeridos:

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=7">
   <style>
     .hc-main { max-width: 960px; margin: 28px auto; padding: 0 20px 60px; }
     .hc-header { margin-bottom: 22px; }
@@ -53,24 +53,11 @@
       .hc-mes-meta, .hc-mes-link { text-align: left; }
     }
   </style>
+  {% include 'citas/includes/tipografia_rc.html' %}
 </head>
-<body>
+<body class="panel-interno">
 
-<div class="top-strip">
-  <span>Gobierno del <b>Estado de México</b></span>
-  <span>gob.mx · Registro Civil 03</span>
-</div>
-<header class="navbar">
-  <a href="{{ panel_inicio_url }}" class="navbar-brand">
-    <span class="crest">RC</span>
-    <span>
-      <span class="name">Registro Civil</span>
-      <span class="sub">Historial de citas canceladas</span>
-    </span>
-  </a>
-</header>
-
-{% include 'citas/includes/barra_usuario.html' %}
+{% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Historial de citas canceladas' %}
 
 <main class="page">
 <div class="hc-main">
@@ -82,15 +69,6 @@
     {% else %}
       <h2>Historial de citas canceladas</h2>
       <p>Resumen mensual de citas canceladas. Selecciona un mes para ver el detalle.</p>
-    {% endif %}
-  </div>
-
-  <div class="hc-nav">
-    {% if mes_detalle %}
-      <a href="{% url 'vista_historial_canceladas' %}">← Volver al resumen por mes</a>
-    {% else %}
-      <a href="{% url 'vista_historial_finalizadas' %}">Historial finalizadas</a>
-      <a href="{% url 'vista_citas_pagadas' %}">Citas pagadas</a>
     {% endif %}
   </div>
 

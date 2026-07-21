@@ -3,54 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mockup — Gestión de horarios</title>
+  <title>Gestión de Horarios — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/maqueta.css">
 </head>
-<body>
-  <div class="mock-banner"><strong>MOCKUP</strong> · <a href="index.html" style="color:#b8dcc8">← Catálogo</a></div>
-  <div class="top-strip"><span>Gobierno del <b>Estado de México</b></span><span>gob.mx · Registro Civil 03</span></div>
-  <header class="navbar">
-    <a class="navbar-brand" href="#"><span class="crest">RC</span><span><span class="brand-name">Registro Civil</span><span class="brand-sub">Gestión de horarios</span></span></a>
-  </header>
-  <div class="gobmx-barra-usuario">
-    <span class="gobmx-usuario">María Admin</span>
-    <span class="barra-spacer"></span>
-    <a class="btn-inicio" href="sitio-administrador.html">Inicio</a>
+<body class="panel-interno">
+
+<div class="mock-banner"><strong>MOCKUP</strong> — Alineado al sistema desarrollado · <a href="index.html">← Catálogo</a></div>
+
+<div class="top-strip">
+  <span>Gobierno del <b>Estado de México</b></span>
+  <span>gob.mx · Registro Civil 03</span>
+</div>
+<header class="navbar navbar--institucional">
+  <a href="sitio-administrador.html" class="navbar-brand">
+    <span class="crest">RC</span>
+    <span>
+      <span class="name">Registro Civil</span>
+      <span class="sub">Oficialía 03 · Gestión de horarios</span>
+    </span>
+  </a>
+  <div class="navbar-actions">
+    <span class="gobmx-usuario">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      admin_01
+    </span>
+    <a href="sitio-administrador.html" class="btn-panel-anterior btn-panel-anterior--navbar">Anterior</a>
   </div>
-  <main class="page">
-    <div class="main">
-      <h2 class="page-title">Bloqueo de disponibilidad</h2>
-      <p class="page-sub">Bloquea días completos o horarios específicos. Los ciudadanos no podrán agendar en los bloques bloqueados.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
-        <div class="form-panel" style="margin:0">
-          <h3 style="font-size:14px;margin-bottom:16px">Bloquear día completo</h3>
-          <div class="field" style="margin-bottom:12px"><label>Fecha</label><input type="date" disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-          <div class="field" style="margin-bottom:16px"><label>Motivo</label><input type="text" placeholder="Ej. Día inhábil" disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-          <button class="btn btn-sm" type="button" disabled>Bloquear día</button>
-        </div>
-        <div class="form-panel" style="margin:0">
-          <h3 style="font-size:14px;margin-bottom:16px">Bloquear horarios</h3>
-          <div class="form-grid">
-            <div class="field"><label>Fecha</label><input type="date" disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-            <div class="field"><label>Hora inicio</label><input type="time" disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-            <div class="field"><label>Hora fin</label><input type="time" disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-            <div class="field full"><label>Motivo</label><input type="text" disabled style="width:100%;padding:8px;border:1px solid var(--borde);border-radius:4px"></div>
-          </div>
-          <button class="btn btn-sm" type="button" disabled style="margin-top:12px">Bloquear horarios</button>
-        </div>
+</header>
+
+<main class="page">
+<div class="main">
+
+  <div class="page-title">Bloqueo de disponibilidad</div>
+  <div class="page-sub">Bloquea días completos o horarios específicos. Los ciudadanos no podrán agendar en los bloques bloqueados.</div>
+
+  <div class="info-box">
+    <span class="ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+    <div>
+      Horario de atención regular: <strong>Lunes a Viernes de 9:00 a.m. a 5:00 p.m.</strong> y <strong>Sábados de 9:00 a.m. a 1:00 p.m.</strong> (Domingos cerrado). Usa esta herramienta para bloquear excepciones.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Nuevo bloqueo</div>
+    <div class="card-body">
+      <div class="tabs">
+        <div class="tab active"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Bloquear día completo</div>
+        <div class="tab"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Bloquear horario específico</div>
       </div>
-      <div class="table-wrap">
-        <div class="table-header">Bloqueos activos</div>
-        <table>
-          <thead><tr><th>Fecha</th><th>Horario</th><th>Motivo</th><th></th></tr></thead>
-          <tbody>
-            <tr><td>16/07/2026</td><td>Día completo</td><td>Capacitación interna</td><td><button class="btn btn-sm btn-outline" style="color:var(--rojo);border-color:var(--rojo)">Eliminar</button></td></tr>
-            <tr><td>10/07/2026</td><td>12:00 — 14:00</td><td>Junta de área</td><td><button class="btn btn-sm btn-outline" style="color:var(--rojo);border-color:var(--rojo)">Eliminar</button></td></tr>
-          </tbody>
-        </table>
+      <div class="form-panel active">
+        <div class="fg">
+          <label>Fecha a bloquear</label>
+          <input type="date" disabled>
+          <div class="hint">Todo el día quedará indisponible para citas (ej. día festivo).</div>
+        </div>
+        <div class="fg">
+          <label>Motivo (opcional)</label>
+          <input type="text" placeholder="Ej: Día festivo, capacitación, mantenimiento" disabled>
+        </div>
+        <button type="button" class="btn btn-amber" disabled><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Bloquear día completo</button>
+      </div>
+      <div class="horario-ref">
+        <div class="ref-item">
+          <div class="ref-day">Lunes a Viernes</div>
+          <div class="ref-time">9:00 AM – 5:00 PM</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-day">Sábados</div>
+          <div class="ref-time">9:00 AM – 1:00 PM</div>
+        </div>
       </div>
     </div>
-  </main>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg> Bloqueos activos (próximos)</div>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Bloqueo</th><th>Motivo</th><th>Creado por</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>20/07/2026</strong></td>
+          <td><span class="tipo-pill tipo-dia">Día completo</span></td>
+          <td class="motivo">Capacitación interna</td>
+          <td class="motivo">admin_01</td>
+          <td><button type="button" class="btn btn-sm" style="color:var(--rojo);border-color:var(--rojo);">Eliminar</button></td>
+        </tr>
+        <tr>
+          <td><strong>18/07/2026</strong></td>
+          <td><span class="tipo-pill tipo-hora">12:00 – 14:00</span></td>
+          <td class="motivo">Junta de área</td>
+          <td class="motivo">oficial_01</td>
+          <td><button type="button" class="btn btn-sm" style="color:var(--rojo);border-color:var(--rojo);">Eliminar</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</main>
 </body>
 </html>
