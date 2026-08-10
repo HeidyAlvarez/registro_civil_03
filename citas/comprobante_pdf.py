@@ -7,6 +7,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from .office_info import OFICINA_REGISTRO_CIVIL
+from .servicios.qr import generar_imagen_qr_bytes
 
 MESES = (
     'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -136,6 +137,7 @@ def generar_comprobante_pdf(cita):
     y -= 8
 
     qr_size = 50 * mm
+    qr_dibujado = False
     if cita.codigo_qr and cita.codigo_qr.name:
         try:
             c.drawImage(
@@ -147,12 +149,28 @@ def generar_comprobante_pdf(cita):
                 preserveAspectRatio=True,
                 mask='auto',
             )
-            y -= qr_size + 12
+            qr_dibujado = True
+        except Exception:
+            pass
+    if not qr_dibujado:
+        try:
+            c.drawImage(
+                ImageReader(io.BytesIO(generar_imagen_qr_bytes(cita))),
+                (ancho - qr_size) / 2,
+                y - qr_size,
+                width=qr_size,
+                height=qr_size,
+                preserveAspectRatio=True,
+                mask='auto',
+            )
+            qr_dibujado = True
         except Exception:
             c.setFont('Helvetica-Oblique', 9)
             c.drawString(x_label, y - 10, '(QR no disponible en este momento)')
             y -= 24
-    else:
+    if qr_dibujado:
+        y -= qr_size + 12
+    elif not (cita.codigo_qr and cita.codigo_qr.name):
         y -= 10
 
     c.setFillColorRGB(0.45, 0.45, 0.45)

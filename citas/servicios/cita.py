@@ -105,6 +105,7 @@ class Cita:
             'puede_cancelar': puede,
             'motivo_no_cancelar': motivo,
             'pdf_url': reverse('descargar_comprobante_pdf', args=[cita.id]),
+            'qr_url': reverse('imagen_qr_cita', args=[cita.id]),
         }
 
     @classmethod

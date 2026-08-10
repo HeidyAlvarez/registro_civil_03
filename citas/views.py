@@ -8,6 +8,8 @@ from .office_info import OFICINA_REGISTRO_CIVIL
 from .comprobante_pdf import generar_comprobante_pdf
 from .auditoria import registrar_log
 from .servicios import Bitacora, Caja, Calendario, CitaNegocio, QR, TramiteNegocio
+from .servicios.qr import generar_imagen_qr_bytes
+from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 import json
@@ -58,7 +60,7 @@ def dashboard_personalizado(request):
 
 
 # ==========================================
-# 📅 AGENDA (HU-3)
+# 📅 AGENDA 
 # ==========================================
 
 @login_required
@@ -73,7 +75,7 @@ def vista_agenda(request):
 
 
 # ==========================================
-# 📷 ESCÁNER QR (HU-3)
+# 📷 ESCÁNER QR 
 # ==========================================
 
 @login_required
@@ -82,7 +84,7 @@ def vista_escanear_qr(request, cita_id=None):
     return render(request, 'citas/escanear_qr.html')
 
 def validar_cita(request, cita_id, token=None):
-    """ Vista pública de consulta — no modifica el estado de la cita (HU-4). """
+    """ Vista pública de consulta — no modifica el estado de la cita. """
     cita = get_object_or_404(Cita, id=cita_id)
     token_valido = None
     if token is not None:
@@ -437,6 +439,8 @@ def api_consultar_cita_portal(request):
         return JsonResponse({'ok': False, 'error': error}, status=404)
     if datos.get('pdf_url'):
         datos['pdf_url'] = request.build_absolute_uri(datos['pdf_url'])
+    if datos.get('qr_url'):
+        datos['qr_url'] = request.build_absolute_uri(datos['qr_url'])
     return JsonResponse({'ok': True, 'cita': datos})
 
 
@@ -466,8 +470,8 @@ def api_crear_cita(request):
         return JsonResponse({'ok': False, 'error': resultado})
 
     cita = resultado
-    qr_url = request.build_absolute_uri(cita.codigo_qr.url) if cita.codigo_qr else ''
-    pdf_url = request.build_absolute_uri(f'/citas/comprobante/{cita.id}/pdf/')
+    qr_url = request.build_absolute_uri(reverse('imagen_qr_cita', args=[cita.id]))
+    pdf_url = request.build_absolute_uri(reverse('descargar_comprobante_pdf', args=[cita.id]))
 
     return JsonResponse({
         'ok': True,
@@ -475,6 +479,14 @@ def api_crear_cita(request):
         'qr_url': qr_url,
         'pdf_url': pdf_url,
     })
+
+
+def imagen_qr_cita(request, cita_id):
+    """Sirve el QR como PNG generado al vuelo (funciona en Render sin /media/)."""
+    cita = get_object_or_404(Cita, pk=cita_id)
+    if cita.estado == 'CANCELADA':
+        return HttpResponse(status=404)
+    return HttpResponse(generar_imagen_qr_bytes(cita), content_type='image/png')
 
 
 def descargar_comprobante_pdf(request, cita_id):
@@ -511,7 +523,15 @@ def api_citas_estado(request):
 @login_required
 @user_passes_test(puede_ver_panel_citas)
 def api_resumen_dashboard(request):
-    return JsonResponse(CitaNegocio.resumen_dashboard())
+    resumen = CitaNegocio.resumen_dashboard()
+    return JsonResponse({
+        'total_citas_hoy': resumen['total_citas_hoy'],
+        'citas_pendientes': resumen['citas_pendientes'],
+        'citas_en_caja': resumen['citas_en_caja'],
+        'citas_pagadas': resumen['citas_pagadas'],
+        'citas_finalizadas': resumen['citas_finalizadas'],
+        'ingresos_hoy': float(resumen['ingresos_hoy'] or 0),
+    })
 
 
 # ==========================================

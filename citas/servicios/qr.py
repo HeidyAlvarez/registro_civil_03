@@ -1,8 +1,23 @@
 """Tabla CRC 24 — QR (generación y validación)."""
 
+from io import BytesIO
+
+import qrcode
 from django.utils import timezone
 
 from citas.models import Cita
+
+
+def generar_imagen_qr_bytes(cita):
+    """Genera la imagen PNG del QR en memoria (no depende de archivos en /media/)."""
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(cita.url_validacion_qr())
+    qr.make(fit=True)
+    img = qr.make_image(fill='black', back_color='white')
+    buffer = BytesIO()
+    img.save(buffer, 'PNG')
+    buffer.seek(0)
+    return buffer.getvalue()
 
 
 class QR:
