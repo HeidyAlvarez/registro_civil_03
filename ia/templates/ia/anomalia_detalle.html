@@ -1,0 +1,100 @@
+{% extends 'ia/base.html' %}
+{% block title %}{{ anomalia.folio }}{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Expediente de investigación</div>
+    <h1>Anomalía {{ anomalia.folio }}</h1>
+    <p class="ia-meta">Estado: <span class="ia-pill ia-pill--{{ anomalia.estado|lower }}">{{ anomalia.estado|lower }}</span>{% if anomalia.clasificacion %} · {{ anomalia.clasificacion }}{% endif %}</p>
+  </div></div>
+  <div class="ia-panel">
+    <p><strong>Usuario:</strong> {{ anomalia.codigo_usuario }} {% if anomalia.usuario_texto %}({{ anomalia.usuario_texto }}){% endif %}</p>
+    <p><strong>Área:</strong> {{ anomalia.area }}</p>
+    <p><strong>Fecha:</strong> {{ anomalia.detectada_el|date:"d/m/Y H:i" }}</p>
+    <p><strong>Tipo:</strong> {{ anomalia.get_tipo_display_legible }}</p>
+    <p>{{ anomalia.descripcion }}</p>
+  </div>
+
+  <h2>Registros relacionados</h2>
+  <div class="ia-table-wrap">
+  <table class="ia-tabla">
+    <caption>Registros vinculados con el evento</caption>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Acción</th><th scope="col">Usuario</th><th scope="col">Descripción</th></tr></thead>
+    <tbody>
+      {% for registro in registros %}
+        <tr>
+          <td>{{ registro.fecha_hora|date:"d/m/Y H:i" }}</td>
+          <td>{{ registro.accion }}</td>
+          <td>{{ registro.nombre_usuario_log }}</td>
+          <td>{{ registro.descripcion }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">Sin registros asociados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  <h2 class="ia-section">Historial del usuario</h2>
+  <div class="ia-table-wrap">
+  <table class="ia-tabla">
+    <caption>Actividad reciente del usuario identificado</caption>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Acción</th><th scope="col">Descripción</th></tr></thead>
+    <tbody>
+      {% for registro in historial %}
+        <tr>
+          <td>{{ registro.fecha_hora|date:"d/m/Y H:i" }}</td>
+          <td>{{ registro.accion }}</td>
+          <td>{{ registro.descripcion }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3">No hay historial de un usuario identificado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  <h2 class="ia-section">Acciones de investigación</h2>
+  <form method="post" class="ia-form ia-panel" data-ia-loading>
+    {% csrf_token %}
+    <label for="nota-anomalia">Nota para la bitácora
+      <textarea id="nota-anomalia" name="nota" rows="2" placeholder="Describe lo revisado o la razón de la acción"></textarea>
+    </label>
+    <label for="clasificacion-anomalia">Clasificación
+      <select id="clasificacion-anomalia" name="clasificacion">
+        <option value="">Selecciona si vas a clasificar</option>
+        {% for opcion in clasificaciones %}
+          <option value="{{ opcion }}">{{ opcion }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <div class="ia-opciones">
+      <button class="ia-btn" type="submit" name="accion" value="CONSULTAR_REGISTROS">Consultar registros</button>
+      <button class="ia-btn" type="submit" name="accion" value="CONSULTAR_HISTORIAL">Consultar historial</button>
+      <button class="ia-btn" type="submit" name="accion" value="MARCAR_REVISADO" data-confirm="¿Confirmas que el evento ya fue revisado?">Marcar como revisado</button>
+      <button class="ia-btn" type="submit" name="accion" value="CLASIFICAR" data-confirm="¿Registrar esta clasificación en la bitácora?">Clasificar</button>
+      <button class="ia-btn ia-btn--danger" type="submit" name="accion" value="SOLICITAR_INVESTIGACION" data-confirm="¿Solicitar una investigación formal de este evento?">Solicitar investigación</button>
+      <button class="ia-btn" type="submit" name="accion" value="GENERAR_REPORTE">Generar reporte</button>
+    </div>
+    <div class="ia-loading" role="status"><span class="ia-spinner" aria-hidden="true"></span>Registrando acción…</div>
+  </form>
+
+  <h2>Bitácora de auditoría de la investigación</h2>
+  <div class="ia-table-wrap">
+  <table class="ia-tabla">
+    <caption>Acciones registradas durante la investigación</caption>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Acción</th><th scope="col">Funcionario</th><th scope="col">Nota</th></tr></thead>
+    <tbody>
+      {% for evento in eventos %}
+        <tr>
+          <td>{{ evento.fecha_hora|date:"d/m/Y H:i" }}</td>
+          <td>{{ evento.accion }}</td>
+          <td>{{ evento.usuario }}</td>
+          <td>{{ evento.nota }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">Aún no hay acciones registradas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+{% endblock %}

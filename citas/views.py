@@ -9,6 +9,13 @@ from .comprobante_pdf import generar_comprobante_pdf
 from .auditoria import registrar_log
 from .servicios import Bitacora, Caja, Calendario, CitaNegocio, QR, TramiteNegocio
 from .servicios.qr import generar_imagen_qr_bytes
+from .permisos import (
+    es_administrador,
+    es_admin_o_super,
+    es_capturista_o_superior,
+    es_oficial_o_admin,
+    puede_ver_panel_citas,
+)
 from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
@@ -16,29 +23,8 @@ import json
 from datetime import datetime
 
 
-# ==========================================
-# 🛡️ CONTROL DE ACCESO
-# ==========================================
-
-def es_administrador(user):
-    return user.is_superuser or user.groups.filter(name='Administrador').exists()
-
-def es_oficial_o_admin(user):
-    return user.is_superuser or user.groups.filter(name__in=['oficial', 'Administrador']).exists()
-
-def es_capturista_o_superior(user):
-    return user.is_superuser or user.groups.filter(name__in=['Capturista', 'oficial', 'Administrador']).exists()
-
 def puede_cancelar_citas(user):
     return es_oficial_o_admin(user)
-
-def puede_ver_panel_citas(user):
-    """ Staff, capturista, oficial o administrador de grupo """
-    return user.is_staff or es_capturista_o_superior(user) or es_oficial_o_admin(user)
-
-def es_admin_o_super(user):
-    return user.is_superuser or es_administrador(user)
-
 
 # ==========================================
 # 🏠 DASHBOARD DEL ADMINISTRADOR
@@ -610,7 +596,8 @@ def eliminar_bloqueo(request, bloqueo_id):
 # 🔁 REDIRECCIÓN POR ROL
 # ==========================================
 
-@login_required
 def redirigir_por_rol(request):
+    if not request.user.is_authenticated:
+        return redirect('portal_ciudadano')
     from autenticacion.servicios import Login
     return redirect(Login.url_panel_para_usuario(request.user))

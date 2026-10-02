@@ -56,10 +56,11 @@
   .top-strip b { color: #fff; font-weight: 700; }
 
   /* NAVBAR */
+  .top-strip, .navbar { display: none; }
   .navbar {
     position: sticky; top: 0; z-index: 200;
     background: var(--superficie);
-    display: flex; align-items: center;
+    align-items: center;
     padding: 0 32px; height: 68px;
     border-bottom: 3px solid var(--verde);
     box-shadow: 0 2px 10px rgba(10,63,41,.08);
@@ -80,13 +81,59 @@
     background: var(--verde-dark);
     color: #fff; padding: 56px 32px 68px; text-align: center; position: relative; overflow: hidden;
   }
-  .hero::after {
-    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
-    background: linear-gradient(90deg, var(--oro) 0%, var(--verde) 45%, var(--verde) 55%, var(--oro) 100%);
-  }
+  .hero::after { content: none; }
   .hero-eyebrow { font-size: 12.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--oro-claro); margin-bottom: 14px; }
   .hero h1 { font-size: clamp(24px,3.6vw,36px); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
-  .hero p  { font-size: 14.5px; color: rgba(255,255,255,.78); max-width: 480px; margin: 0 auto; line-height: 1.65; }
+  .hero p  { font-size: 14.5px; color: rgba(255,255,255,.82); max-width: 640px; margin: 0 auto; line-height: 1.65; }
+
+  .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .svc-card {
+    background: #fff; border: 1px solid #e6e8e4; border-radius: 16px;
+    padding: 28px 22px 22px; text-align: center; text-decoration: none; color: var(--tinta);
+    box-shadow: 0 8px 24px rgba(15, 40, 28, .04);
+    display: flex; flex-direction: column; align-items: center; min-height: 230px;
+    cursor: pointer; font: inherit; width: 100%;
+  }
+  .svc-card:hover { box-shadow: 0 10px 28px rgba(15, 40, 28, .08); }
+  .svc-ico {
+    width: 46px; height: 46px; border-radius: 12px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center;
+    background: #E7F6EE; color: var(--verde);
+  }
+  .svc-ico svg { width: 22px; height: 22px; }
+  .svc-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .svc-card p { font-size: 13px; color: var(--tinta-muted); line-height: 1.45; margin: 0 0 18px; flex: 1; }
+  .svc-btn {
+    width: 100%; border: 1.5px solid var(--verde); color: var(--verde); background: #fff;
+    border-radius: 8px; padding: 8px 12px; font-weight: 700; font-size: 14px;
+  }
+  .svc-card--alerta .svc-ico { background: #F8F3DE; color: #C47B16; }
+  .svc-card--alerta .svc-btn { border-color: #E0A15A; color: #C47B16; }
+  .svc-card--ia {
+    background: var(--verde); color: #fff; border-color: var(--verde);
+  }
+  .svc-card--ia p { color: rgba(255,255,255,.82); }
+  .svc-card--ia .svc-ico { background: rgba(255,255,255,.12); color: #fff; }
+  .svc-card--ia .svc-btn { background: #fff; color: var(--verde-dark); border-color: #fff; }
+
+  .ia-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .ia-modal.abierto { display: flex; }
+  .ia-modal-fondo { position: absolute; inset: 0; background: rgba(20, 32, 26, .45); }
+  .ia-modal-caja {
+    position: relative; background: #fff; width: min(440px, 100%);
+    border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 24px 60px rgba(0,0,0,.18);
+  }
+  .ia-modal-head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--borde); }
+  .ia-modal-head h2 { font-size: 18px; font-weight: 800; flex: 1; }
+  .ia-modal-x { border: 0; background: transparent; font-size: 22px; cursor: pointer; color: var(--tinta-muted); line-height: 1; }
+  .ia-modal-caja > p { font-size: 13.5px; color: var(--tinta-muted); margin: 14px 2px 12px; }
+  .ia-opcion {
+    display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--tinta);
+    border: 1px solid var(--borde); border-radius: 12px; padding: 12px; margin-bottom: 10px;
+  }
+  .ia-opcion:hover { border-color: var(--verde); }
+  .ia-opcion strong { display: block; font-size: 14.5px; }
+  .ia-opcion span { display: block; font-size: 12.5px; color: var(--tinta-muted); margin-top: 2px; }
 
   /* MENU CARDS — agrupadas por función (acción / consulta / contacto) */
   .menu-section { padding: 44px 24px 60px; max-width: 900px; margin: 0 auto; }
@@ -312,7 +359,7 @@
   .footer strong { color: white; font-family: 'Montserrat', sans-serif; }
 
   @media (max-width: 720px) {
-    .menu-grid { grid-template-columns: 1fr; }
+    .menu-grid, .svc-grid { grid-template-columns: 1fr; }
     .pasos-grid { grid-template-columns: 1fr; }
     .ubi-grid { grid-template-columns: 1fr; }
     .tgrid-vitrina { grid-template-columns: 1fr; }
@@ -343,74 +390,87 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">Servicio en línea · Sin necesidad de cuenta</div>
-  <h1>Agenda tu cita en el<br>Registro Civil desde casa</h1>
-  <p>Consulta trámites, elige fecha y hora disponible, y recibe tu comprobante con código QR al instante.</p>
+  <h1>Portal Ciudadano - Registro Civil 03</h1>
+  <p>Accede a los servicios del registro civil o consulta las herramientas de inteligencia artificial.</p>
 </section>
 
 <!-- MENÚ PRINCIPAL -->
 <div id="inicio">
   <div class="menu-section">
-    <div class="menu-kicker">Servicios disponibles</div>
-    <div class="menu-grid">
+    <div class="menu-kicker">Servicios y módulos</div>
+    <div class="svc-grid">
 
-      <a class="menu-card blue" href="#" onclick="mostrarSeccion('agendar');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-        <h3>Agendar cita</h3>
-        <p>Solicita una cita para tu trámite y recibe tu comprobante con código QR al instante.</p>
-        <button class="card-btn">Agendar ahora</button>
+      <a class="svc-card" href="#" onclick="mostrarSeccion('agendar');return false;">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 15l2 2 4-4"/></svg></div>
+        <h3>Agendar Cita</h3>
+        <p>Solicita tu cita en línea con comprobante QR.</p>
+        <span class="svc-btn">Ingresar</span>
       </a>
 
-      <a class="menu-card green" href="#" onclick="mostrarSeccion('consultar');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
-        <h3>Consultar cita</h3>
-        <p>Revisa el estatus de tu cita con el folio que recibiste al agendar y tu CURP.</p>
-        <button class="card-btn">Consultar</button>
+      <a class="svc-card" href="#" onclick="mostrarSeccion('consultar');return false;">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+        <h3>Consultar Cita</h3>
+        <p>Revisa el estatus de tu cita con Folio y CURP.</p>
+        <span class="svc-btn">Ingresar</span>
       </a>
 
-      <a class="menu-card red" href="#" onclick="mostrarSeccion('cancelar');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
-        <h3>Cancelar cita</h3>
-        <p>Cancela tu cita en línea con folio y CURP. Disponible con al menos {{ dias_cancelacion_portal }} días de anticipación.</p>
-        <button class="card-btn">Cancelar cita</button>
+      <a class="svc-card svc-card--alerta" href="#" onclick="mostrarSeccion('cancelar');return false;">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+        <h3>Cancelar Cita</h3>
+        <p>Cancela tu cita en línea con anticipación.</p>
+        <span class="svc-btn">Ingresar</span>
       </a>
 
-      <a class="menu-card green" href="#" onclick="mostrarSeccion('tramites');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div>
-        <h3>Trámites disponibles</h3>
-        <p>Consulta todos los servicios que ofrece el Registro Civil y sus costos oficiales.</p>
-        <button class="card-btn">Ver catálogo</button>
+      <a class="svc-card" href="#" onclick="mostrarSeccion('tramites');return false;">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
+        <h3>Trámites</h3>
+        <p>Consulta el catálogo y los costos oficiales.</p>
+        <span class="svc-btn">Ingresar</span>
       </a>
 
-      <a class="menu-card amber" href="#" onclick="mostrarSeccion('guia');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
-        <h3>Guía paso a paso</h3>
-        <p>Aprende cómo funciona el proceso de agendado y qué documentos necesitas llevar.</p>
-        <button class="card-btn">Ver guía</button>
-      </a>
-
-      <a class="menu-card teal" href="#" onclick="mostrarSeccion('ubicacion');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <a class="svc-card" href="#" onclick="mostrarSeccion('ubicacion');return false;">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
         <h3>Ubicación</h3>
-        <p>Encuentra la dirección, horarios de atención y datos de contacto de nuestra oficina.</p>
-        <button class="card-btn">Ver ubicación</button>
+        <p>Dirección y mapa de la Oficialía 03.</p>
+        <span class="svc-btn">Ingresar</span>
       </a>
 
-      <a class="menu-card red" href="#" onclick="mostrarSeccion('requisitos');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
-        <h3>Requisitos</h3>
-        <p>Consulta los documentos que debes presentar el día de tu cita según el trámite.</p>
-        <button class="card-btn">Ver requisitos</button>
-      </a>
-
-      <a class="menu-card purple" href="#" onclick="mostrarSeccion('preguntas');return false;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.7-2 3.3M12 17h.01"/></svg></div>
-        <h3>Preguntas frecuentes</h3>
-        <p>Resolvemos las dudas más comunes sobre el proceso de agendado y atención.</p>
-        <button class="card-btn">Ver preguntas</button>
-      </a>
+      <button type="button" class="svc-card svc-card--ia" onclick="abrirModuloIA()">
+        <div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="8" width="14" height="10" rx="3"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V5M9 5h6"/></svg></div>
+        <h3>Módulo de IA</h3>
+        <p>Asistente, horarios y notificaciones inteligentes.</p>
+        <span class="svc-btn">Abrir Módulo IA</span>
+      </button>
 
     </div>
+  </div>
+</div>
+
+<div class="ia-modal" id="modal-ia" role="dialog" aria-modal="true" aria-labelledby="modal-ia-titulo" aria-hidden="true">
+  <div class="ia-modal-fondo" onclick="cerrarModuloIA()"></div>
+  <div class="ia-modal-caja">
+    <div class="ia-modal-head">
+      <div class="svc-ico" style="margin:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="8" width="14" height="10" rx="3"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V5M9 5h6"/></svg></div>
+      <h2 id="modal-ia-titulo">Módulo de IA</h2>
+      <button type="button" class="ia-modal-x" onclick="cerrarModuloIA()" aria-label="Cerrar">×</button>
+    </div>
+    <p>Selecciona la función a la que deseas ingresar:</p>
+    <a class="ia-opcion" href="{% url 'ia_asistente' %}">
+      <div class="svc-ico" style="margin:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 16.5A7 7 0 1118.5 12"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg></div>
+      <div><strong>Asistente</strong><span>Asistencia conversacional sobre trámites</span></div>
+    </a>
+    <a class="ia-opcion" href="{% url 'ia_dias' %}">
+      <div class="svc-ico" style="margin:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16"/><path d="M8 15v-3M12 15V8M16 15v-5"/></svg></div>
+      <div><strong>Días más Concurridos</strong><span>Estimación y análisis de afluencia</span></div>
+    </a>
+    <a class="ia-opcion" href="{% url 'ia_sugerencia' %}">
+      <div class="svc-ico" style="margin:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+      <div><strong>Sugerencia de Horario</strong><span>Predicción de mejor horario de atención</span></div>
+    </a>
+    <a class="ia-opcion" href="{% url 'ia_notificaciones' %}">
+      <div class="svc-ico" style="margin:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16V11a6 6 0 1112 0v5l1.5 2H4.5L6 16z"/><path d="M10 19a2 2 0 004 0"/></svg></div>
+      <div><strong>Notificaciones Inteligentes</strong><span>Recordatorios, documentos y cambios de tu cita</span></div>
+    </a>
   </div>
 </div>
 
@@ -1063,8 +1123,46 @@
   function mostrarInicio() {
     E('inicio').style.display = 'block';
     document.querySelectorAll('.seccion').forEach(s => s.classList.remove('visible'));
+    cerrarModuloIA();
     window.scrollTo({top:0, behavior:'smooth'});
   }
+
+  let focoAntesDelModalIA = null;
+
+  function abrirModuloIA() {
+    const modal = E('modal-ia');
+    focoAntesDelModalIA = document.activeElement;
+    modal.classList.add('abierto');
+    modal.setAttribute('aria-hidden', 'false');
+    const cerrar = modal.querySelector('.ia-modal-x');
+    if (cerrar) cerrar.focus();
+  }
+
+  function cerrarModuloIA() {
+    const modal = E('modal-ia');
+    if (modal) {
+      modal.classList.remove('abierto');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    if (focoAntesDelModalIA) focoAntesDelModalIA.focus();
+  }
+
+  document.addEventListener('keydown', function (evento) {
+    if (evento.key === 'Escape') cerrarModuloIA();
+    const modal = E('modal-ia');
+    if (evento.key !== 'Tab' || !modal.classList.contains('abierto')) return;
+    const controles = Array.from(modal.querySelectorAll('a[href], button:not([disabled])'));
+    if (!controles.length) return;
+    const primero = controles[0];
+    const ultimo = controles[controles.length - 1];
+    if (evento.shiftKey && document.activeElement === primero) {
+      evento.preventDefault();
+      ultimo.focus();
+    } else if (!evento.shiftKey && document.activeElement === ultimo) {
+      evento.preventDefault();
+      primero.focus();
+    }
+  });
 
   function mostrarSeccion(id) {
     E('inicio').style.display = 'none';

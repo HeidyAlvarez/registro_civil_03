@@ -1,0 +1,28 @@
+{% extends 'ia/base.html' %}
+{% block title %}Casos urgentes{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Alertas para revisión</div>
+    <h1>Casos urgentes</h1>
+    <p class="ia-lead">La IA no decide quién tiene prioridad. Señala solicitudes que cumplen las reglas configuradas para que el personal les dé seguimiento.</p>
+  </div></div>
+  {% for alerta in alertas %}
+    <article class="ia-alerta">
+      <div class="ia-kicker"><span class="ia-pill ia-pill--{{ alerta.estado|lower }}">{{ alerta.estado|lower }}</span></div>
+      <h2>Atención requerida</h2>
+      <p><strong>{{ alerta.titulo }}</strong></p>
+      <p>Tiempo transcurrido: {{ alerta.tiempo_minutos }} minutos.</p>
+      <p>Documentación: {{ alerta.documentacion }}.</p>
+      <p>Acción sugerida: {{ alerta.accion_sugerida }}</p>
+      <p class="ia-meta">Cita #{{ alerta.cita_id }} · {{ alerta.cita.nombre_ciudadano }} · {{ alerta.cita.fecha|date:"d/m/Y" }} {{ alerta.cita.hora|time:"H:i" }}</p>
+      {% if alerta.estado == 'ABIERTA' %}
+        <form method="post" action="{% url 'ia_urgente_revisar' alerta.id %}" data-ia-loading>
+          {% csrf_token %}
+          <button class="ia-btn ia-btn--prim" type="submit" data-confirm="¿Confirmas que revisaste este caso?">Marcar como revisada</button>
+        </form>
+      {% endif %}
+    </article>
+  {% empty %}
+    <div class="ia-vacio"><strong>No hay casos urgentes abiertos</strong><span>Ninguna solicitud cumple las reglas de alerta en este momento.</span></div>
+  {% endfor %}
+{% endblock %}

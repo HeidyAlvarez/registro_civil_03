@@ -1,0 +1,71 @@
+{% extends 'ia/base.html' %}
+{% block title %}Control interno IA{% endblock %}
+{% block content %}
+  <div class="ia-page-head">
+    <div>
+      <div class="ia-eyebrow">Control interno</div>
+      <h1>Módulo de IA de la oficialía</h1>
+      <p class="ia-lead">Analiza la operación y genera propuestas. Las citas, prioridades y anomalías solo cambian cuando el personal autorizado las revisa.</p>
+    </div>
+    <form method="post" action="{% url 'ia_sincronizar' %}" data-ia-loading>
+      {% csrf_token %}
+      <button class="ia-btn ia-btn--prim" type="submit" data-confirm="¿Actualizar el análisis del módulo ahora?">Actualizar análisis</button>
+      <div class="ia-loading" role="status"><span class="ia-spinner" aria-hidden="true"></span>Actualizando…</div>
+    </form>
+  </div>
+
+  <div class="stats">
+    <a class="ia-stat-link" href="{% url 'ia_urgentes' %}"><div class="stat-card"><div class="stat-label">Casos urgentes</div><div class="stat-val">{{ alertas_abiertas }}</div><div class="stat-sub">pendientes de revisión</div></div></a>
+    <a class="ia-stat-link" href="{% url 'ia_anomalias' %}"><div class="stat-card"><div class="stat-label">Anomalías nuevas</div><div class="stat-val">{{ anomalias_abiertas }}</div><div class="stat-sub">eventos detectados</div></div></a>
+    <a class="ia-stat-link" href="{% url 'ia_optimizacion' %}"><div class="stat-card"><div class="stat-label">Propuestas</div><div class="stat-val">{{ propuestas_pendientes }}</div><div class="stat-sub">por autorizar</div></div></a>
+    <a class="ia-stat-link" href="#solicitudes-asistente"><div class="stat-card"><div class="stat-label">Atención ciudadana</div><div class="stat-val">{{ solicitudes_pendientes }}</div><div class="stat-sub">solicitudes pendientes</div></div></a>
+  </div>
+
+  <div class="ia-section-title"><h2>Herramientas de análisis</h2></div>
+  <div class="ia-grid ia-grid--principal">
+    <a class="ia-card ia-card--icon" href="{% url 'ia_temporadas' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg></span><span><h2>Trámites más solicitados</h2><p>Compara demanda por mes y temporada.</p><span class="ia-card-arrow">Abrir análisis →</span></span></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_optimizacion' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></span><span><h2>Optimización de citas</h2><p>Propone redistribuciones sujetas a autorización.</p><span class="ia-card-arrow">Revisar propuestas →</span></span></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_urgentes' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10 3L2 20h20L14 3a2 2 0 00-4 0z"/></svg></span><span><h2>Casos urgentes</h2><p>Señala casos que cumplen las reglas institucionales.</p><span class="ia-card-arrow">Revisar casos →</span></span></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_anomalias' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4M12 16h.01"/></svg></span><span><h2>Anomalías e investigación</h2><p>Organiza eventos inusuales para revisión humana.</p><span class="ia-card-arrow">Abrir investigación →</span></span></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reportes' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h8M9 17h8"/></svg></span><span><h2>Reportes inteligentes</h2><p>Consulta demanda, atención y resumen ejecutivo.</p><span class="ia-card-arrow">Ver reportes →</span></span></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_dias_interno' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16"/><path d="M8 15v-3M12 15V8M16 15v-5"/></svg></span><span><h2>Días más concurridos</h2><p>Visualiza patrones y concentración de citas.</p><span class="ia-card-arrow">Ver afluencia →</span></span></a>
+  </div>
+
+  <section class="ia-section" aria-labelledby="avisos-funcionarios">
+  <h2 id="avisos-funcionarios">Avisos para funcionarios</h2>
+  {% for aviso in notificaciones %}
+    <article class="ia-alerta">
+      <strong>{{ aviso.titulo }}</strong>
+      <p>{{ aviso.mensaje }}</p>
+      <form method="post" action="{% url 'ia_notificacion_leida' %}" data-ia-loading>
+        {% csrf_token %}
+        <input type="hidden" name="aviso_id" value="{{ aviso.id }}">
+        <button class="ia-btn" type="submit">Marcar como leído</button>
+      </form>
+    </article>
+  {% empty %}
+    <div class="ia-vacio"><strong>No hay avisos nuevos</strong><span>Los avisos relevantes aparecerán en esta sección.</span></div>
+  {% endfor %}
+  </section>
+
+  <section class="ia-section" id="solicitudes-asistente" aria-labelledby="titulo-solicitudes">
+  <h2 id="titulo-solicitudes">Solicitudes del asistente</h2>
+  {% for solicitud in solicitudes %}
+    <article class="ia-alerta">
+      <strong>{{ solicitud.nombre|default:"Ciudadano sin nombre" }}</strong>
+      <p>{{ solicitud.motivo }}</p>
+      <p class="ia-meta">{{ solicitud.curp }} · {{ solicitud.creado_el|date:"d/m/Y H:i" }}</p>
+      <form method="post" action="{% url 'ia_atender_solicitud' solicitud.id %}" data-ia-loading>
+        {% csrf_token %}
+        <button class="ia-btn ia-btn--prim" type="submit" data-confirm="¿Confirmas que esta solicitud ya fue atendida?">Marcar como atendida</button>
+      </form>
+    </article>
+  {% empty %}
+    <div class="ia-vacio"><strong>No hay solicitudes pendientes</strong><span>Las canalizaciones del asistente aparecerán aquí.</span></div>
+  {% endfor %}
+  </section>
+
+  {% for hallazgo in panorama.hallazgos %}
+    <div class="ia-note">{{ hallazgo }}</div>
+  {% endfor %}
+{% endblock %}

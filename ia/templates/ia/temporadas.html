@@ -1,0 +1,44 @@
+{% extends 'ia/base.html' %}
+{% block title %}Trámites por temporada{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Comportamiento histórico</div>
+    <h1>Trámites más solicitados</h1>
+    <p class="ia-lead">Comparación de {{ analisis.mes }} de {{ analisis.anio }} con el historial. Temporadas consideradas: {{ analisis.temporadas|join:", " }}.</p>
+  </div></div>
+  {% for frase in analisis.frases %}
+    <div class="ia-note">{{ frase }}</div>
+  {% endfor %}
+
+  <section class="ia-section" aria-labelledby="meses-recientes">
+    <h2 id="meses-recientes">Meses recientes</h2>
+    {% for fila in analisis.serie %}
+      <div class="ia-meta">{{ fila.etiqueta }} · {{ fila.total }} solicitudes</div>
+      <div class="ia-barra" style="margin-bottom:8px;" role="img" aria-label="{{ fila.etiqueta }}: {{ fila.total }} solicitudes"><span style="width: {{ fila.pct }}%;"></span></div>
+    {% empty %}
+      <div class="ia-vacio"><strong>Sin historial mensual</strong><span>La comparación aparecerá cuando existan registros suficientes.</span></div>
+    {% endfor %}
+  </section>
+
+  <div class="ia-table-wrap ia-section">
+  <table class="ia-tabla">
+    <caption>Mes actual frente a la referencia histórica</caption>
+    <thead>
+      <tr><th scope="col">Trámite</th><th scope="col">Mes actual</th><th scope="col">Referencia</th><th scope="col">Comparación</th></tr>
+    </thead>
+    <tbody>
+      {% for fila in analisis.filas %}
+        <tr>
+          <td>{{ fila.nombre }}</td>
+          <td>{{ fila.actual }}</td>
+          <td>{{ fila.referencia }}</td>
+          <td>{{ fila.metodo }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">Aún no hay historial para comparar temporadas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <p class="ia-lead">Con esta lectura la oficialía puede preparar personal, ampliar citas o anticipar saturaciones. El módulo no modifica la agenda.</p>
+{% endblock %}

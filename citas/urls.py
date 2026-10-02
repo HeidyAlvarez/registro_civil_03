@@ -1,5 +1,7 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
+from . import api_v1
+from .frontend import frontend_shell
 
 urlpatterns = [
     path('horarios/gestionar/', views.gestionar_horarios, name='gestionar_horarios'),
@@ -40,8 +42,33 @@ urlpatterns = [
     # 👤 REGISTRO
     path('registrar/', views.vista_registrar, name='registrar'),
 
+    # Módulo de IA (ciudadanos y control interno)
+    path('ia/', include('ia.urls')),
+
     # 🌐 PORTAL CIUDADANO
-    path('', views.portal_agendar, name='portal_ciudadano'),
+    path('', frontend_shell, name='portal_ciudadano'),
+    path('agendar-cita/', frontend_shell, name='frontend_agendar'),
+    path('consultar/', frontend_shell, name='frontend_consultar'),
+    path('cancelar/', frontend_shell, name='frontend_cancelar'),
+    path('tramites/', frontend_shell, name='frontend_tramites'),
+    path('ubicacion/', frontend_shell, name='frontend_ubicacion'),
+    path('inteligencia/', frontend_shell, name='frontend_ia'),
+    path('inteligencia/<path:path>/', frontend_shell, name='frontend_ia_path'),
+    path('acceso/', frontend_shell, name='frontend_acceso'),
+    path('panel/', frontend_shell, name='frontend_panel'),
+    path('panel/<path:path>/', frontend_shell, name='frontend_panel_path'),
+    path('portal-anterior/', views.portal_agendar, name='portal_anterior'),
+
+    # API v1 para React
+    path('api/v1/auth/me/', api_v1.session_me, name='api_v1_session'),
+    path('api/v1/auth/login/', api_v1.session_login, name='api_v1_login'),
+    path('api/v1/auth/logout/', api_v1.session_logout, name='api_v1_logout'),
+    path('api/v1/navigation/', api_v1.navigation, name='api_v1_navigation'),
+    path('api/v1/audit/', api_v1.audit_log, name='api_v1_audit'),
+    path('api/v1/reports/financial/', api_v1.financial_report, name='api_v1_financial_report'),
+    path('api/v1/schedule-blocks/', api_v1.schedule_blocks, name='api_v1_schedule_blocks'),
+    path('api/v1/schedule-blocks/<int:block_id>/', api_v1.schedule_block_detail, name='api_v1_schedule_block_detail'),
+    path('api/v1/catalog/', api_v1.catalog_management, name='api_v1_catalog'),
     path('api/tramites/', views.api_tramites, name='api_tramites'),
     path('api/horarios/', views.api_horarios, name='api_horarios'),
     path('api/validar-curp/', views.api_validar_curp_portal, name='api_validar_curp_portal'),

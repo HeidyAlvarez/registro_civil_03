@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'autenticacion',
     'citas',
+    'ia',
 ]
 
 MIDDLEWARE = [
@@ -184,3 +185,8 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# API de Groq. Configurar GROK_API_KEY en el entorno de ejecución.
+GROK_API_KEY = os.getenv('GROK_API_KEY', '')
+GROK_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
+GROK_MODEL = 'openai/gpt-oss-120b'
