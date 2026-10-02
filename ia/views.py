@@ -11,8 +11,8 @@ from django.views.decorators.http import require_POST
 from citas.auditoria import registrar_log
 from citas.models import BitacoraAuditoria, Tramite
 from citas.office_info import OFICINA_REGISTRO_CIVIL
+from citas.permisos import es_oficial_o_admin
 from citas.validators import validar_curp
-from citas.views import es_oficial_o_admin
 
 
 def solo_personal(vista):

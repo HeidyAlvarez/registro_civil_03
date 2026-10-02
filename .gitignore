@@ -21,6 +21,11 @@ db.sqlite3-journal
 media/
 staticfiles/
 
+# Frontend React
+frontend/node_modules/
+frontend/dist/
+citas/static/frontend/
+
 # Variables de entorno y secretos
 .env
 .env.*
