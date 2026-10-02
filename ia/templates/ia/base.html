@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Módulo de IA{% endblock %} — Registro Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=11">
+  <link rel="stylesheet" href="{% static 'ia/css/modulo_ia.css' %}?v=3">
+  {% include 'citas/includes/tipografia_rc.html' %}
+</head>
+<body class="{% if interno %}panel-interno ia-interno{% else %}ia-publico{% endif %} {% block body_class %}{% endblock %}">
+<a class="ia-skip" href="#contenido-ia">Saltar al contenido</a>
+{% if interno %}
+  {% include 'citas/includes/encabezado_panel.html' with encabezado_subtitulo='Oficialía 03 · Módulo de IA' encabezado_mostrar_anterior=True %}
+{% else %}
+  <div class="top-strip">
+    <span>Gobierno del <b>Estado de México</b></span>
+    <span>gob.mx · Registro Civil 03</span>
+  </div>
+  <header class="navbar navbar--institucional">
+    <a href="{% url 'portal_ciudadano' %}" class="navbar-brand">
+      <span class="crest">RC</span>
+      <span>
+        <span class="name">Registro Civil</span>
+        <span class="sub">Oficialía 03 · Asistencia al ciudadano</span>
+      </span>
+    </a>
+    <div class="navbar-actions">
+      <a href="{% url 'portal_ciudadano' %}" class="btn-panel-anterior btn-panel-anterior--navbar">Volver al portal</a>
+    </div>
+  </header>
+{% endif %}
+
+<main class="page" id="contenido-ia" tabindex="-1">
+  <div class="main ia-main">
+    <nav class="ia-subnav" aria-label="Secciones del módulo de IA">
+      {% if interno %}
+        <a href="{% url 'ia_interno' %}" class="{% if ia_activo == 'inicio' %}is-active{% endif %}"{% if ia_activo == 'inicio' %} aria-current="page"{% endif %}>Inicio</a>
+        <a href="{% url 'ia_dias_interno' %}" class="{% if ia_activo == 'dias' %}is-active{% endif %}"{% if ia_activo == 'dias' %} aria-current="page"{% endif %}>Días concurridos</a>
+        <a href="{% url 'ia_temporadas' %}" class="{% if ia_activo == 'temporadas' %}is-active{% endif %}"{% if ia_activo == 'temporadas' %} aria-current="page"{% endif %}>Temporadas</a>
+        <a href="{% url 'ia_optimizacion' %}" class="{% if ia_activo == 'optimizacion' %}is-active{% endif %}"{% if ia_activo == 'optimizacion' %} aria-current="page"{% endif %}>Optimización{% if propuestas_pendientes %}<span class="ia-badge">{{ propuestas_pendientes }}</span>{% endif %}</a>
+        <a href="{% url 'ia_urgentes' %}" class="{% if ia_activo == 'urgentes' %}is-active{% endif %}"{% if ia_activo == 'urgentes' %} aria-current="page"{% endif %}>Casos urgentes{% if alertas_abiertas %}<span class="ia-badge">{{ alertas_abiertas }}</span>{% endif %}</a>
+        <a href="{% url 'ia_anomalias' %}" class="{% if ia_activo == 'anomalias' %}is-active{% endif %}"{% if ia_activo == 'anomalias' %} aria-current="page"{% endif %}>Anomalías{% if anomalias_abiertas %}<span class="ia-badge">{{ anomalias_abiertas }}</span>{% endif %}</a>
+        <a href="{% url 'ia_reportes' %}" class="{% if ia_activo == 'reportes' %}is-active{% endif %}"{% if ia_activo == 'reportes' %} aria-current="page"{% endif %}>Reportes</a>
+      {% else %}
+        <a href="{% url 'ia_ciudadano' %}" class="{% if ia_activo == 'inicio' %}is-active{% endif %}"{% if ia_activo == 'inicio' %} aria-current="page"{% endif %}>Inicio</a>
+        <a href="{% url 'ia_asistente' %}" class="{% if ia_activo == 'asistente' %}is-active{% endif %}"{% if ia_activo == 'asistente' %} aria-current="page"{% endif %}>Asistente</a>
+        <a href="{% url 'ia_dias' %}" class="{% if ia_activo == 'dias' %}is-active{% endif %}"{% if ia_activo == 'dias' %} aria-current="page"{% endif %}>Días concurridos</a>
+        <a href="{% url 'ia_sugerencia' %}" class="{% if ia_activo == 'sugerencia' %}is-active{% endif %}"{% if ia_activo == 'sugerencia' %} aria-current="page"{% endif %}>Sugerencia de horario</a>
+        <a href="{% url 'ia_notificaciones' %}" class="{% if ia_activo == 'notificaciones' %}is-active{% endif %}"{% if ia_activo == 'notificaciones' %} aria-current="page"{% endif %}>Notificaciones</a>
+      {% endif %}
+    </nav>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="ia-flash ia-flash--{{ message.tags|default:'success' }}" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </div>
+</main>
+{% if not interno %}
+  <footer class="ia-publico-footer">
+    <strong>Registro Civil — Oficialía 03</strong><br>
+    Villa Victoria, Estado de México · Servicio de orientación ciudadana
+  </footer>
+{% endif %}
+<script src="{% static 'ia/js/modulo_ia.js' %}?v=1" defer></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 
 urlpatterns = [
@@ -39,6 +39,9 @@ urlpatterns = [
 
     # 👤 REGISTRO
     path('registrar/', views.vista_registrar, name='registrar'),
+
+    # Módulo de IA (ciudadanos y control interno)
+    path('ia/', include('ia.urls')),
 
     # 🌐 PORTAL CIUDADANO
     path('', views.portal_agendar, name='portal_ciudadano'),

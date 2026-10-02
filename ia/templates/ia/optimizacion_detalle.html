@@ -1,0 +1,52 @@
+{% extends 'ia/base.html' %}
+{% block title %}Propuesta de optimización{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Revisión humana obligatoria</div>
+    <h1>Propuesta del {{ propuesta.fecha|date:"d/m/Y" }}</h1>
+    <p class="ia-lead">{{ propuesta.resumen }}</p>
+    <p class="ia-meta">Estado: <span class="ia-pill ia-pill--{{ propuesta.estado|lower }}">{{ propuesta.estado|lower }}</span>{% if propuesta.revisada_el %} · revisada el {{ propuesta.revisada_el|date:"d/m/Y H:i" }}{% endif %}</p>
+  </div></div>
+  {% if propuesta.nota %}<div class="ia-note">{{ propuesta.nota }}</div>{% endif %}
+
+  <h2>Ocupación detectada</h2>
+  {% for fila in propuesta.analisis.horas %}
+    <div class="ia-meta">{{ fila.hora }} · {{ fila.total }} cita{{ fila.total|pluralize }}{% if fila.sensibles %} · {{ fila.sensibles }} sensible{{ fila.sensibles|pluralize }}{% endif %}</div>
+    <div class="ia-barra" style="margin-bottom:8px;"><span style="width: {% widthratio fila.total 8 100 %}%;"></span></div>
+  {% endfor %}
+
+  <h2>Movimientos propuestos</h2>
+  <div class="ia-table-wrap">
+  <table class="ia-tabla">
+    <caption>Movimientos que se aplicarían después de autorizar</caption>
+    <thead><tr><th scope="col">Cita</th><th scope="col">Ciudadano</th><th scope="col">Trámite</th><th scope="col">Actual</th><th scope="col">Propuesto</th></tr></thead>
+    <tbody>
+      {% for mov in propuesta.movimientos %}
+        <tr>
+          <td>#{{ mov.cita_id }}</td>
+          <td>{{ mov.ciudadano }}</td>
+          <td>{{ mov.tramite }}</td>
+          <td>{{ mov.hora_actual }}</td>
+          <td>{{ mov.hora_propuesta }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">Esta propuesta no incluye movimientos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  {% if propuesta.estado == 'PROPUESTA' %}
+    <form method="post" class="ia-form ia-panel ia-section" data-ia-loading>
+      {% csrf_token %}
+      <label for="nota-optimizacion">Nota de la revisión
+        <textarea id="nota-optimizacion" name="nota" rows="2" placeholder="Nota opcional"></textarea>
+      </label>
+      <div class="ia-actions">
+        <button class="ia-btn ia-btn--prim" type="submit" name="accion" value="autorizar" data-confirm="Esta acción aplicará los movimientos mostrados. ¿Deseas autorizarla?">Autorizar y aplicar</button>
+        <button class="ia-btn ia-btn--danger" type="submit" name="accion" value="rechazar" data-confirm="¿Deseas rechazar esta propuesta?">Rechazar</button>
+      </div>
+      <div class="ia-loading" role="status"><span class="ia-spinner" aria-hidden="true"></span>Registrando decisión…</div>
+    </form>
+  {% endif %}
+{% endblock %}

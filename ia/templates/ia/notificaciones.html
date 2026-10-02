@@ -1,0 +1,48 @@
+{% extends 'ia/base.html' %}
+{% block title %}Notificaciones{% endblock %}
+{% block content %}
+  <div class="ia-page-head">
+    <div>
+      <div class="ia-eyebrow">Seguimiento de cita</div>
+      <h1>Notificaciones inteligentes</h1>
+      <p class="ia-lead">Consulta recordatorios, documentos pendientes, cambios y espacios liberados asociados con tu cita.</p>
+    </div>
+  </div>
+
+  <form method="get" class="ia-form ia-panel" data-ia-loading>
+    <label for="curp-notificaciones">CURP de la persona que agendó
+      <input id="curp-notificaciones" type="text" name="curp" value="{{ curp }}" placeholder="18 caracteres" maxlength="18" autocomplete="off" required>
+    </label>
+    <button class="ia-btn ia-btn--prim" type="submit">Ver avisos</button>
+    <div class="ia-loading" role="status" aria-live="polite"><span class="ia-spinner" aria-hidden="true"></span>Consultando avisos…</div>
+  </form>
+  {% if error %}<div class="ia-flash ia-flash--error" role="alert">{{ error }}</div>{% endif %}
+
+  {% for aviso in avisos %}
+    <article class="ia-alerta">
+      <div class="ia-kicker">{{ aviso.categoria }}</div>
+      <h2>{{ aviso.titulo }}</h2>
+      <p>{{ aviso.mensaje }}</p>
+      <p class="ia-meta">{{ aviso.creado_el|date:"d/m/Y H:i" }} · {% if aviso.leida %}<span class="ia-pill ia-pill--revisada">Leído</span>{% else %}<span class="ia-pill ia-pill--abierta">Pendiente</span>{% endif %}</p>
+      {% if not aviso.leida %}
+        <form method="post" action="{% url 'ia_notificacion_leida' %}" data-ia-loading>
+          {% csrf_token %}
+          <input type="hidden" name="curp" value="{{ curp }}">
+          <input type="hidden" name="aviso_id" value="{{ aviso.id }}">
+          <button class="ia-btn" type="submit">Marcar como leído</button>
+        </form>
+      {% endif %}
+    </article>
+  {% empty %}
+    <div class="ia-vacio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+      {% if curp %}
+        <strong>No hay avisos para esta CURP</strong>
+        <span>Cuando exista un recordatorio o cambio aparecerá aquí.</span>
+      {% else %}
+        <strong>Consulta los avisos de tu cita</strong>
+        <span>Ingresa tu CURP para revisar la información disponible.</span>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endblock %}

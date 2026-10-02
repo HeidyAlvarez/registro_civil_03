@@ -1,0 +1,79 @@
+{% extends 'ia/base.html' %}
+{% block title %}Sugerencia de horario{% endblock %}
+{% block content %}
+  <div class="ia-page-head">
+    <div>
+      <div class="ia-eyebrow">Planeación de visita</div>
+      <h1>Sugerencia de horario</h1>
+      <p class="ia-lead">Elige el trámite y la fecha. La recomendación compara demanda histórica, citas existentes y disponibilidad real de {{ oficina.nombre }}.</p>
+    </div>
+  </div>
+
+  <form method="get" class="ia-form ia-panel" data-ia-loading>
+    <div class="ia-fila">
+      <label for="tramite-sugerencia">Trámite
+        <select id="tramite-sugerencia" name="tramite" required>
+          <option value="">Selecciona</option>
+          {% for tramite in tramites %}
+            <option value="{{ tramite.id }}" {% if tramite_id == tramite.id|stringformat:"s" %}selected{% endif %}>{{ tramite.nombre }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label for="oficina-sugerencia">Oficina
+        <input id="oficina-sugerencia" type="text" value="{{ oficina.nombre }}" readonly>
+      </label>
+      <label for="fecha-sugerencia">Fecha
+        <input id="fecha-sugerencia" type="date" name="fecha" value="{{ fecha|default:'' }}" required>
+      </label>
+    </div>
+    <button class="ia-btn ia-btn--prim" type="submit">Analizar horarios</button>
+    <div class="ia-loading" role="status" aria-live="polite"><span class="ia-spinner" aria-hidden="true"></span>Consultando disponibilidad…</div>
+  </form>
+
+  {% if resultado %}
+    {% if resultado.error %}
+      <div class="ia-flash ia-flash--error" role="alert">{{ resultado.error }}</div>
+    {% else %}
+      <section class="ia-section" aria-labelledby="resultado-horario">
+      <h2 id="resultado-horario">{{ resultado.tramite.nombre }} · {{ resultado.fecha|date:"d/m/Y" }}</h2>
+      {% if resultado.recomendado %}
+        <div class="ia-note">
+          <strong>¿Por qué recomienda las {{ resultado.recomendado.hora }}?</strong><br>
+          {{ resultado.recomendado.explicacion }}
+        </div>
+      {% endif %}
+      <div class="ia-leyenda" aria-label="Niveles de demanda">
+        <span><i class="ia-punto ia-punto--baja" aria-hidden="true"></i> Demanda baja</span>
+        <span><i class="ia-punto ia-punto--media" aria-hidden="true"></i> Demanda media</span>
+        <span><i class="ia-punto ia-punto--alta" aria-hidden="true"></i> Demanda alta</span>
+      </div>
+      <div class="ia-niveles">
+        {% for opcion in resultado.opciones %}
+          <div class="ia-nivel ia-nivel--{{ opcion.nivel }}">
+            <span class="ia-punto ia-punto--{{ opcion.nivel }}" aria-hidden="true"></span>
+            <div class="ia-nivel-contenido">
+              <strong>{{ opcion.hora }} — {{ opcion.etiqueta }}</strong>
+              <div class="ia-meta">{{ opcion.explicacion }}</div>
+            </div>
+            <span class="ia-nivel-estado ia-pill {% if opcion.disponible %}ia-pill--aplicada{% else %}ia-pill--rechazada{% endif %}">
+              {% if opcion.disponible %}Disponible{% else %}Sin cupo{% endif %}
+            </span>
+          </div>
+        {% empty %}
+          <div class="ia-vacio"><strong>No hay horarios que ofrecer</strong><span>Prueba con otra fecha.</span></div>
+        {% endfor %}
+      </div>
+      <div class="ia-cta">
+        <div><strong>La sugerencia no reserva tu horario</strong><p>Confirma la fecha y hora desde el proceso de agendado.</p></div>
+        <a class="ia-btn ia-btn--prim" href="{% url 'portal_ciudadano' %}">Ir a agendar cita</a>
+      </div>
+      </section>
+    {% endif %}
+  {% else %}
+    <div class="ia-vacio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <strong>Selecciona un trámite y una fecha</strong>
+      <span>El sistema mostrará primero los horarios con menor demanda estimada.</span>
+    </div>
+  {% endif %}
+{% endblock %}

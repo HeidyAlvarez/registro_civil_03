@@ -1,0 +1,20 @@
+{% extends 'ia/base.html' %}
+{% block title %}Reportes inteligentes{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Resumen institucional</div>
+    <h1>Reportes inteligentes</h1>
+    <p class="ia-lead">Los módulos de demanda, citas, atención, anomalías y temporadas alimentan estos reportes.</p>
+  </div></div>
+  <div class="ia-grid">
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reporte' 'demanda' %}"><span class="ia-card-icon" aria-hidden="true">D</span><div><h2>Reporte de demanda</h2><p>Trámites más solicitados durante el periodo.</p></div></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reporte' 'citas' %}"><span class="ia-card-icon" aria-hidden="true">C</span><div><h2>Reporte de citas</h2><p>Horarios con mayor y menor utilización.</p></div></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reporte' 'atencion' %}"><span class="ia-card-icon" aria-hidden="true">A</span><div><h2>Reporte de atención</h2><p>Tiempo observado y duración configurada.</p></div></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reporte' 'anomalias' %}"><span class="ia-card-icon" aria-hidden="true">!</span><div><h2>Reporte de anomalías</h2><p>Eventos detectados y estado de revisión.</p></div></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reporte' 'temporadas' %}"><span class="ia-card-icon" aria-hidden="true">T</span><div><h2>Reporte de temporadas</h2><p>Cambios de demanda respecto a periodos anteriores.</p></div></a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_reporte' 'ejecutivo' %}"><span class="ia-card-icon" aria-hidden="true">E</span><div><h2>Reporte ejecutivo</h2><p>Pantalla resumida para directivos.</p></div></a>
+  </div>
+  {% for hallazgo in panorama.hallazgos %}
+    <div class="ia-note">{{ hallazgo }}</div>
+  {% endfor %}
+{% endblock %}

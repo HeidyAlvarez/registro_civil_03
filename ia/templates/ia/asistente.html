@@ -1,0 +1,86 @@
+{% extends 'ia/base.html' %}
+{% block title %}Asistente{% endblock %}
+{% block body_class %}ia-asistente-page{% endblock %}
+{% block content %}
+  <div class="ia-page-head">
+    <div>
+      <div class="ia-eyebrow">Orientación ciudadana</div>
+      <h1>Asistente inteligente</h1>
+      <p class="ia-lead">Pregunta con tus propias palabras. Las respuestas utilizan el catálogo y los datos oficiales; no sustituyen una revisión jurídica o presencial.</p>
+    </div>
+  </div>
+
+  <div class="ia-chat-aviso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22a10 10 0 100-20 10 10 0 000 20z"/><path d="M12 8v5M12 17h.01"/></svg>
+    La conversación es temporal y se elimina cuando sales del asistente.
+  </div>
+
+  <section class="ia-chat-shell" aria-label="Conversación con el asistente">
+    <div class="ia-chat" data-ia-chat role="log" aria-live="polite" aria-relevant="additions">
+      {% if not mensajes %}
+        <div class="ia-burbuja ia-burbuja--asistente">
+          <span class="ia-burbuja-label">Asistente</span>
+          Soy el asistente del Registro Civil. Puedo orientarte sobre trámites, documentos, costos, horarios y citas.
+        </div>
+      {% endif %}
+      {% for mensaje in mensajes %}
+        <div class="ia-burbuja ia-burbuja--{{ mensaje.rol }}">
+          <span class="ia-burbuja-label">{% if mensaje.rol == 'ciudadano' %}Tú{% else %}Asistente{% endif %}</span>
+          {{ mensaje.texto }}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if not mensajes %}
+      <form method="post" class="ia-atajos" data-ia-loading>
+        {% csrf_token %}
+        <button type="submit" name="atajo" value="¿Qué necesito para registrar un matrimonio?">Requisitos para matrimonio</button>
+        <button type="submit" name="atajo" value="¿Cuánto cuesta una copia certificada?">Costo de copia certificada</button>
+        <button type="submit" name="atajo" value="¿Cuál es el horario de atención?">Horario de atención</button>
+        <button type="submit" name="atajo" value="¿Tengo que sacar cita?">¿Necesito cita?</button>
+      </form>
+    {% endif %}
+
+    {% if ultimo.metadatos.opciones %}
+      <form method="post" class="ia-opciones" data-ia-loading aria-label="Opciones sugeridas">
+        {% csrf_token %}
+        {% for opcion in ultimo.metadatos.opciones %}
+          <button type="submit" name="atajo" value="{{ opcion.valor }}">{{ opcion.etiqueta }}</button>
+        {% endfor %}
+      </form>
+    {% endif %}
+
+    <form method="post" class="ia-form" data-ia-loading>
+      {% csrf_token %}
+      <label for="pregunta">Tu pregunta</label>
+      <textarea id="pregunta" name="pregunta" rows="3" required maxlength="1500" placeholder="Ejemplo: ¿Qué documentos necesito llevar?"></textarea>
+      <button class="ia-btn ia-btn--prim ia-btn--wide" type="submit">Enviar pregunta</button>
+      <div class="ia-loading" role="status" aria-live="polite">
+        <span class="ia-spinner" aria-hidden="true"></span>
+        Analizando tu pregunta…
+      </div>
+    </form>
+  </section>
+
+  {% if ultimo.metadatos.derivar %}
+    <div class="ia-panel ia-section">
+      <h2>Solicitar atención de un funcionario</h2>
+      <p class="ia-lead">Esta situación puede requerir revisión humana. La solicitud queda para el personal de la oficialía.</p>
+      <form method="post" class="ia-form" data-ia-loading>
+        {% csrf_token %}
+        <input type="hidden" name="accion" value="derivar">
+        <label for="nombre">Nombre
+          <input id="nombre" type="text" name="nombre" placeholder="Nombre completo" maxlength="150">
+        </label>
+        <label for="curp">CURP
+          <input id="curp" type="text" name="curp" placeholder="18 caracteres" maxlength="18">
+        </label>
+        <label for="motivo">Motivo
+          <textarea id="motivo" name="motivo" rows="3" placeholder="Describe tu situación">{{ ultimo.texto }}</textarea>
+        </label>
+        <button class="ia-btn ia-btn--prim" type="submit">Solicitar atención</button>
+        <div class="ia-loading" role="status"><span class="ia-spinner" aria-hidden="true"></span>Registrando solicitud…</div>
+      </form>
+    </div>
+  {% endif %}
+{% endblock %}

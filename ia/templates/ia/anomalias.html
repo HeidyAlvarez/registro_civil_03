@@ -1,0 +1,29 @@
+{% extends 'ia/base.html' %}
+{% block title %}Anomalías{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Eventos para investigación</div>
+    <h1>Reporte de anomalías</h1>
+    <p class="ia-lead">Revisa los eventos que se apartan del comportamiento habitual y documenta la conclusión del personal autorizado.</p>
+  </div></div>
+  <div class="ia-note">Anomalía no significa fraude. El módulo solo señala un comportamiento que se aleja del patrón. La revisión la hace el personal autorizado.</div>
+  <div class="ia-table-wrap">
+  <table class="ia-tabla">
+    <caption>Eventos detectados por el módulo</caption>
+    <thead><tr><th scope="col">Folio</th><th scope="col">Tipo</th><th scope="col">Usuario</th><th scope="col">Estado</th><th scope="col">Fecha</th></tr></thead>
+    <tbody>
+      {% for anomalia in lista %}
+        <tr>
+          <td><a href="{% url 'ia_anomalia_detalle' anomalia.id %}">{{ anomalia.folio }}</a></td>
+          <td>{{ anomalia.get_tipo_display_legible }}</td>
+          <td>{{ anomalia.codigo_usuario }}</td>
+          <td><span class="ia-pill ia-pill--{{ anomalia.estado|lower }}">{{ anomalia.estado|lower }}</span></td>
+          <td>{{ anomalia.detectada_el|date:"d/m/Y H:i" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">No hay anomalías registradas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+{% endblock %}

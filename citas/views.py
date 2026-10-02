@@ -610,7 +610,8 @@ def eliminar_bloqueo(request, bloqueo_id):
 # 🔁 REDIRECCIÓN POR ROL
 # ==========================================
 
-@login_required
 def redirigir_por_rol(request):
+    if not request.user.is_authenticated:
+        return redirect('portal_ciudadano')
     from autenticacion.servicios import Login
     return redirect(Login.url_panel_para_usuario(request.user))

@@ -1,0 +1,38 @@
+{% extends 'ia/base.html' %}
+{% block title %}Optimización de citas{% endblock %}
+{% block content %}
+  <div class="ia-page-head"><div>
+    <div class="ia-eyebrow">Redistribución supervisada</div>
+    <h1>Optimización de citas</h1>
+    <p class="ia-lead">La IA analiza la concentración de citas y propone movimientos únicamente para citas pendientes no sensibles.</p>
+  </div></div>
+  <div class="ia-note">IA analiza → IA propone → funcionario revisa → funcionario autoriza → el sistema aplica.</div>
+
+  <form method="post" class="ia-form ia-panel" data-ia-loading>
+    {% csrf_token %}
+    <label for="fecha-optimizacion">Fecha a analizar
+      <input id="fecha-optimizacion" type="date" name="fecha" value="{{ manana }}" required>
+    </label>
+    <button class="ia-btn ia-btn--prim" type="submit">Generar propuesta</button>
+    <div class="ia-loading" role="status"><span class="ia-spinner" aria-hidden="true"></span>Analizando ocupación…</div>
+  </form>
+
+  <div class="ia-table-wrap">
+  <table class="ia-tabla">
+    <caption>Propuestas de optimización generadas</caption>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Estado</th><th scope="col">Resumen</th><th scope="col">Acción</th></tr></thead>
+    <tbody>
+      {% for propuesta in propuestas %}
+        <tr>
+          <td>{{ propuesta.fecha|date:"d/m/Y" }}</td>
+          <td><span class="ia-pill ia-pill--{{ propuesta.estado|lower }}">{{ propuesta.estado|lower }}</span></td>
+          <td>{{ propuesta.resumen|truncatechars:120 }}</td>
+          <td><a href="{% url 'ia_optimizacion_detalle' propuesta.id %}">Abrir</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">Todavía no hay propuestas guardadas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+{% endblock %}

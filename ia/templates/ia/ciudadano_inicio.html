@@ -1,0 +1,49 @@
+{% extends 'ia/base.html' %}
+{% block title %}IA para ciudadanos{% endblock %}
+{% block content %}
+  <div class="ia-page-head">
+    <div>
+      <div class="ia-eyebrow">Módulo para ciudadanos</div>
+      <h1>Orientación antes de acudir a la oficina</h1>
+      <p class="ia-lead">Consulta información oficial, revisa la afluencia y encuentra el horario que más te conviene. Si tu caso necesita una revisión especial, el asistente puede canalizarlo con el personal.</p>
+    </div>
+  </div>
+  <div class="ia-grid ia-grid--principal">
+    <a class="ia-card ia-card--icon" href="{% url 'ia_asistente' %}">
+      <span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 9h8M8 13h5"/></svg></span>
+      <span>
+        <span class="ia-kicker">Orientación</span>
+        <h2>Asistente inteligente</h2>
+        <p>Pregunta por requisitos, costos, documentos, horarios y proceso de agendado.</p>
+        <span class="ia-card-arrow">Iniciar conversación →</span>
+      </span>
+    </a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_dias' %}">
+      <span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16"/><path d="M8 15v-3M12 15V8M16 15v-5"/></svg></span>
+      <span>
+        <span class="ia-kicker">Afluencia</span>
+        <h2>Días más concurridos</h2>
+        <p>Compara días y horarios para identificar cuándo se concentra la atención.</p>
+        <span class="ia-card-arrow">Consultar afluencia →</span>
+      </span>
+    </a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_sugerencia' %}">
+      <span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <span>
+        <span class="ia-kicker">Planeación</span>
+        <h2>Sugerencia de horario</h2>
+        <p>Revisa la disponibilidad real y las horas con menor demanda estimada.</p>
+        <span class="ia-card-arrow">Analizar horarios →</span>
+      </span>
+    </a>
+    <a class="ia-card ia-card--icon" href="{% url 'ia_notificaciones' %}">
+      <span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span>
+      <span>
+        <span class="ia-kicker">Seguimiento</span>
+        <h2>Notificaciones inteligentes</h2>
+        <p>Consulta recordatorios, documentos y cambios relacionados con tu cita.</p>
+        <span class="ia-card-arrow">Ver notificaciones →</span>
+      </span>
+    </a>
+  </div>
+{% endblock %}
