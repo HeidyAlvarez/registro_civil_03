@@ -1,11 +1,14 @@
 from django.conf import settings
 from django.db import models
 
+from core_rc.fields import EncryptedJSONField, EncryptedTextField
+from core_rc.security import blind_index, decrypt_text, is_encrypted
+
 
 class ConversacionAsistente(models.Model):
     clave = models.CharField(max_length=64, unique=True)
     creado_el = models.DateTimeField(auto_now_add=True)
-    contexto = models.JSONField(default=dict, blank=True)
+    contexto = EncryptedJSONField(default=dict, blank=True)
 
     class Meta:
         verbose_name = 'Conversación del asistente'
@@ -23,8 +26,8 @@ class MensajeAsistente(models.Model):
         ConversacionAsistente, on_delete=models.CASCADE, related_name='mensajes',
     )
     rol = models.CharField(max_length=12)
-    texto = models.TextField()
-    metadatos = models.JSONField(default=dict, blank=True)
+    texto = EncryptedTextField()
+    metadatos = EncryptedJSONField(default=dict, blank=True)
     creado_el = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -41,9 +44,9 @@ class SolicitudAtencion(models.Model):
     conversacion = models.ForeignKey(
         ConversacionAsistente, null=True, blank=True, on_delete=models.SET_NULL,
     )
-    curp = models.CharField(max_length=18, blank=True)
-    nombre = models.CharField(max_length=150, blank=True)
-    motivo = models.TextField()
+    curp = EncryptedTextField(blank=True)
+    nombre = EncryptedTextField(blank=True)
+    motivo = EncryptedTextField()
     estado = models.CharField(max_length=20, default=PENDIENTE)
     creado_el = models.DateTimeField(auto_now_add=True)
     atendida_por = models.ForeignKey(
@@ -72,13 +75,14 @@ class NotificacionInteligente(models.Model):
 
     clave = models.CharField(max_length=140, unique=True)
     destino = models.CharField(max_length=12)
-    curp = models.CharField(max_length=18, blank=True, db_index=True)
+    curp = EncryptedTextField(blank=True)
+    curp_hash = models.CharField(max_length=64, blank=True, default='', db_index=True, editable=False)
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE,
     )
     categoria = models.CharField(max_length=20)
-    titulo = models.CharField(max_length=180)
-    mensaje = models.TextField()
+    titulo = EncryptedTextField()
+    mensaje = EncryptedTextField()
     cita = models.ForeignKey('citas.Cita', null=True, blank=True, on_delete=models.CASCADE)
     leida = models.BooleanField(default=False)
     creado_el = models.DateTimeField(auto_now_add=True)
@@ -90,6 +94,14 @@ class NotificacionInteligente(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    def save(self, *args, **kwargs):
+        raw_curp = decrypt_text(self.curp) if is_encrypted(self.curp) else self.curp
+        self.curp_hash = blind_index(raw_curp) if raw_curp else ''
+        update_fields = kwargs.get('update_fields')
+        if update_fields is not None:
+            kwargs['update_fields'] = list(set(update_fields) | {'curp_hash'})
+        super().save(*args, **kwargs)
 
 
 class PropuestaOptimizacion(models.Model):
@@ -149,8 +161,8 @@ class AlertaUrgente(models.Model):
     clave = models.CharField(max_length=80, unique=True)
     cita = models.ForeignKey('citas.Cita', on_delete=models.CASCADE, related_name='alertas_ia')
     regla = models.ForeignKey(ReglaPrioridad, null=True, blank=True, on_delete=models.SET_NULL)
-    titulo = models.CharField(max_length=200)
-    detalle = models.TextField(blank=True)
+    titulo = EncryptedTextField()
+    detalle = EncryptedTextField(blank=True)
     tiempo_minutos = models.PositiveIntegerField(default=0)
     documentacion = models.CharField(max_length=80, default='completa')
     accion_sugerida = models.CharField(max_length=200)
@@ -199,8 +211,8 @@ class Anomalia(models.Model):
     usuario_texto = models.CharField(max_length=150, blank=True)
     area = models.CharField(max_length=80, default='Oficialía 03')
     tipo = models.CharField(max_length=20, choices=TIPOS)
-    descripcion = models.TextField()
-    evidencia = models.JSONField(default=dict, blank=True)
+    descripcion = EncryptedTextField()
+    evidencia = EncryptedJSONField(default=dict, blank=True)
     estado = models.CharField(max_length=20, default=DETECTADA)
     clasificacion = models.CharField(max_length=80, blank=True)
     detectada_el = models.DateTimeField(auto_now_add=True)

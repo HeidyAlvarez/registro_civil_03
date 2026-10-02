@@ -3,7 +3,9 @@
 import json
 from functools import wraps
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
+
+from autenticacion.servicios.login import Login
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
@@ -69,16 +71,17 @@ def session_me(request):
 @require_POST
 def session_login(request):
     data = _body(request)
-    user = authenticate(
+    resultado = Login.autenticar_panel(
         request,
-        username=(data.get('username') or '').strip(),
-        password=data.get('password') or '',
+        (data.get('username') or '').strip(),
+        data.get('password') or '',
     )
-    if user is None or not user.is_active:
-        return JsonResponse({'error': 'El usuario o la contraseña no son correctos.'}, status=400)
-    if not puede_ver_panel_citas(user):
+    if resultado.usuario is None:
+        status = 429 if resultado.bloqueado else 400
+        return JsonResponse({'error': resultado.mensaje}, status=status)
+    if not puede_ver_panel_citas(resultado.usuario):
         return JsonResponse({'error': 'Tu cuenta no tiene acceso al panel operativo.'}, status=403)
-    login(request, user)
+    login(request, resultado.usuario)
     return JsonResponse({'ok': True})
 
 

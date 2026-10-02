@@ -13,6 +13,7 @@ from citas.models import BitacoraAuditoria, Tramite
 from citas.office_info import OFICINA_REGISTRO_CIVIL
 from citas.permisos import es_oficial_o_admin
 from citas.validators import validar_curp
+from core_rc.security import blind_index
 
 
 def solo_personal(vista):
@@ -231,7 +232,7 @@ def notificaciones_ciudadano(request):
             sincronizar_si_hace_falta()
             avisos = NotificacionInteligente.objects.filter(
                 destino=NotificacionInteligente.CIUDADANO,
-                curp=curp,
+                curp_hash=blind_index(curp),
             )
     return render(request, 'ia/notificaciones.html', {
         'interno': False,
@@ -247,7 +248,7 @@ def marcar_notificacion(request):
     curp = (request.POST.get('curp') or '').strip().upper()
     aviso = get_object_or_404(NotificacionInteligente, pk=request.POST.get('aviso_id'))
     if aviso.destino == NotificacionInteligente.CIUDADANO:
-        if aviso.curp != curp:
+        if not curp or aviso.curp_hash != blind_index(curp):
             messages.error(request, 'No se pudo marcar el aviso.')
             return redirect('ia_notificaciones')
         aviso.leida = True
@@ -336,7 +337,7 @@ def revisar_urgente(request, alerta_id):
     alerta.revisada_por = request.user
     alerta.revisada_el = timezone.now()
     alerta.save(update_fields=['estado', 'revisada_por', 'revisada_el'])
-    registrar_log(request, 'INFO', f'Caso urgente revisado: {alerta.titulo} (cita #{alerta.cita_id}).')
+    registrar_log(request, 'INFO', f'Caso urgente revisado: alerta #{alerta.id}, cita #{alerta.cita_id}.')
     messages.success(request, 'El caso quedó marcado como revisado.')
     return redirect('ia_urgentes')
 

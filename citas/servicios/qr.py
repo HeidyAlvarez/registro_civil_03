@@ -81,7 +81,7 @@ class QR:
                 'nuevo_estado': 'ASISTIDA',
                 'log': (
                     'MODIFICACION_CITA',
-                    f"Cita #{cita.id} ({cita.nombre_ciudadano}) marcada como ASISTIDA por validación QR.",
+                    f"Cita #{cita.id} marcada como ASISTIDA por validación QR.",
                 ),
             }
 

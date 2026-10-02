@@ -8,6 +8,7 @@ urlpatterns = [
     path('api/demanda/', api.demand_analysis, name='ia_api_demand'),
     path('api/sugerencia/', api.schedule_suggestion, name='ia_api_suggestion'),
     path('api/notificaciones/', api.citizen_notifications, name='ia_api_notifications'),
+    path('api/interno/asistente/mensaje/', api.internal_assistant_message, name='ia_api_internal_assistant'),
     path('api/interno/resumen/', api.internal_summary, name='ia_api_internal_summary'),
     path('api/interno/operaciones/', api.internal_operations, name='ia_api_internal_operations'),
     path('api/interno/accion/', api.internal_action, name='ia_api_internal_action'),

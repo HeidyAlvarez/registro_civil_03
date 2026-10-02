@@ -32,6 +32,10 @@ python manage.py runserver
 - `mockups/` — maquetación estática de interfaces
 - `core_rc/` — configuración del proyecto
 
+## Datos personales
+
+CURP, nombres, domicilio, mensajes y bitácoras se cifran en la base con AES-256-GCM. Antes de migrar un entorno con datos reales, respalda PostgreSQL y sigue [docs/cifrado_datos_personales.md](docs/cifrado_datos_personales.md).
+
 ## Despliegue en Render
 
 El archivo `render.yaml` crea automáticamente:

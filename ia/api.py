@@ -11,6 +11,7 @@ from citas.api_v1 import api_permission
 from citas.office_info import OFICINA_REGISTRO_CIVIL
 from citas.permisos import es_oficial_o_admin
 from citas.validators import validar_curp
+from core_rc.security import blind_index
 
 from .models import (
     AlertaUrgente,
@@ -27,6 +28,7 @@ from .servicios.analitica import (
     sugerir_horario,
 )
 from .servicios.asistente import responder
+from .servicios.control import historial_seguro, responder_control
 from .servicios.grok import responder_con_grok
 from .servicios.sincronizar import aplicar_propuesta, generar_propuesta, rechazar_propuesta, registrar_evento, sincronizar
 from .views import _conversacion, _limpiar_chat, _tramites_activos, _ctx_interno
@@ -101,6 +103,27 @@ def assistant_message(request):
     return response
 
 
+@require_POST
+@api_permission(es_oficial_o_admin)
+def internal_assistant_message(request):
+    """Responde con datos del sistema y no guarda la conversación."""
+    data = _body(request)
+    question = str(data.get('question') or '').strip()
+    if not question:
+        return JsonResponse({'error': 'Escribe una pregunta para continuar.'}, status=400)
+    if len(question) > 1500:
+        return JsonResponse({'error': 'La pregunta es demasiado larga. Resume lo que necesitas saber.'}, status=400)
+    result = responder_control(question, historial_seguro(data.get('history')))
+    response = JsonResponse({
+        'message': {
+            'role': 'asistente',
+            'text': result['texto'],
+        },
+    })
+    response['Cache-Control'] = 'no-store'
+    return response
+
+
 @require_GET
 def demand_analysis(request):
     return JsonResponse(panorama_demanda())
@@ -150,7 +173,7 @@ def citizen_notifications(request):
         return JsonResponse({'error': 'La CURP no tiene un formato válido.'}, status=400)
     notifications = NotificacionInteligente.objects.filter(
         destino=NotificacionInteligente.CIUDADANO,
-        curp=curp,
+        curp_hash=blind_index(curp),
     )
     return JsonResponse({'notifications': [{
         'id': item.id,

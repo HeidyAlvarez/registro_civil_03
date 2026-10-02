@@ -15,6 +15,7 @@ from citas.servicios.calendario import Calendario
 from citas.servicios.constantes import MESES_ESPANOL
 from citas.utils import es_tramite_registro_nacimiento, validar_datos_recien_nacido
 from citas.validators import validar_curp
+from core_rc.security import blind_index
 
 
 class Cita:
@@ -33,7 +34,7 @@ class Cita:
     @classmethod
     def tiene_cita_activa_curp(cls, curp):
         return CitaModel.objects.filter(
-            curp_ciudadano=curp,
+            curp_hash=blind_index(curp),
             estado__in=cls.ESTADOS_CITA_ACTIVA,
         ).exists()
 
@@ -60,7 +61,7 @@ class Cita:
         try:
             return CitaModel.objects.select_related('tramite__seccion').get(
                 id=folio_int,
-                curp_ciudadano=curp,
+                curp_hash=blind_index(curp),
             )
         except CitaModel.DoesNotExist:
             return None
@@ -104,8 +105,8 @@ class Cita:
             'dias_restantes': dias,
             'puede_cancelar': puede,
             'motivo_no_cancelar': motivo,
-            'pdf_url': reverse('descargar_comprobante_pdf', args=[cita.id]),
-            'qr_url': reverse('imagen_qr_cita', args=[cita.id]),
+            'pdf_url': reverse('descargar_comprobante_pdf', args=[cita.id, cita.qr_codigo]),
+            'qr_url': reverse('imagen_qr_cita', args=[cita.id, cita.qr_codigo]),
         }
 
     @classmethod
@@ -196,8 +197,11 @@ class Cita:
                 datos_adicionales=datos_adicionales,
             )
             cita.save()
-        except Exception as exc:
-            return False, str(exc)
+        except ValidationError as exc:
+            messages = getattr(exc, 'messages', None) or ['No se pudo registrar la cita.']
+            return False, ' '.join(str(message) for message in messages)
+        except Exception:
+            return False, 'No se pudo registrar la cita.'
 
         return True, cita
 
@@ -234,7 +238,7 @@ class Cita:
         cita.estado = 'CANCELADA'
         cita.save(update_fields=['estado'])
 
-        desc_log = f"Cita #{cita.id} ({cita.nombre_ciudadano}) cancelada por {usuario_username}."
+        desc_log = f"Cita #{cita.id} cancelada por {usuario_username}."
         if monto_descontado is not None:
             desc_log += f" Ingreso descontado: ${monto_descontado}."
         ok_msg = 'Cita cancelada correctamente.'
@@ -253,7 +257,7 @@ class Cita:
         cita.estado = 'FINALIZADA'
         cita.save(update_fields=['estado'])
         return True, (
-            f"Cita #{cita.id} ({cita.nombre_ciudadano}) marcada como FINALIZADA."
+            f"Cita #{cita.id} marcada como FINALIZADA."
         )
 
     @classmethod
@@ -264,7 +268,7 @@ class Cita:
         cita.usuario_atendio = None
         cita.save(update_fields=['estado', 'usuario_atendio'])
         return True, (
-            f"Asistencia revertida: cita #{cita.id} ({cita.nombre_ciudadano}) regresó a PENDIENTE."
+            f"Asistencia revertida: cita #{cita.id} regresó a PENDIENTE."
         )
 
     @classmethod

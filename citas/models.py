@@ -5,6 +5,8 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils import timezone
+from core_rc.fields import EncryptedJSONField, EncryptedTextField
+from core_rc.security import blind_index, decrypt_text, is_encrypted
 from .validators import validador_curp, validar_curp
 import qrcode
 from io import BytesIO
@@ -93,12 +95,13 @@ class Cita(models.Model):
         message="El Código Postal debe ser de exactamente 5 números (ej. 50900)."
     )
 
-    # Datos del Ciudadano
-    curp_ciudadano = models.CharField(max_length=18, validators=[validador_curp], verbose_name="CURP")
-    nombre_ciudadano = models.CharField(max_length=150, verbose_name="Nombre Completo")
-    codigo_postal = models.CharField(max_length=5, validators=[validador_cp], verbose_name="Código Postal")
-    direccion = models.TextField(verbose_name="Dirección Completa")
-    datos_adicionales = models.JSONField(
+    # Datos del Ciudadano. El texto cifrado no cabe en las columnas originales.
+    curp_ciudadano = EncryptedTextField(validators=[validador_curp], verbose_name="CURP")
+    curp_hash = models.CharField(max_length=64, blank=True, default='', db_index=True, editable=False)
+    nombre_ciudadano = EncryptedTextField(verbose_name="Nombre Completo")
+    codigo_postal = EncryptedTextField(validators=[validador_cp], verbose_name="Código Postal")
+    direccion = EncryptedTextField(verbose_name="Dirección Completa")
+    datos_adicionales = EncryptedJSONField(
         default=dict,
         blank=True,
         verbose_name="Datos adicionales del trámite",
@@ -166,6 +169,11 @@ class Cita(models.Model):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        raw_curp = decrypt_text(self.curp_ciudadano) if is_encrypted(self.curp_ciudadano) else self.curp_ciudadano
+        self.curp_hash = blind_index(raw_curp) if raw_curp else ''
+        update_fields = kwargs.get('update_fields')
+        if update_fields is not None:
+            kwargs['update_fields'] = list(set(update_fields) | {'curp_hash'})
         super().save(*args, **kwargs)
         if not self.codigo_qr:
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
@@ -248,7 +256,7 @@ class BitacoraAuditoria(models.Model):
 
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name="Usuario Ejecutor")
     accion = models.CharField(max_length=25, choices=TIPO_ACCION_CHOICES, verbose_name="Acción Realizada")
-    descripcion = models.TextField(verbose_name="Descripción Detallada del Cambio")
+    descripcion = EncryptedTextField(verbose_name="Descripción Detallada del Cambio")
     fecha_hora = models.DateTimeField(auto_now_add=True, verbose_name="Fecha y Hora Exacta")
     ip_direccion = models.GenericIPAddressField(null=True, blank=True, verbose_name="Dirección IP")
 

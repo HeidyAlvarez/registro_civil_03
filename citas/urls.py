@@ -77,8 +77,8 @@ urlpatterns = [
     path('api/citas/', views.api_citas_estado, name='api_citas_estado'),
     path('api/dashboard/', views.api_resumen_dashboard, name='api_resumen_dashboard'),
     path('agendar/', views.api_crear_cita, name='api_crear_cita'),
-    path('qr/<int:cita_id>/', views.imagen_qr_cita, name='imagen_qr_cita'),
-    path('comprobante/<int:cita_id>/pdf/', views.descargar_comprobante_pdf, name='descargar_comprobante_pdf'),
+    path('qr/<int:cita_id>/<str:token>/', views.imagen_qr_cita, name='imagen_qr_cita'),
+    path('comprobante/<int:cita_id>/<str:token>/pdf/', views.descargar_comprobante_pdf, name='descargar_comprobante_pdf'),
 
     # CAPTURISTA
     path('capturista/', views.dashboard_capturista, name='dashboard_capturista'),

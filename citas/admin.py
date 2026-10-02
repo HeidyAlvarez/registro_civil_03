@@ -2,10 +2,11 @@ from django.contrib import admin, messages
 from django.urls import path
 from django.db.models.deletion import ProtectedError
 from django.core.exceptions import ValidationError
+from autenticacion.forms import FormularioAccesoPanel
 from autenticacion.servicios import Login
 from .models import SeccionTramite, Tramite, Cita, PagoCaja, BitacoraAuditoria, CorteCajaDiario
 from .views import dashboard_personalizado
-from .auditoria import registrar_log, registrar_log_seguridad, rol_usuario
+from .auditoria import registrar_log, rol_usuario
 from django.contrib.auth.models import Group
 from django.contrib.admin import AdminSite
 from django.shortcuts import redirect
@@ -110,7 +111,24 @@ class TramiteAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
 @admin.register(Cita)
 class CitaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
     list_display = ['id', 'fecha', 'hora', 'nombre_ciudadano', 'tramite', 'estado']
-    search_fields = ['curp_ciudadano', 'nombre_ciudadano']
+    search_fields = ['id']
+
+    def get_search_results(self, request, queryset, search_term):
+        from django.core.exceptions import ValidationError
+
+        from citas.validators import validar_curp
+        from core_rc.security import blind_index
+
+        term = (search_term or '').strip()
+        if not term:
+            return queryset, False
+        if term.isdigit():
+            return queryset.filter(pk=int(term)), False
+        try:
+            curp = validar_curp(term)
+        except ValidationError:
+            return queryset.none(), False
+        return queryset.filter(curp_hash=blind_index(curp)), False
 
     def has_add_permission(self, request):
         """Las citas nuevas se agendan solo por el portal ciudadano."""
@@ -131,11 +149,11 @@ class CitaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
             if prev.estado != obj.estado:
                 self._log(
                     request, 'MODIFICACION_CITA',
-                    f"Cita #{obj.id} ({obj.nombre_ciudadano}): {prev.estado} → {obj.estado} (admin).",
+                    f"Cita #{obj.id}: {prev.estado} → {obj.estado} (admin).",
                 )
 
     def delete_model(self, request, obj):
-        desc = f"Cita #{obj.id} ({obj.nombre_ciudadano}) eliminada desde admin."
+        desc = f"Cita #{obj.id} eliminada desde admin."
         super().delete_model(request, obj)
         self._log(request, 'MODIFICACION_CITA', desc)
 
@@ -143,7 +161,7 @@ class CitaAdmin(AuditoriaAdminMixin, admin.ModelAdmin):
 @admin.register(PagoCaja)
 class PagoCajaAdmin(SoloSuperusuarioAdminMixin, AuditoriaAdminMixin, admin.ModelAdmin):
     list_display = ('id', 'cita', 'monto_cobrado', 'fecha_pago', 'cajero', 'corte_cierre_listo')
-    search_fields = ('cita__nombre_ciudadano', 'id')
+    search_fields = ('id', 'cita__id')
     actions = ['cerrar_corte_masivo']
 
     def has_change_permission(self, request, obj=None):
@@ -182,7 +200,7 @@ class CorteCajaDiarioAdmin(SoloSuperusuarioAdminMixin, admin.ModelAdmin):
 @admin.register(BitacoraAuditoria)
 class BitacoraAuditoriaAdmin(admin.ModelAdmin):
     list_display = ('fecha_hora', 'usuario', 'accion', 'descripcion', 'ip_direccion')
-    search_fields = ('descripcion', 'usuario__username', 'ip_direccion')
+    search_fields = ('usuario__username', 'ip_direccion')
     readonly_fields = ('usuario', 'accion', 'descripcion', 'fecha_hora', 'ip_direccion')
 
     def changelist_view(self, request, extra_context=None):
@@ -239,20 +257,16 @@ original_login = AdminSite.login
 
 def custom_login(self, request, extra_context=None):
     if request.method == 'POST':
-        from django.contrib.auth import authenticate, login
+        from django.contrib.auth import login as auth_login
         username = (request.POST.get('username') or '').strip()
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect(Login.url_panel_para_usuario(user))
-        elif username:
-            registrar_log_seguridad(
-                request,
-                'ACCESO_DENEGADO',
-                Login.mensaje_intento_fallido(username),
-                username=username,
-            )
+        password = request.POST.get('password') or ''
+        resultado = Login.autenticar_panel(request, username, password)
+        request.resultado_acceso_panel = resultado
+        if resultado.usuario is not None:
+            auth_login(request, resultado.usuario)
+            return redirect(Login.url_panel_para_usuario(resultado.usuario))
     return original_login(self, request, extra_context)
 
 AdminSite.login = custom_login
+AdminSite.login_form = FormularioAccesoPanel
+admin.site.login_form = FormularioAccesoPanel

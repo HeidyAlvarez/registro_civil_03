@@ -94,14 +94,14 @@ def _destino():
     return url, modelo
 
 
-def responder_con_grok(pregunta, historial, tramites, oficina, contexto=None):
-    """Consulta la API configurada en GROK_API_KEY. Devuelve None si no responde."""
+def _completar(instrucciones, pregunta, historial, temperature):
+    """Llama a Groq o Grok con la clave del entorno. None si no hay respuesta."""
     if not clave_configurada():
         return None
 
     url, modelo = _destino()
-    mensajes = [{'role': 'system', 'content': _instrucciones(tramites, oficina)}]
-    for mensaje in historial[-8:]:
+    mensajes = [{'role': 'system', 'content': instrucciones}]
+    for mensaje in (historial or [])[-8:]:
         rol = 'assistant' if mensaje.get('rol') == 'asistente' else 'user'
         mensajes.append({'role': rol, 'content': mensaje.get('texto') or ''})
     mensajes.append({'role': 'user', 'content': pregunta})
@@ -116,33 +116,56 @@ def responder_con_grok(pregunta, historial, tramites, oficina, contexto=None):
             json={
                 'model': modelo,
                 'messages': mensajes,
-                'temperature': 0.2,
+                'temperature': temperature,
             },
             timeout=30,
         )
         if respuesta.status_code >= 400:
-            mensaje = ''
+            detalle = ''
             try:
-                mensaje = respuesta.json().get('error', {}).get('message', '')
+                detalle = respuesta.json().get('error', {}).get('message', '')
             except ValueError:
-                mensaje = ''
+                detalle = ''
             return {
-                'texto': (
-                    'No pude consultar la API configurada. '
-                    + (mensaje or f'La API respondió con el código {respuesta.status_code}.')
-                ),
-                'opciones': [],
-                'derivar': False,
-                'contexto': dict(contexto or {}),
+                'error_http': True,
+                'status': respuesta.status_code,
+                'detalle': detalle,
             }
         contenido = respuesta.json()['choices'][0]['message']['content']
     except (requests.RequestException, KeyError, IndexError, TypeError, ValueError):
         return None
 
     interpretada = interpretar_respuesta(contenido)
+    interpretada['error_http'] = False
+    return interpretada
+
+
+def responder_con_grok(pregunta, historial, tramites, oficina, contexto=None):
+    """Consulta la API configurada en GROK_API_KEY. Devuelve None si no responde."""
+    resultado = _completar(_instrucciones(tramites, oficina), pregunta, historial, 0.2)
+    if resultado is None:
+        return None
+    if resultado.get('error_http'):
+        return {
+            'texto': (
+                'No pude consultar la API configurada. '
+                + (resultado.get('detalle') or f'La API respondió con el código {resultado.get("status")}.')
+            ),
+            'opciones': [],
+            'derivar': False,
+            'contexto': dict(contexto or {}),
+        }
     return {
-        'texto': interpretada['texto'],
-        'opciones': interpretada['opciones'],
-        'derivar': interpretada['derivar'],
+        'texto': resultado['texto'],
+        'opciones': resultado['opciones'],
+        'derivar': resultado['derivar'],
         'contexto': dict(contexto or {}),
     }
+
+
+def consultar_grok(instrucciones, pregunta, historial):
+    """Consulta el modelo para el personal interno. None si no hay una respuesta útil."""
+    resultado = _completar(instrucciones, pregunta, historial, 0.1)
+    if not resultado or resultado.get('error_http'):
+        return None
+    return resultado

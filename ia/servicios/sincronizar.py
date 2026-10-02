@@ -495,8 +495,8 @@ def aplicar_propuesta(propuesta, usuario, request):
             cita.hora = datetime.datetime.strptime(movimiento['hora_propuesta'], '%H:%M').time()
             try:
                 cita.save()
-            except Exception as exc:
-                fallos.append(f'La cita #{cita.id} no se pudo mover: {exc}')
+            except Exception:
+                fallos.append(f'La cita #{cita.id} no se pudo mover.')
                 continue
             aplicados.append(cita.id)
             NotificacionInteligente.objects.get_or_create(

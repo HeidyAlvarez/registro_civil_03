@@ -122,7 +122,7 @@ def registrar_pago_ventanilla(request, cita_id):
         return redirect('fila_caja')
     registrar_log(
         request, 'TRANSACCION',
-        f"Cobro de ${cita.tramite.costo} registrado para cita #{cita.id} ({cita.nombre_ciudadano})."
+        f"Cobro de ${cita.tramite.costo} registrado para cita #{cita.id}."
     )
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         return JsonResponse({'ok': True, 'cita_id': cita.id, 'nuevo_estado': 'PAGADA'})
@@ -456,8 +456,8 @@ def api_crear_cita(request):
         return JsonResponse({'ok': False, 'error': resultado})
 
     cita = resultado
-    qr_url = request.build_absolute_uri(reverse('imagen_qr_cita', args=[cita.id]))
-    pdf_url = request.build_absolute_uri(reverse('descargar_comprobante_pdf', args=[cita.id]))
+    qr_url = request.build_absolute_uri(reverse('imagen_qr_cita', args=[cita.id, cita.qr_codigo]))
+    pdf_url = request.build_absolute_uri(reverse('descargar_comprobante_pdf', args=[cita.id, cita.qr_codigo]))
 
     return JsonResponse({
         'ok': True,
@@ -467,23 +467,23 @@ def api_crear_cita(request):
     })
 
 
-def imagen_qr_cita(request, cita_id):
-    """Sirve el QR como PNG generado al vuelo (funciona en Render sin /media/)."""
-    cita = get_object_or_404(Cita, pk=cita_id)
+def imagen_qr_cita(request, cita_id, token):
+    """Sirve el QR como PNG solo si el token de la cita es correcto."""
+    cita = get_object_or_404(Cita, pk=cita_id, qr_codigo=token)
     if cita.estado == 'CANCELADA':
         return HttpResponse(status=404)
     return HttpResponse(generar_imagen_qr_bytes(cita), content_type='image/png')
 
 
-def descargar_comprobante_pdf(request, cita_id):
-    """Descarga el comprobante de cita en PDF (datos + QR)."""
-    cita = get_object_or_404(Cita.objects.select_related('tramite'), pk=cita_id)
+def descargar_comprobante_pdf(request, cita_id, token):
+    """Descarga el comprobante de cita en PDF si el token de la cita es correcto."""
+    cita = get_object_or_404(Cita.objects.select_related('tramite'), pk=cita_id, qr_codigo=token)
     if cita.estado == 'CANCELADA':
         return JsonResponse({'error': 'Esta cita fue cancelada.'}, status=404)
     try:
         pdf_buffer = generar_comprobante_pdf(cita)
-    except Exception as e:
-        return JsonResponse({'error': f'No se pudo generar el PDF: {e}'}, status=500)
+    except Exception:
+        return JsonResponse({'error': 'No se pudo generar el PDF.'}, status=500)
     response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="comprobante_cita_folio_{cita.id}.pdf"'
     return response

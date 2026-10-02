@@ -10,9 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-from pathlib import Path
+import base64
+import json
 import os
+import sys
+from pathlib import Path
+
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +34,53 @@ SECRET_KEY = os.environ.get(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('1', 'true', 'yes')
+
+def _load_key_map(raw, setting_name):
+    if not raw:
+        return {}
+    try:
+        loaded = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise ImproperlyConfigured(f'{setting_name} debe ser un objeto JSON válido.') from exc
+    if not isinstance(loaded, dict) or not loaded:
+        raise ImproperlyConfigured(f'{setting_name} debe ser un objeto JSON con al menos una clave.')
+    return {str(version): str(value) for version, value in loaded.items()}
+
+
+# Claves de cifrado. No guardar valores reales en el repositorio.
+# PII_ENCRYPTION_KEYS={"v1":"<Base64 URL-safe de 32 bytes>"}
+# PII_ACTIVE_KEY_VERSION=v1
+# PII_BLIND_INDEX_KEY=<Base64 URL-safe de 32 bytes, distinta de las de cifrado>
+PII_ENCRYPTION_KEYS = _load_key_map(
+    os.environ.get('PII_ENCRYPTION_KEYS') or os.environ.get('DATA_ENCRYPTION_KEYS', ''),
+    'PII_ENCRYPTION_KEYS',
+)
+PII_ACTIVE_KEY_VERSION = (
+    os.environ.get('PII_ACTIVE_KEY_VERSION')
+    or os.environ.get('DATA_ENCRYPTION_ACTIVE_KEY', '')
+)
+PII_BLIND_INDEX_KEY = (
+    os.environ.get('PII_BLIND_INDEX_KEY')
+    or os.environ.get('DATA_BLIND_INDEX_KEY', '')
+)
+
+if 'test' in sys.argv and not PII_ENCRYPTION_KEYS:
+    PII_ENCRYPTION_KEYS = {'v1': base64.urlsafe_b64encode(b'\x11' * 32).decode('ascii')}
+    PII_ACTIVE_KEY_VERSION = 'v1'
+    PII_BLIND_INDEX_KEY = base64.urlsafe_b64encode(b'\x22' * 32).decode('ascii')
+
+if not DEBUG and (
+    not PII_ENCRYPTION_KEYS
+    or PII_ACTIVE_KEY_VERSION not in PII_ENCRYPTION_KEYS
+    or not PII_BLIND_INDEX_KEY
+):
+    raise ImproperlyConfigured(
+        'La producción requiere PII_ENCRYPTION_KEYS, PII_ACTIVE_KEY_VERSION y PII_BLIND_INDEX_KEY.'
+    )
+
+DATA_ENCRYPTION_KEYS = PII_ENCRYPTION_KEYS
+DATA_ENCRYPTION_ACTIVE_KEY = PII_ACTIVE_KEY_VERSION
+DATA_BLIND_INDEX_KEY = PII_BLIND_INDEX_KEY
 
 ALLOWED_HOSTS = [
     host.strip()

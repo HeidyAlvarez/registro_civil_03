@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, Bot, FileWarning, Lightbulb, UsersRound } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card, CardDescription, CardTitle } from '@/components/ui/card'
 import { Alert, LoadingState } from '@/components/ui/feedback'
 import { api } from '@/lib/api'
@@ -20,6 +21,13 @@ export function AiDashboardPage() {
     <section>
       <p className="text-sm font-semibold text-primary">Control interno</p><h1 className="mt-1 font-heading text-2xl font-semibold md:text-4xl">Módulo de inteligencia artificial</h1>
       <p className="mt-3 max-w-3xl text-warm-500">La IA detecta patrones y genera propuestas. El personal autorizado conserva la decisión final.</p>
+      <Link to="/panel/ia/asistente" className="mt-6 block max-w-3xl">
+        <Card className="h-full transition hover:border-primary">
+          <Bot className="h-8 w-8 text-primary" />
+          <CardTitle className="mt-4">Asistente de control</CardTitle>
+          <CardDescription>Pregunta sobre las citas, los movimientos de la operación y qué conviene decidir. La conversación se borra al salir.</CardDescription>
+        </Card>
+      </Link>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{cards.map(([label, value, Icon]) => <Card key={label}><Icon className="h-8 w-8 text-primary" /><p className="mt-4 text-sm font-semibold text-warm-500">{label}</p><p className="mt-1 font-heading text-4xl font-semibold">{value}</p></Card>)}</div>
       <div className="mt-6 grid gap-4 lg:grid-cols-2"><Card><Bot className="h-8 w-8 text-primary" /><CardTitle className="mt-4">Hallazgos de demanda</CardTitle><CardDescription>Resumen generado con datos del sistema.</CardDescription><div className="mt-4 space-y-3">{summary.data?.demand.hallazgos.map((item) => <Alert key={item}>{item}</Alert>)}</div></Card><Card><Lightbulb className="h-8 w-8 text-primary" /><CardTitle className="mt-4">Cambios de temporada</CardTitle><CardDescription>Comparación con el historial disponible.</CardDescription><div className="mt-4 space-y-3">{summary.data?.seasons.frases.map((item) => <Alert key={item} variant="warning">{item}</Alert>)}</div></Card></div>
     </section>

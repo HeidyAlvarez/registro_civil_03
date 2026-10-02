@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { InternalAiGate } from '@/components/layout/internal-ai-gate'
 import { InternalLayout } from '@/components/layout/internal-layout'
 import { PublicLayout } from '@/components/layout/public-layout'
 import { LoginPage } from '@/pages/auth/login'
@@ -6,6 +7,7 @@ import { AiHubPage, AssistantPage } from '@/pages/ia/assistant'
 import { DemandPage, ScheduleSuggestionPage } from '@/pages/ia/insights'
 import { NotificationsPage } from '@/pages/ia/notifications'
 import { AiDashboardPage } from '@/pages/internal/ai-dashboard'
+import { InternalAssistantPage } from '@/pages/internal/control-assistant'
 import { AppointmentsPage } from '@/pages/internal/appointments'
 import { DashboardPage } from '@/pages/internal/dashboard'
 import { AuditPage, CatalogManagementPage, FinancialReportPage, ScheduleBlocksPage } from '@/pages/internal/management'
@@ -43,7 +45,10 @@ function App() {
         <Route path="reporte" element={<FinancialReportPage />} />
         <Route path="horarios" element={<ScheduleBlocksPage />} />
         <Route path="catalogo" element={<CatalogManagementPage />} />
-        <Route path="ia" element={<AiDashboardPage />} />
+        <Route path="ia" element={<InternalAiGate />}>
+          <Route index element={<AiDashboardPage />} />
+          <Route path="asistente" element={<InternalAssistantPage />} />
+        </Route>
       </Route>
       <Route path="oficial" element={<Navigate to="/panel" replace />} />
       <Route path="capturista" element={<Navigate to="/panel" replace />} />
