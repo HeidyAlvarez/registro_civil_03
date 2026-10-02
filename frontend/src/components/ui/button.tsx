@@ -40,16 +40,27 @@ export function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const Component = asChild ? Slot : 'button'
+  if (asChild) {
+    return (
+      <Slot
+        className={cn(buttonVariants({ variant, size }), className)}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {children}
+      </Slot>
+    )
+  }
+
   return (
-    <Component
+    <button
       className={cn(buttonVariants({ variant, size }), className)}
-      disabled={!asChild ? disabled || loading : undefined}
+      disabled={disabled || loading}
       aria-busy={loading || undefined}
       {...props}
     >
       {loading ? <LoaderCircle className="h-5 w-5 animate-spin" aria-hidden="true" /> : null}
       {children}
-    </Component>
+    </button>
   )
 }
