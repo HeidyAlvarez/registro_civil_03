@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'citas/css/sistema.css' %}?v=11">
   <link rel="stylesheet" href="{% static 'ia/css/modulo_ia.css' %}?v=3">
+  <link rel="stylesheet" href="{% static 'ia/css/mascota.css' %}?v=1">
   {% include 'citas/includes/tipografia_rc.html' %}
 </head>
 <body class="{% if interno %}panel-interno ia-interno{% else %}ia-publico{% endif %} {% block body_class %}{% endblock %}">
@@ -40,6 +41,7 @@
     <nav class="ia-subnav" aria-label="Secciones del módulo de IA">
       {% if interno %}
         <a href="{% url 'ia_interno' %}" class="{% if ia_activo == 'inicio' %}is-active{% endif %}"{% if ia_activo == 'inicio' %} aria-current="page"{% endif %}>Inicio</a>
+        <a href="{% url 'ia_asistente_interno' %}" class="{% if ia_activo == 'asistente' %}is-active{% endif %}"{% if ia_activo == 'asistente' %} aria-current="page"{% endif %}>Decisiones</a>
         <a href="{% url 'ia_dias_interno' %}" class="{% if ia_activo == 'dias' %}is-active{% endif %}"{% if ia_activo == 'dias' %} aria-current="page"{% endif %}>Días concurridos</a>
         <a href="{% url 'ia_temporadas' %}" class="{% if ia_activo == 'temporadas' %}is-active{% endif %}"{% if ia_activo == 'temporadas' %} aria-current="page"{% endif %}>Temporadas</a>
         <a href="{% url 'ia_optimizacion' %}" class="{% if ia_activo == 'optimizacion' %}is-active{% endif %}"{% if ia_activo == 'optimizacion' %} aria-current="page"{% endif %}>Optimización{% if propuestas_pendientes %}<span class="ia-badge">{{ propuestas_pendientes }}</span>{% endif %}</a>
@@ -70,6 +72,6 @@
     Villa Victoria, Estado de México · Servicio de orientación ciudadana
   </footer>
 {% endif %}
-<script src="{% static 'ia/js/modulo_ia.js' %}?v=1" defer></script>
+<script src="{% static 'ia/js/modulo_ia.js' %}?v=2" defer></script>
 </body>
 </html>

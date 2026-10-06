@@ -62,10 +62,12 @@
         <div class="qbtn-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
         <div><div class="qbtn-name">Fila de caja</div><div class="qbtn-desc">Cobrar trámites</div></div>
       </a>
-      <a href="{% url 'ia_interno' %}" class="qbtn">
+      {% if puede_ver_ia %}
+      <a href="{% url 'ia_asistente_interno' %}" class="qbtn">
         <div class="qbtn-icon ic-teal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
-        <div><div class="qbtn-name">Módulo de IA</div><div class="qbtn-desc">Control interno y reportes</div></div>
+        <div><div class="qbtn-name">Módulo de IA</div><div class="qbtn-desc">Toma de decisiones</div></div>
       </a>
+      {% endif %}
       <a href="{% url 'vista_citas_pagadas' %}" class="qbtn">
         <div class="qbtn-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
         <div><div class="qbtn-name">Citas pagadas</div><div class="qbtn-desc">Finalizar entrega</div></div>

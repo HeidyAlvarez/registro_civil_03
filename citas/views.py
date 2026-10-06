@@ -40,6 +40,7 @@ def dashboard_personalizado(request):
         'titulo': 'Panel de Control - Registro Civil',
         'hoy': hoy,
         'mostrar_admin_sistema': es_administrador(request.user) or request.user.is_superuser,
+        'puede_ver_ia': es_oficial_o_admin(request.user),
         **resumen,
     }
     return render(request, 'citas/dashboard_personalizado.html', contexto)

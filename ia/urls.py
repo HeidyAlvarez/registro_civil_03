@@ -22,6 +22,7 @@ urlpatterns = [
     path('notificaciones/leida/', views.marcar_notificacion, name='ia_notificacion_leida'),
 
     path('interno/', views.panel_interno, name='ia_interno'),
+    path('interno/asistente/', views.asistente_interno, name='ia_asistente_interno'),
     path('interno/temporadas/', views.temporadas, name='ia_temporadas'),
     path('interno/optimizacion/', views.optimizacion, name='ia_optimizacion'),
     path('interno/optimizacion/<int:propuesta_id>/', views.optimizacion_detalle, name='ia_optimizacion_detalle'),

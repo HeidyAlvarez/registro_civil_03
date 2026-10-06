@@ -1,0 +1,95 @@
+.rc-mascota-escena {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 72% 58%, rgba(52, 211, 153, 0.55), transparent 46%),
+    radial-gradient(circle at 18% 88%, rgba(209, 250, 229, 0.28), transparent 36%),
+    linear-gradient(155deg, #063221 0%, #0b4a2b 52%, #157a49 100%);
+  box-shadow: 0 18px 42px rgba(11, 74, 43, 0.28);
+}
+
+.rc-mascota-escena::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(209, 250, 229, 0.45) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(circle at 68% 48%, #000 20%, transparent 74%);
+  pointer-events: none;
+}
+
+.rc-mascota-burbuja {
+  position: absolute;
+  top: 22px;
+  left: 18px;
+  z-index: 2;
+  max-width: 168px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 18px 18px 18px 6px;
+  background: #f7fffb;
+  color: #0b4a2b;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.rc-mascota-puntos { display: none; gap: 4px; margin-top: 8px; }
+.rc-mascota[data-estado="pensando"] .rc-mascota-puntos { display: flex; }
+.rc-mascota-puntos i {
+  width: 6px; height: 6px; border-radius: 50%; background: #0b4a2b; animation: rc-punto 1s infinite;
+}
+.rc-mascota-puntos i:nth-child(2) { animation-delay: 0.15s; }
+.rc-mascota-puntos i:nth-child(3) { animation-delay: 0.3s; }
+
+.rc-mascota-tarjeta {
+  position: absolute; left: 18px; bottom: 22px; z-index: 2;
+  display: flex; flex-direction: column; gap: 7px; width: 132px; padding: 12px;
+  border: 1px solid rgba(209, 250, 229, 0.7); border-radius: 16px;
+  background: rgba(247, 255, 251, 0.92); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+.rc-mascota-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, #fff 0 5px, transparent 6px), #0b4a2b;
+}
+.rc-mascota-linea { height: 7px; border-radius: 99px; background: #d1fae5; }
+.rc-mascota-linea--corta { width: 68%; background: #0b4a2b; }
+
+.rc-mascota-robot {
+  position: absolute; right: 8px; bottom: 8px; z-index: 2; width: min(210px, 58%);
+  padding: 0; border: 0; background: transparent; cursor: pointer;
+  animation: rc-flotar 3.6s ease-in-out infinite;
+}
+.rc-mascota-robot:focus-visible { outline: 3px solid #d1fae5; outline-offset: 4px; border-radius: 24px; }
+.rc-mascota-robot svg { display: block; width: 100%; height: auto; overflow: visible; }
+.rc-brazo { transform-box: fill-box; transform-origin: 50% 8%; animation: rc-saludo 3.4s ease-in-out infinite; }
+.rc-mascota:hover .rc-brazo,
+.rc-mascota.is-saludo .rc-brazo,
+.rc-mascota.is-atento .rc-brazo { animation-duration: 0.7s; }
+.rc-ojo { transform-box: fill-box; transform-origin: center; animation: rc-parpadeo 4.8s infinite; }
+.rc-pupila { transition: transform 0.08s linear; }
+.rc-antena-luz { transform-box: fill-box; transform-origin: center; animation: rc-pulso 2.4s ease-in-out infinite; }
+.rc-mascota[data-estado="pensando"] .rc-antena-luz,
+.rc-mascota[data-estado="pensando"] .rc-ojo { animation-duration: 0.55s; }
+.rc-boca { opacity: 0; }
+.rc-mascota[data-estado="hablando"] .rc-sonrisa { opacity: 0; }
+.rc-mascota[data-estado="hablando"] .rc-boca {
+  opacity: 1; transform-box: fill-box; transform-origin: center; animation: rc-hablar 0.28s ease-in-out infinite;
+}
+.ia-asistente-escenario { display: grid; gap: 16px; align-items: start; }
+@media (min-width: 900px) {
+  .ia-asistente-escenario { grid-template-columns: 280px minmax(0, 1fr); }
+  .rc-mascota { position: sticky; top: 16px; }
+}
+@keyframes rc-flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes rc-saludo { 0%, 100% { transform: rotate(12deg); } 50% { transform: rotate(-26deg); } }
+@keyframes rc-parpadeo { 0%, 46%, 52%, 100% { transform: scaleY(1); } 49% { transform: scaleY(0.08); } }
+@keyframes rc-pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes rc-hablar { 0%, 100% { transform: scaleY(0.7); } 50% { transform: scaleY(1.35); } }
+@keyframes rc-punto { 0%, 80%, 100% { opacity: 0.35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) {
+  .rc-mascota-robot, .rc-brazo, .rc-ojo, .rc-antena-luz, .rc-boca, .rc-mascota-puntos i { animation: none; }
+}

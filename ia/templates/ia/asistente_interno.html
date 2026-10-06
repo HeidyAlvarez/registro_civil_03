@@ -1,0 +1,136 @@
+{% extends 'ia/base.html' %}
+{% block title %}Asistente de decisiones{% endblock %}
+{% block body_class %}ia-asistente-page{% endblock %}
+{% block content %}
+  <div class="ia-page-head">
+    <div>
+      <div class="ia-eyebrow">Control interno · Oficial y administrador</div>
+      <h1>Asistente para toma de decisiones</h1>
+      <p class="ia-lead">Pregunta por las citas del día, los movimientos de la operación y qué conviene decidir. Este chat no es el de orientación al ciudadano: usa las cifras de la oficialía y no se guarda al salir.</p>
+    </div>
+    <a class="ia-btn" href="{% url 'ia_interno' %}">Ver reportes y anomalías</a>
+  </div>
+
+  <div class="ia-chat-aviso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22a10 10 0 100-20 10 10 0 000 20z"/><path d="M12 8v5M12 17h.01"/></svg>
+    La conversación se borra al salir de esta pantalla. No queda registrada en el sistema.
+  </div>
+
+  {% csrf_token %}
+  <div class="ia-asistente-escenario">
+  {% include 'ia/includes/mascota.html' with frase_idle="¿Qué decisión revisamos?" frase_pensando="Estoy consultando la agenda…" frase_hablando="Esto muestran los datos de hoy." frase_saludo="Listo para apoyar. La decisión la tomas tú." %}
+  <section class="ia-chat-shell" aria-label="Conversación de control interno">
+    <div class="ia-chat" id="chat-decisiones" role="log" aria-live="polite" aria-relevant="additions">
+      <div class="ia-burbuja ia-burbuja--asistente" id="chat-bienvenida">
+        <span class="ia-burbuja-label">Asistente</span>
+        Puedo ayudarte a revisar la agenda, los movimientos recientes y las decisiones que muestran los datos de hoy.
+      </div>
+    </div>
+
+    <div class="ia-atajos" id="chat-ejemplos">
+      <button type="button" data-pregunta="¿Cuántas citas hay pendientes hoy?">Citas pendientes de hoy</button>
+      <button type="button" data-pregunta="¿Qué movimientos de la operación conviene revisar?">Movimientos por revisar</button>
+      <button type="button" data-pregunta="¿Qué decisión sugieres con los datos de hoy?">Sugerencia para decidir</button>
+    </div>
+
+    <p class="ia-flash ia-flash--error" id="chat-error" hidden></p>
+
+    <form class="ia-form" id="chat-form">
+      <label for="pregunta-decision">Tu pregunta</label>
+      <textarea id="pregunta-decision" rows="3" required maxlength="1500" placeholder="Ejemplo: ¿Qué conviene atender primero hoy?"></textarea>
+      <button class="ia-btn ia-btn--prim ia-btn--wide" type="submit">Enviar pregunta</button>
+      <div class="ia-loading" id="chat-cargando" hidden role="status" aria-live="polite">
+        <span class="ia-spinner" aria-hidden="true"></span>
+        Consultando los datos de la oficialía…
+      </div>
+    </form>
+  </section>
+<script>
+(function () {
+  var chat = document.getElementById('chat-decisiones');
+  var form = document.getElementById('chat-form');
+  var campo = document.getElementById('pregunta-decision');
+  var error = document.getElementById('chat-error');
+  var cargando = document.getElementById('chat-cargando');
+  var ejemplos = document.getElementById('chat-ejemplos');
+  var bienvenida = document.getElementById('chat-bienvenida');
+  var historial = [];
+  var enviando = false;
+  var token = '';
+  var entrada = document.querySelector('[name=csrfmiddlewaretoken]');
+  if (entrada) token = entrada.value;
+  if (!token) {
+    document.cookie.split(';').forEach(function (parte) {
+      var trozo = parte.trim().split('=');
+      if (trozo[0] === 'csrftoken') token = decodeURIComponent(trozo[1] || '');
+    });
+  }
+
+  function burbuja(rol, texto) {
+    var nodo = document.createElement('div');
+    nodo.className = 'ia-burbuja ia-burbuja--' + (rol === 'personal' ? 'personal' : 'asistente');
+    var etiqueta = document.createElement('span');
+    etiqueta.className = 'ia-burbuja-label';
+    etiqueta.textContent = rol === 'personal' ? 'Tú' : 'Asistente';
+    nodo.appendChild(etiqueta);
+    nodo.appendChild(document.createTextNode(texto));
+    chat.appendChild(nodo);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function preguntar(texto) {
+    texto = (texto || '').trim();
+    if (!texto || enviando) return;
+    if (bienvenida) bienvenida.remove();
+    if (ejemplos) ejemplos.hidden = true;
+    error.hidden = true;
+    burbuja('personal', texto);
+    var previo = historial.slice();
+    historial.push({ role: 'personal', text: texto });
+    campo.value = '';
+    enviando = true;
+    cargando.hidden = false;
+    document.dispatchEvent(new CustomEvent('ia-mascota-estado', { detail: 'pensando' }));
+    fetch('{% url "ia_api_internal_assistant" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': token
+      },
+      body: JSON.stringify({ question: texto, history: previo })
+    }).then(function (respuesta) {
+      return respuesta.json().then(function (datos) {
+        if (!respuesta.ok) throw new Error(datos.error || 'El asistente no pudo responder.');
+        return datos;
+      });
+    }).then(function (datos) {
+      var textoRespuesta = (datos.message && datos.message.text) || 'No hay una respuesta disponible.';
+      historial.push({ role: 'asistente', text: textoRespuesta });
+      burbuja('asistente', textoRespuesta);
+      document.dispatchEvent(new CustomEvent('ia-mascota-estado', { detail: 'hablando' }));
+    }).catch(function (fallo) {
+      historial.pop();
+      error.textContent = fallo.message || 'El asistente no pudo responder.';
+      error.hidden = false;
+      document.dispatchEvent(new CustomEvent('ia-mascota-estado', { detail: 'idle' }));
+    }).finally(function () {
+      enviando = false;
+      cargando.hidden = true;
+      campo.focus();
+    });
+  }
+
+  form.addEventListener('submit', function (evento) {
+    evento.preventDefault();
+    preguntar(campo.value);
+  });
+  if (ejemplos) {
+    ejemplos.addEventListener('click', function (evento) {
+      var boton = evento.target.closest('[data-pregunta]');
+      if (boton) preguntar(boton.getAttribute('data-pregunta'));
+    });
+  }
+})();
+</script>
+  </div>
+{% endblock %}

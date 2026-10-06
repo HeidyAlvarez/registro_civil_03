@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Alert } from '@/components/ui/feedback'
 import { Textarea } from '@/components/ui/field'
+import { AssistantMascot } from '@/components/ia/assistant-mascot'
 import { postJson } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
@@ -54,7 +55,7 @@ export function InternalAssistantPage() {
   }
 
   return (
-    <section className="mx-auto max-w-4xl">
+    <section className="mx-auto max-w-6xl">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="text-sm font-semibold text-primary">Control interno</p>
@@ -71,7 +72,9 @@ export function InternalAssistantPage() {
         ) : null}
       </div>
       {error ? <Alert variant="error" className="mt-5">{error}</Alert> : null}
-      <Card className="mt-7 p-3 sm:p-5">
+      <div className="mt-7 grid items-start gap-4 lg:grid-cols-[280px_minmax(0,1fr)]">
+      <AssistantMascot modo="interno" estado={sending ? 'pensando' : messages.length ? 'hablando' : 'idle'} />
+      <Card className="p-3 sm:p-5">
         <div ref={log} className="max-h-[52vh] min-h-80 space-y-4 overflow-y-auto rounded-xl bg-warm-100 p-4" role="log" aria-live="polite">
           {!messages.length ? (
             <div className="max-w-xl rounded-2xl bg-white p-4 shadow-sm">
@@ -113,6 +116,7 @@ export function InternalAssistantPage() {
           <Button className="w-full" loading={sending}><Send className="h-6 w-6" />Enviar pregunta</Button>
         </form>
       </Card>
+      </div>
       <p className="mt-4 flex items-center gap-2 text-sm text-warm-500"><Bot className="h-5 w-5 text-primary" />Las cifras salen de la agenda y del seguimiento del día. Si un dato no está en el sistema, el asistente lo dice.</p>
     </section>
   )

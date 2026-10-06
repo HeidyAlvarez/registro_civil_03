@@ -1,0 +1,42 @@
+<div class="rc-mascota" data-mascota data-estado="idle" data-frase-idle="{{ frase_idle }}" data-frase-pensando="{{ frase_pensando }}" data-frase-hablando="{{ frase_hablando }}" data-frase-saludo="{{ frase_saludo }}">
+  <div class="rc-mascota-escena">
+    <p class="rc-mascota-burbuja" data-mascota-texto>{{ frase_idle }}<span class="rc-mascota-puntos" aria-hidden="true"><i></i><i></i><i></i></span></p>
+    <div class="rc-mascota-tarjeta" aria-hidden="true">
+      <span class="rc-mascota-avatar"></span>
+      <span class="rc-mascota-linea"></span>
+      <span class="rc-mascota-linea rc-mascota-linea--corta"></span>
+    </div>
+    <button type="button" class="rc-mascota-robot" data-mascota-saludo aria-label="Saludar al asistente">
+      <svg viewBox="0 0 180 210" aria-hidden="true">
+        <g>
+          <line x1="90" y1="28" x2="90" y2="12" stroke="#d1fae5" stroke-width="4" stroke-linecap="round"/>
+          <circle class="rc-antena-luz" cx="90" cy="10" r="6" fill="#34d399"/>
+        </g>
+        <path d="M52 64c0-30 16-46 38-46s38 16 38 46" fill="none" stroke="#d1fae5" stroke-width="7" stroke-linecap="round"/>
+        <rect x="46" y="30" width="88" height="74" rx="34" fill="#f7fffb" stroke="#0b4a2b" stroke-width="3"/>
+        <circle cx="50" cy="72" r="9" fill="#0b4a2b"/>
+        <path d="M42 74c6 8 6 16 0 24" fill="none" stroke="#d1fae5" stroke-width="3" stroke-linecap="round"/>
+        <g class="rc-ojo">
+          <ellipse cx="74" cy="64" rx="13" ry="15" fill="#34d399"/>
+          <circle class="rc-pupila" cx="74" cy="66" r="5" fill="#064e3b"/>
+        </g>
+        <g class="rc-ojo">
+          <ellipse cx="106" cy="64" rx="13" ry="15" fill="#34d399"/>
+          <circle class="rc-pupila" cx="106" cy="66" r="5" fill="#064e3b"/>
+        </g>
+        <path class="rc-sonrisa" d="M78 86q12 10 24 0" fill="none" stroke="#0b4a2b" stroke-width="3" stroke-linecap="round"/>
+        <ellipse class="rc-boca" cx="90" cy="88" rx="7" ry="4" fill="#0b4a2b"/>
+        <rect x="58" y="110" width="64" height="62" rx="26" fill="#f7fffb" stroke="#0b4a2b" stroke-width="3"/>
+        <circle cx="90" cy="138" r="13" fill="#0b4a2b"/>
+        <circle cx="90" cy="138" r="6" fill="#d1fae5"/>
+        <rect x="34" y="118" width="20" height="46" rx="10" fill="#f7fffb" stroke="#0b4a2b" stroke-width="3"/>
+        <g class="rc-brazo">
+          <rect x="126" y="112" width="20" height="48" rx="10" fill="#f7fffb" stroke="#0b4a2b" stroke-width="3"/>
+          <circle cx="136" cy="166" r="11" fill="#f7fffb" stroke="#0b4a2b" stroke-width="3"/>
+        </g>
+        <rect x="70" y="174" width="14" height="22" rx="7" fill="#d1fae5"/>
+        <rect x="96" y="174" width="14" height="22" rx="7" fill="#d1fae5"/>
+      </svg>
+    </button>
+  </div>
+</div>

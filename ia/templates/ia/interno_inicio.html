@@ -5,7 +5,7 @@
     <div>
       <div class="ia-eyebrow">Control interno</div>
       <h1>Módulo de IA de la oficialía</h1>
-      <p class="ia-lead">Analiza la operación y genera propuestas. Las citas, prioridades y anomalías solo cambian cuando el personal autorizado las revisa.</p>
+      <p class="ia-lead">Este módulo es solo para oficial y administrador. Sirve para decidir sobre citas, movimientos y seguimiento. No es el asistente del ciudadano, que responde dudas sobre trámites y el uso del sistema.</p>
     </div>
     <form method="post" action="{% url 'ia_sincronizar' %}" data-ia-loading>
       {% csrf_token %}
@@ -23,6 +23,7 @@
 
   <div class="ia-section-title"><h2>Herramientas de análisis</h2></div>
   <div class="ia-grid ia-grid--principal">
+    <a class="ia-card ia-card--icon" href="{% url 'ia_asistente_interno' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span><h2>Asistente de decisiones</h2><p>Pregunta por citas, movimientos y qué conviene hacer hoy. La conversación no se guarda.</p><span class="ia-card-arrow">Abrir asistente →</span></span></a>
     <a class="ia-card ia-card--icon" href="{% url 'ia_temporadas' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-8"/></svg></span><span><h2>Trámites más solicitados</h2><p>Compara demanda por mes y temporada.</p><span class="ia-card-arrow">Abrir análisis →</span></span></a>
     <a class="ia-card ia-card--icon" href="{% url 'ia_optimizacion' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></span><span><h2>Optimización de citas</h2><p>Propone redistribuciones sujetas a autorización.</p><span class="ia-card-arrow">Revisar propuestas →</span></span></a>
     <a class="ia-card ia-card--icon" href="{% url 'ia_urgentes' %}"><span class="ia-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10 3L2 20h20L14 3a2 2 0 00-4 0z"/></svg></span><span><h2>Casos urgentes</h2><p>Señala casos que cumplen las reglas institucionales.</p><span class="ia-card-arrow">Revisar casos →</span></span></a>

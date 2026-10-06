@@ -178,6 +178,14 @@ def dias_concurridos(request):
 
 
 @solo_personal
+def asistente_interno(request):
+    """Chat de decisiones para oficial y administrador. No se guarda al salir."""
+    respuesta = render(request, 'ia/asistente_interno.html', _ctx_interno('asistente'))
+    respuesta['Cache-Control'] = 'no-store'
+    return respuesta
+
+
+@solo_personal
 def dias_concurridos_interno(request):
     ctx = _ctx_interno('dias')
     ctx.update({

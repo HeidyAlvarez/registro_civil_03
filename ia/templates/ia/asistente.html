@@ -6,7 +6,7 @@
     <div>
       <div class="ia-eyebrow">Orientación ciudadana</div>
       <h1>Asistente inteligente</h1>
-      <p class="ia-lead">Pregunta con tus propias palabras. Las respuestas utilizan el catálogo y los datos oficiales; no sustituyen una revisión jurídica o presencial.</p>
+      <p class="ia-lead">Resuelve dudas sobre el sistema, los trámites, los documentos, los costos y los horarios. No consulta citas internas ni sugiere decisiones de la oficialía.</p>
     </div>
   </div>
 
@@ -15,12 +15,14 @@
     La conversación es temporal y se elimina cuando sales del asistente.
   </div>
 
+  <div class="ia-asistente-escenario">
+  {% include 'ia/includes/mascota.html' with frase_idle="¿En qué trámite te ayudo?" frase_pensando="Estoy revisando el catálogo…" frase_hablando="Listo, te lo explico." frase_saludo="¡Hola! Soy el asistente del Registro Civil." %}
   <section class="ia-chat-shell" aria-label="Conversación con el asistente">
     <div class="ia-chat" data-ia-chat role="log" aria-live="polite" aria-relevant="additions">
       {% if not mensajes %}
         <div class="ia-burbuja ia-burbuja--asistente">
           <span class="ia-burbuja-label">Asistente</span>
-          Soy el asistente del Registro Civil. Puedo orientarte sobre trámites, documentos, costos, horarios y citas.
+          Soy el asistente del ciudadano. Puedo resolver dudas sobre trámites, documentos, costos, horarios y cómo usar el sistema.
         </div>
       {% endif %}
       {% for mensaje in mensajes %}
@@ -61,6 +63,7 @@
       </div>
     </form>
   </section>
+  </div>
 
   {% if ultimo.metadatos.derivar %}
     <div class="ia-panel ia-section">

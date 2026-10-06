@@ -139,9 +139,18 @@ class AccesoModuloIATests(TestCase):
         for usuario in (self.capturista, self.usuario_comun):
             with self.subTest(usuario=usuario.username):
                 self.client.force_login(usuario)
-                respuesta = self.client.get(reverse('ia_interno'))
-                self.assertRedirects(respuesta, reverse('portal_ciudadano'))
+                for ruta in ('ia_interno', 'ia_asistente_interno'):
+                    respuesta = self.client.get(reverse(ruta))
+                    self.assertRedirects(respuesta, reverse('portal_ciudadano'))
                 self.client.logout()
+
+    def test_oficial_puede_abrir_el_asistente_de_decisiones(self):
+        self.client.force_login(self.oficial)
+        with patch('ia.views.sincronizar_si_hace_falta'):
+            respuesta = self.client.get(reverse('ia_asistente_interno'))
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertContains(respuesta, 'Asistente para toma de decisiones')
+        self.assertNotContains(respuesta, 'dudas sobre el sistema')
 
     def test_paginas_ciudadanas_no_exponen_enlaces_internos(self):
         rutas = (

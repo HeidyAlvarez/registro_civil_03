@@ -75,7 +75,8 @@
   line-height: 1.5;
   font-size: 14.5px;
 }
-.ia-burbuja--ciudadano {
+.ia-burbuja--ciudadano,
+.ia-burbuja--personal {
   align-self: flex-end;
   background: var(--verde);
   color: white;
